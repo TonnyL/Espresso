@@ -9,7 +9,7 @@ public class API {
 
     public static final String API_BASE = "http://www.kuaidi100.com/";
 
-    public static final String TEST = "autonumber/autoComNum";
+    public static final String COMPANY_QUERY = "autonumber/autoComNum";
 
     public static final String TEST_NUMBER = "47258833029";
 

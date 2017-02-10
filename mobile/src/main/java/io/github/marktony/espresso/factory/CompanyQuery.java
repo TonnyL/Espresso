@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.interfaze;
+package io.github.marktony.espresso.factory;
 
 import io.github.marktony.espresso.constant.API;
 import io.github.marktony.espresso.entity.CompanyAuto;
@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 
 public interface CompanyQuery {
 
-    @GET(API.TEST)
+    @GET(API.COMPANY_QUERY)
     Observable<CompanyAuto> query(@Query("text") String number);
 
 }
