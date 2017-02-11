@@ -6,7 +6,7 @@ import java.util.List;
  * Created by lizhaotailang on 2017/2/10.
  */
 
-public class PackageInfo {
+public class PackageState {
 
     private String message;
     private String nu;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Espresso</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_search">Search</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_companies">Companies</string>
+    <string name="nav_switch_theme">Switch Theme</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about">About</string>
+</resources>

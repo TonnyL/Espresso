@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.detail;
+package io.github.marktony.espresso.companydetail;
 
 import io.github.marktony.espresso.BasePresenter;
 import io.github.marktony.espresso.BaseView;
@@ -7,7 +7,7 @@ import io.github.marktony.espresso.BaseView;
  * Created by lizhaotailang on 2017/2/10.
  */
 
-public interface PackageDetailContract {
+public interface CompanyDetailContract {
 
     interface View extends BaseView<Presenter> {
 

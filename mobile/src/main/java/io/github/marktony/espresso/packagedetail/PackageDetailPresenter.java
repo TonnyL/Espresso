@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.detail;
+package io.github.marktony.espresso.packagedetail;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -13,7 +13,7 @@ public class PackageDetailPresenter implements PackageDetailContract.Presenter {
     }
 
     @Override
-    public void unSubscribe() {
+    public void unsubscribe() {
 
     }
 

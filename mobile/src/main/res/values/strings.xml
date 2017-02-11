@@ -4,5 +4,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_search">Search</string>
+    <string name="action_search">搜索</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_companies">公司</string>
+    <string name="nav_switch_theme">切换主题</string>
+    <string name="nav_settings">设置</string>
+    <string name="nav_about">关于</string>
 </resources>

@@ -1,11 +1,10 @@
-package io.github.marktony.espresso.addpack;
+package io.github.marktony.espresso.companydetail;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
  */
 
-public class AddPackagePresenter implements AddPackageContract.Presenter{
-
+public class CompanyDetailPresenter implements CompanyDetailContract.Presenter {
 
     @Override
     public void subscribe() {
