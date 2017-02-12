@@ -4,10 +4,17 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="activity_package_details">包裹详情</string>
+    <string name="activity_add_package">添加包裹</string>
+    <string name="activity_company_details">公司详情</string>
+
     <string name="action_search">搜索</string>
     <string name="nav_home">首页</string>
     <string name="nav_companies">公司</string>
     <string name="nav_switch_theme">切换主题</string>
     <string name="nav_settings">设置</string>
     <string name="nav_about">关于</string>
+    <string name="package_status">物流信息</string>
+    <string name="company">公司</string>
+    <string name="package_number">单号</string>
 </resources>

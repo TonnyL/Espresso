@@ -1,13 +1,12 @@
-package io.github.marktony.espresso.packages;
+package io.github.marktony.espresso.packagedetails;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.github.marktony.espresso.constant.API;
+import io.github.marktony.espresso.data.PackagesRepository;
 import io.github.marktony.espresso.entity.Package;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.reactivex.Observer;
@@ -22,16 +21,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by lizhaotailang on 2017/2/10.
  */
 
-public class PackagesPresenter implements PackagesContract.Presenter {
+public class PackageDetailsPresenter implements PackageDetailsContract.Presenter {
 
     @NonNull
-    private final PackagesContract.View view;
+    private PackageDetailsContract.View view;
 
     @NonNull
-    private final CompositeDisposable disposable;
+    private PackagesRepository packagesRepository;
 
-    public PackagesPresenter(@NonNull PackagesContract.View view) {
-        this.view = view;
+    @NonNull
+    private CompositeDisposable disposable;
+
+    @Nullable
+    private String packageId;
+
+    public PackageDetailsPresenter(@Nullable String packageId,
+                                   @NonNull PackagesRepository packagesRepository,
+                                   @NonNull PackageDetailsContract.View packageDetailView) {
+        this.packageId = packageId;
+        this.view = packageDetailView;
 
         disposable = new CompositeDisposable();
         this.view.setPresenter(this);
@@ -39,7 +47,7 @@ public class PackagesPresenter implements PackagesContract.Presenter {
 
     @Override
     public void subscribe() {
-        loadPackageStates();
+        openDetail();
     }
 
     @Override
@@ -47,9 +55,11 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         disposable.clear();
     }
 
-    private void loadPackageStates() {
-
-        view.setProgressIndicator(true);
+    private void openDetail() {
+        if (packageId == null || packageId.isEmpty()) {
+            view.showDetailError();
+            return;
+        }
 
         // just for test
         Retrofit retrofit = new Retrofit.Builder()
@@ -71,23 +81,21 @@ public class PackagesPresenter implements PackagesContract.Presenter {
 
                     @Override
                     public void onNext(Package value) {
-                        List<Package> list = new ArrayList<Package>();
-                        list.add(value);
-                        view.showPackageStates(list);
+                        view.showPackageStatus(value.getData());
+                        view.setPackageNumber(value.getNu());
+                        view.setCompanyName(value.getCom());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showLoadingPackageStatesError();
-                        view.setProgressIndicator(false);
+
                     }
 
                     @Override
                     public void onComplete() {
-                        view.setProgressIndicator(false);
+
                     }
                 });
-
     }
 
 }

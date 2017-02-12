@@ -1,5 +1,6 @@
 package io.github.marktony.espresso.packages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,8 +17,10 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.adapter.PackageStateAdapter;
-import io.github.marktony.espresso.entity.PackageState;
+import io.github.marktony.espresso.adapter.PackageAdapter;
+import io.github.marktony.espresso.entity.Package;
+import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
+import io.github.marktony.espresso.packagedetails.PackageDetailsActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -30,7 +33,7 @@ public class PackagesFragment extends Fragment
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
 
-    private PackageStateAdapter adapter;
+    private PackageAdapter adapter;
 
     private FloatingActionButton fab;
 
@@ -100,9 +103,16 @@ public class PackagesFragment extends Fragment
     }
 
     @Override
-    public void showPackageStates(List<PackageState> list) {
+    public void showPackageStates(final List<Package> list) {
         if (adapter == null) {
-            adapter = new PackageStateAdapter(getContext(), list);
+            adapter = new PackageAdapter(getContext(), list);
+            adapter.setOnRecyclerViewItemOnClickListener(new OnRecyclerViewItemClickListener() {
+                @Override
+                public void OnItemClick(View v, int position) {
+                    startActivity(new Intent(getContext(), PackageDetailsActivity.class)
+                            .putExtra(PackageDetailsActivity.PACKAGE_ID, list.get(position).getNu()));
+                }
+            });
             recyclerView.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();

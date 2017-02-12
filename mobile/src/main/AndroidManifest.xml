@@ -24,7 +24,11 @@
         </activity>
 
         <activity android:name=".addpack.AddPackageActivity"
-            android:label="Add Package"
+            android:label="@string/activity_add_package"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".packagedetails.PackageDetailsActivity"
+            android:label="@string/activity_package_details"
             android:theme="@style/AppTheme.NoActionBar" />
 
     </application>

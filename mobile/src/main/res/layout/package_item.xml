@@ -6,7 +6,8 @@
     android:paddingLeft="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_horizontal_margin">
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:background="?attr/selectableItemBackground">
 
     <io.github.marktony.espresso.component.CircleImageView
         android:layout_width="64dp"

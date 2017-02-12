@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.BasePresenter;
 import io.github.marktony.espresso.BaseView;
-import io.github.marktony.espresso.entity.PackageState;
+import io.github.marktony.espresso.entity.Package;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -22,7 +22,7 @@ public interface PackagesContract {
         // show this error
         void showLoadingPackageStatesError();
 
-        void showPackageStates(List<PackageState> list);
+        void showPackageStates(List<Package> list);
 
     }
 
