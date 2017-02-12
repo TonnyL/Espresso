@@ -7,4 +7,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">240dp</dimen>
+    <dimen name="timeline_dot_size">16dp</dimen>
+    <dimen name="timeline_line_size">2dp</dimen>
+    <dimen name="timeline_padding_top">20dp</dimen>
 </resources>

@@ -83,6 +83,7 @@ public class PackageDetailsFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.package_details, menu);
     }
 
     @Override

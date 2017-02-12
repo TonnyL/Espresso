@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_horizontal_margin">
+    android:layout_height="wrap_content">
 
-    <android.support.v7.widget.AppCompatTextView
+    <io.github.marktony.espresso.component.TimeLine
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/timeLine"
+        android:paddingTop="@dimen/timeline_padding_top"
+        app:start_line="@color/colorDivider"
+        app:finish_line="@color/colorDivider"
+        app:line_size="@dimen/timeline_line_size"
+        app:atom="@drawable/solid_circle"
+        app:atom_size="@dimen/timeline_dot_size"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:id="@+id/textViewLocation"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_horizontal_margin">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:id="@+id/textViewTime"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/textViewLocation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/textViewTime"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    </LinearLayout>
 
 </LinearLayout>

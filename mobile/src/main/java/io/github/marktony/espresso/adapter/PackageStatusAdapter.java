@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.component.TimeLine;
 import io.github.marktony.espresso.entity.Package;
 
 /**
@@ -25,6 +26,10 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
     private final LayoutInflater inflater;
     private List<Package.Data> list;
 
+    public static final int TYPE_NORMAL = 0x00;
+    public static final int TYPE_START = 0x01;
+    public static final int TYPE_FINISH = 0x02;
+
     public PackageStatusAdapter(@NonNull Context context, List<Package.Data> list) {
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -38,7 +43,15 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         Package.Data item = list.get(position);
+        // here can be simplified
+        if (getItemViewType(position) == TYPE_START) {
+            ((PackageStatusViewHolder)holder).timeLine.setStartLine(null);
+        } else if (getItemViewType(position) == TYPE_FINISH) {
+            ((PackageStatusViewHolder)holder).timeLine.setFinishLine(null);
+        }
+
         ((PackageStatusViewHolder)holder).textViewTime.setText(item.getTime());
         ((PackageStatusViewHolder)holder).textViewLocation.setText(item.getContext());
     }
@@ -48,15 +61,27 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
         return list.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return TYPE_START;
+        } else if (position == list.size() - 1) {
+            return TYPE_FINISH;
+        }
+        return TYPE_NORMAL;
+    }
+
     public class PackageStatusViewHolder extends RecyclerView.ViewHolder {
 
         private AppCompatTextView textViewLocation;
         private AppCompatTextView textViewTime;
+        private TimeLine timeLine;
 
         public PackageStatusViewHolder(View itemView) {
             super(itemView);
             textViewLocation = (AppCompatTextView) itemView.findViewById(R.id.textViewLocation);
             textViewTime = (AppCompatTextView) itemView.findViewById(R.id.textViewTime);
+            timeLine = (TimeLine) itemView.findViewById(R.id.timeLine);
         }
     }
 

@@ -18,4 +18,8 @@
     <string name="package_status">PACKAGE STATUS</string>
     <string name="company">Company</string>
     <string name="package_number">Package Number</string>
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
+    <string name="copy_code">Copy code</string>
+    <string name="set_unread">Set unread</string>
 </resources>

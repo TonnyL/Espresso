@@ -17,4 +17,9 @@
     <string name="package_status">物流信息</string>
     <string name="company">公司</string>
     <string name="package_number">单号</string>
+    <string name="share">分享</string>
+    <string name="delete">删除</string>
+    <string name="copy_code">复制运单号</string>
+    <string name="set_unread">标记为未读</string>
+
 </resources>
