@@ -18,6 +18,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.adapter.PackageAdapter;
+import io.github.marktony.espresso.addpack.AddPackageActivity;
 import io.github.marktony.espresso.entity.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 import io.github.marktony.espresso.packagedetails.PackageDetailsActivity;
@@ -60,7 +61,7 @@ public class PackagesFragment extends Fragment
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(fab, "Hello Espresso", Snackbar.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), AddPackageActivity.class));
             }
         });
 

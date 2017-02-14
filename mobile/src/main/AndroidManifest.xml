@@ -3,6 +3,9 @@
     package="io.github.marktony.espresso">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -30,6 +33,15 @@
         <activity android:name=".packagedetails.PackageDetailsActivity"
             android:label="@string/activity_package_details"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".zxing.CaptureActivity"
+            android:label="扫描"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="io.github.marktony.espresso.zxing.CaptureActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
     </application>
 
