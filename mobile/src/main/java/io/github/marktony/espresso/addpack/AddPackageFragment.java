@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +41,9 @@ public class AddPackageFragment extends Fragment
     private TextInputLayout inputLayoutName;
     private TextInputEditText editTextNumber;
     private TextInputEditText editTextName;
+    private AppCompatTextView textViewErrorAndStatus;
+
+    private AddPackageContract.Presenter presenter;
 
     public AddPackageFragment() {}
 
@@ -78,7 +82,7 @@ public class AddPackageFragment extends Fragment
         } else if (id == R.id.action_scan) {
             checkPermissionOrToScan();
         } else if (id == R.id.action_go) {
-
+            presenter.addNumber(editTextNumber.getText().toString());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -93,12 +97,13 @@ public class AddPackageFragment extends Fragment
         inputLayoutNumber = (TextInputLayout) view.findViewById(R.id.inputLayoutNumber);
         editTextName = (TextInputEditText) view.findViewById(R.id.editTextName);
         editTextNumber = (TextInputEditText) view.findViewById(R.id.editTextNumber);
+        textViewErrorAndStatus = (AppCompatTextView) view.findViewById(R.id.textViewErrorAndStatus);
 
     }
 
     @Override
-    public void setPresenter(AddPackageContract.Presenter presenter) {
-
+    public void setPresenter(@NonNull AddPackageContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -109,15 +114,9 @@ public class AddPackageFragment extends Fragment
                 if (resultCode == RESULT_OK) {
                     Bundle bundle = data.getExtras();
                     if (null != bundle) {
-                        final String scanCode = bundle.getString("result");
-                        Toast.makeText(getContext(), scanCode, Toast.LENGTH_SHORT).show();
-                        if (scanCode.startsWith("http")) { // URL
-                            Toast.makeText(getContext(), "这是个链接哟！", Toast.LENGTH_SHORT).show();
-                        } else if (scanCode.length() == 8 || scanCode.length() == 13) { // 条形码
-                            Toast.makeText(getContext(), scanCode, Toast.LENGTH_SHORT).show();
-                        }
+                        editTextNumber.setText(bundle.getString("result"));
+                        presenter.addNumber(editTextNumber.getText().toString());
                     }
-
                 }
                 break;
             default:
@@ -169,4 +168,13 @@ public class AddPackageFragment extends Fragment
         startActivityForResult(intent, SCANNING_REQUEST_CODE);
     }
 
+    @Override
+    public void showAddingNumberError() {
+
+    }
+
+    @Override
+    public void showNumberError() {
+        Toast.makeText(getContext(), "单号错误，请检查后重试", Toast.LENGTH_SHORT).show();
+    }
 }

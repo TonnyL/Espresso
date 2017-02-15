@@ -11,9 +11,15 @@ public interface AddPackageContract {
 
     interface View extends BaseView<Presenter> {
 
+        void showAddingNumberError();
+
+        void showNumberError();
+
     }
 
     interface Presenter extends BasePresenter {
+
+        void addNumber(String number);
 
     }
 

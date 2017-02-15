@@ -25,4 +25,18 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
     }
 
+    @Override
+    public void addNumber(String number) {
+        if (number.length() < 5) {
+            view.showNumberError();
+            return;
+        }
+        for (char c : number.toCharArray()) {
+            if (!Character.isLetterOrDigit(c)) {
+                view.showNumberError();
+                return;
+            }
+        }
+        // more code here
+    }
 }
