@@ -18,18 +18,10 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
+            android:background="@drawable/nav_header"
             app:contentScrim="@color/colorPrimary"
+            android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/imageView"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                android:scrollbarStyle="insideInset"
-                android:scrollbarAlwaysDrawVerticalTrack="true" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

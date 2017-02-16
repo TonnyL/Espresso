@@ -31,6 +31,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
             view.showNumberError();
             return;
         }
+        // check the string if only contains numbers and characters
         for (char c : number.toCharArray()) {
             if (!Character.isLetterOrDigit(c)) {
                 view.showNumberError();

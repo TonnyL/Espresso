@@ -10,21 +10,33 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="match_parent"
+            android:background="@drawable/nav_header"
+            app:contentScrim="@color/colorPrimary"
+            android:fitsSystemWindows="true">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:background="@color/colorPrimary"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/scrollView"
         android:scrollbars="vertical"
         android:scrollbarFadeDuration="1"
@@ -33,50 +45,68 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_horizontal_margin">
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/inputLayoutNumber"
-                app:counterEnabled="true"
-                app:counterMaxLength="24"
-                app:errorEnabled="true">
+                android:id="@+id/progressBar"
+                android:visibility="invisible"
+                android:indeterminate="true" />
 
-                <android.support.design.widget.TextInputEditText
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editTextNumber"
-                    android:drawableStart="@drawable/ic_dialpad_black_24dp"
-                    android:drawablePadding="16dp"
-                    android:hint="Number"
-                    android:inputType="textVisiblePassword"/>
+                    android:id="@+id/inputLayoutNumber"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="24"
+                    app:errorEnabled="true">
 
-            </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editTextNumber"
+                        android:drawableStart="@drawable/ic_dialpad_black_24dp"
+                        android:drawablePadding="16dp"
+                        android:hint="Number"
+                        android:inputType="textVisiblePassword"/>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/inputLayoutName"
-                app:errorEnabled="true">
+                </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputEditText
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editTextName"
-                    android:drawableStart="@drawable/ic_assignment_black_24dp"
-                    android:drawablePadding="16dp"
-                    android:hint="Name"/>
+                    android:id="@+id/textViewErrorAndStatus"
+                    android:text="SCAN CODE"
+                    android:textColor="@color/colorAccent"
+                    android:textAlignment="textEnd"/>
 
-            </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inputLayoutName"
+                    app:errorEnabled="true">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewErrorAndStatus"/>
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editTextName"
+                        android:drawableStart="@drawable/ic_assignment_black_24dp"
+                        android:drawablePadding="16dp"
+                        android:hint="Name(Optional)"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
