@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"
+        android:enabled="true">
+
+        <item android:id="@+id/nav_all"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:enabled="true"
+            android:title="All" />
+
+        <item android:id="@+id/nav_on_the_way"
+            android:icon="@drawable/ic_local_shipping_black_24dp"
+            android:enabled="true"
+            android:title="On the way" />
+
+        <item android:id="@+id/nav_delivered"
+            android:icon="@drawable/ic_assignment_turned_in_black_24dp"
+            android:enabled="true"
+            android:title="Delivered" />
+
+    </group>
+
+</menu>

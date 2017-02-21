@@ -49,7 +49,7 @@ public class PackagesPresenter implements PackagesContract.Presenter {
 
     private void loadPackageStates() {
 
-        view.setProgressIndicator(true);
+        /*view.setProgressIndicator(true);
 
         // just for test
         Retrofit retrofit = new Retrofit.Builder()
@@ -86,7 +86,7 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                     public void onComplete() {
                         view.setProgressIndicator(false);
                     }
-                });
+                });*/
 
     }
 
