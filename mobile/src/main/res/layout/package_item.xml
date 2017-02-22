@@ -9,17 +9,31 @@
     android:paddingBottom="@dimen/activity_horizontal_margin"
     android:background="?attr/selectableItemBackground">
 
-    <io.github.marktony.espresso.component.CircleImageView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:id="@+id/imageView"
-        android:src="@drawable/ic_local_shipping_black_24dp" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <io.github.marktony.espresso.component.CircleImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/imageView"
+            android:src="@color/colorPrimary"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:text="A"
+            android:textSize="32sp"/>
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="@dimen/activity_vertical_margin">
+        android:layout_marginStart="16dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"

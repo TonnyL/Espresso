@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_above="@id/capture_mask_bottom"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@id/capture_mask_top"
                 android:layout_toStartOf="@id/capture_crop_view"
                 android:background="@drawable/shadow" />

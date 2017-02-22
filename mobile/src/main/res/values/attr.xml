@@ -8,7 +8,7 @@
         <attr name="civ_fill_color" format="color" />
     </declare-styleable>
 
-    <declare-styleable name="TimeLine">
+    <declare-styleable name="Timeline">
         <attr name="atom_size" format="dimension" />
         <attr name="line_size" format="dimension" />
         <attr name="start_line" format="color|reference" />

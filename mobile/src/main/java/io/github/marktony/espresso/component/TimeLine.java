@@ -15,7 +15,7 @@ import io.github.marktony.espresso.R;
  * Created by lizhaotailang on 2017/2/12.
  */
 
-public class TimeLine extends View {
+public class Timeline extends View {
 
 
     @Dimension private int atomSize = 24;
@@ -25,29 +25,29 @@ public class TimeLine extends View {
     private Drawable finishLine;
     private Drawable atomDrawable;
 
-    public TimeLine(Context context) {
+    public Timeline(Context context) {
         this(context, null);
     }
 
-    public TimeLine(Context context, AttributeSet attrs) {
+    public Timeline(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TimeLine(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Timeline(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
 
     private void init(AttributeSet attrs) {
 
-        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.TimeLine);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.Timeline);
 
-        atomSize = typedArray.getDimensionPixelSize(R.styleable.TimeLine_atom_size, atomSize);
-        lineSize = typedArray.getDimensionPixelSize(R.styleable.TimeLine_line_size, lineSize);
+        atomSize = typedArray.getDimensionPixelSize(R.styleable.Timeline_atom_size, atomSize);
+        lineSize = typedArray.getDimensionPixelSize(R.styleable.Timeline_line_size, lineSize);
 
-        startLine = typedArray.getDrawable(R.styleable.TimeLine_start_line);
-        finishLine = typedArray.getDrawable(R.styleable.TimeLine_finish_line);
-        atomDrawable = typedArray.getDrawable(R.styleable.TimeLine_atom);
+        startLine = typedArray.getDrawable(R.styleable.Timeline_start_line);
+        finishLine = typedArray.getDrawable(R.styleable.Timeline_finish_line);
+        atomDrawable = typedArray.getDrawable(R.styleable.Timeline_atom);
 
         typedArray.recycle();
 
