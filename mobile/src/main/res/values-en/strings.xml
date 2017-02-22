@@ -22,4 +22,11 @@
     <string name="delete">Delete</string>
     <string name="copy_code">Copy code</string>
     <string name="set_unread">Set unread</string>
+    <string name="scan_code">Scan code</string>
+
+    <string name="all">All</string>
+    <string name="on_the_way">On the way</string>
+    <string name="delivered">Delivered</string>
+
+    <string name="package_name_default_pre">Package&#160;</string>
 </resources>

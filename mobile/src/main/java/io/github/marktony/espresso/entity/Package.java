@@ -1,5 +1,9 @@
 package io.github.marktony.espresso.entity;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -8,13 +12,29 @@ import java.util.List;
 
 public class Package {
 
+    @Expose
+    @SerializedName("message")
     private String message;
-    private String nu;
-    private String ischeck;
+    @Expose
+    @SerializedName("nu")
+    private String number;
+    @Expose
+    @SerializedName("ischeck")
+    private String isCheck;
+    @Expose
+    @SerializedName("condition")
     private String condition;
-    private String com;
+    @Expose
+    @SerializedName("com")
+    private String company;
+    @Expose
+    @SerializedName("status")
     private String status;
+    @Expose
+    @SerializedName("state")
     private String state;
+    @Expose
+    @SerializedName("data")
     private List<Data> data;
 
     public String getMessage() {
@@ -25,20 +45,20 @@ public class Package {
         this.message = message;
     }
 
-    public String getNu() {
-        return nu;
+    public String getNumber() {
+        return number;
     }
 
-    public void setNu(String nu) {
-        this.nu = nu;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public String getIscheck() {
-        return ischeck;
+    public String getIsCheck() {
+        return isCheck;
     }
 
-    public void setIscheck(String ischeck) {
-        this.ischeck = ischeck;
+    public void setIsCheck(String isCheck) {
+        this.isCheck = isCheck;
     }
 
     public String getCondition() {
@@ -50,11 +70,11 @@ public class Package {
     }
 
     public String getCom() {
-        return com;
+        return company;
     }
 
-    public void setCom(String com) {
-        this.com = com;
+    public void setCom(String company) {
+        this.company = company;
     }
 
     public String getStatus() {
@@ -83,9 +103,17 @@ public class Package {
 
     public class Data {
 
+        @Expose
+        @SerializedName("time")
         private String time;
+        @Expose
+        @SerializedName("ftime")
         private String ftime;
+        @Expose
+        @SerializedName("context")
         private String context;
+        @Expose
+        @SerializedName("location")
         private String location;
 
         public String getTime() {
@@ -121,4 +149,8 @@ public class Package {
         }
     }
 
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
 }

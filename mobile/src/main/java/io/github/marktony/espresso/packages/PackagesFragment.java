@@ -1,5 +1,6 @@
 package io.github.marktony.espresso.packages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.addpack.AddPackageActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -64,11 +66,11 @@ public class PackagesFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(fab, "Hello Espresso", Snackbar.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), AddPackageActivity.class));
             }
         });
 
-        switchToFragment(allFragment);
+        switchToFragment(allFragment, "AllFragment");
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -76,15 +78,15 @@ public class PackagesFragment extends Fragment {
                 switch (item.getItemId()) {
 
                     case R.id.nav_all:
-                        switchToFragment(allFragment);
+                        switchToFragment(allFragment, "AllFragment");
                         break;
 
                     case R.id.nav_on_the_way:
-                        switchToFragment(onTheWayFragment);
+                        switchToFragment(onTheWayFragment, "OnTheWayFragment");
                         break;
 
                     case R.id.nav_delivered:
-                        switchToFragment(deliveredFragment);
+                        switchToFragment(deliveredFragment, "DeliveredFragment");
                         break;
 
                 }
@@ -100,19 +102,28 @@ public class PackagesFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         FragmentManager manager = getFragmentManager();
-        manager.putFragment(outState, "AllFragment", allFragment);
-        manager.putFragment(outState, "OnTheWayFragment", onTheWayFragment);
-        manager.putFragment(outState, "DeliveredFragment", deliveredFragment);
+        if (allFragment.isAdded()) {
+            manager.putFragment(outState, "AllFragment", allFragment);
+        }
+        if (onTheWayFragment.isAdded()) {
+            manager.putFragment(outState, "OnTheWayFragment", onTheWayFragment);
+        }
+        if (deliveredFragment.isAdded()) {
+            manager.putFragment(outState, "DeliveredFragment", deliveredFragment);
+        }
     }
-
+    
     private void initViews(View view) {
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         bottomNavigationView = (BottomNavigationView) view.findViewById(R.id.bottomNavigationView);
     }
 
-    private void switchToFragment(Fragment fragment) {
+    private void switchToFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout, fragment);
+        if (!fragment.isAdded()) {
+            transaction.add(R.id.frameLayout, fragment, tag);
+        }
+        transaction.show(fragment);
         transaction.commit();
     }
 

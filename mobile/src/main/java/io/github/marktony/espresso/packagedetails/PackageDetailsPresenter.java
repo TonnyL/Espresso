@@ -82,7 +82,7 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                     @Override
                     public void onNext(Package value) {
                         view.showPackageStatus(value.getData());
-                        view.setPackageNumber(value.getNu());
+                        view.setPackageNumber(value.getNumber());
                         view.setCompanyName(value.getCom());
                     }
 

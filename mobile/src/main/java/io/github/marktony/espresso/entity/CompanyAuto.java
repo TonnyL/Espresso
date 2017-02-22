@@ -1,5 +1,8 @@
 package io.github.marktony.espresso.entity;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -8,24 +11,30 @@ import java.util.List;
 
 public class CompanyAuto {
 
-    private String comCode;
-    private String num;
+    @Expose
+    @SerializedName("companyCode")
+    private String companyCode;
+    @Expose
+    @SerializedName("num")
+    private String number;
+    @Expose
+    @SerializedName("auto")
     private List<Auto> auto;
 
-    public String getComCode() {
-        return comCode;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setComCode(String comCode) {
-        this.comCode = comCode;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
-    public String getNum() {
-        return num;
+    public String getNumber() {
+        return number;
     }
 
-    public void setNum(String num) {
-        this.num = num;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public List<Auto> getAuto() {
@@ -38,18 +47,28 @@ public class CompanyAuto {
 
     public class Auto {
 
-        private String comCode;
+        @Expose
+        @SerializedName("comCode")
+        private String companyCode;
+        @Expose
+        @SerializedName("id")
         private String id;
+        @Expose
+        @SerializedName("noCount")
         private int noCount;
+        @Expose
+        @SerializedName("noPre")
         private String noPre;
+        @Expose
+        @SerializedName("startTime")
         private String startTime;
 
-        public String getComCode() {
-            return comCode;
+        public String getCompanyCode() {
+            return companyCode;
         }
 
-        public void setComCode(String comCode) {
-            this.comCode = comCode;
+        public void setCompanyCode(String companyCode) {
+            this.companyCode = companyCode;
         }
 
         public String getId() {

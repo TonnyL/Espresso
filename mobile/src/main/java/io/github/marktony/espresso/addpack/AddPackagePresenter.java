@@ -26,18 +26,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
     }
 
     @Override
-    public void addNumber(String number) {
-        if (number.length() < 5) {
-            view.showNumberError();
-            return;
-        }
-        // check the string if only contains numbers and characters
-        for (char c : number.toCharArray()) {
-            if (!Character.isLetterOrDigit(c)) {
-                view.showNumberError();
-                return;
-            }
-        }
-        // more code here
+    public void addNumber(String number, String name) {
+
     }
 }

@@ -19,7 +19,7 @@ public interface AddPackageContract {
 
     interface Presenter extends BasePresenter {
 
-        void addNumber(String number);
+        void addNumber(String number, String name);
 
     }
 

@@ -7,8 +7,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -16,8 +16,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +35,9 @@ public class AddPackageFragment extends Fragment
 
     public final static int SCANNING_REQUEST_CODE = 1;
 
-    private TextInputLayout inputLayoutNumber;
-    private TextInputLayout inputLayoutName;
-    private TextInputEditText editTextNumber;
-    private TextInputEditText editTextName;
-    private AppCompatTextView textViewErrorAndStatus;
+    private TextInputEditText editTextNumber, editTextName;
+    private AppCompatTextView textViewScanCode;
+    private FloatingActionButton fab;
 
     private AddPackageContract.Presenter presenter;
 
@@ -63,28 +59,54 @@ public class AddPackageFragment extends Fragment
 
         initViews(view);
 
-        setHasOptionsMenu(true);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = editTextName.getText().toString();
+                String number = editTextNumber.getText().toString();
+
+                // 对运单号长度进行验证
+                // check the length of the input number
+                if (number.length() < 5) {
+                    showNumberError();
+                    return;
+                }
+                // 检查用户输入运单号是否只包含了数字和字母
+                // check the number if only contains numbers and characters
+                for (char c : number.toCharArray()) {
+                    if (!Character.isLetterOrDigit(c)) {
+                        showNumberError();
+                        return;
+                    }
+                }
+
+                // 如果用户未输入快递名称，则使用默认名称：快递(Package) + 运单号前4位
+                if (name.isEmpty()) {
+                    name = getString(R.string.package_name_default_pre) + number.substring(0, 4);
+                }
+
+                editTextName.setText(name);
+                presenter.addNumber(editTextNumber.getText().toString(), name);
+            }
+        });
+
+        textViewScanCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermissionOrToScan();
+            }
+        });
 
         return view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.add_package, menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home || id == R.id.action_cancel) {
+        if (id == android.R.id.home) {
             getActivity().onBackPressed();
-        } else if (id == R.id.action_scan) {
-            checkPermissionOrToScan();
-        } else if (id == R.id.action_go) {
-            presenter.addNumber(editTextNumber.getText().toString());
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -93,11 +115,10 @@ public class AddPackageFragment extends Fragment
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        inputLayoutName = (TextInputLayout) view.findViewById(R.id.inputLayoutName);
-        inputLayoutNumber = (TextInputLayout) view.findViewById(R.id.inputLayoutNumber);
         editTextName = (TextInputEditText) view.findViewById(R.id.editTextName);
         editTextNumber = (TextInputEditText) view.findViewById(R.id.editTextNumber);
-        textViewErrorAndStatus = (AppCompatTextView) view.findViewById(R.id.textViewErrorAndStatus);
+        textViewScanCode = (AppCompatTextView) view.findViewById(R.id.textViewScanCode);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
     }
 
@@ -115,7 +136,6 @@ public class AddPackageFragment extends Fragment
                     Bundle bundle = data.getExtras();
                     if (null != bundle) {
                         editTextNumber.setText(bundle.getString("result"));
-                        presenter.addNumber(editTextNumber.getText().toString());
                     }
                 }
                 break;

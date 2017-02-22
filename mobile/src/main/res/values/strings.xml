@@ -21,5 +21,12 @@
     <string name="delete">删除</string>
     <string name="copy_code">复制运单号</string>
     <string name="set_unread">标记为未读</string>
+    <string name="scan_code">扫描运单号</string>
+
+    <string name="all">全部</string>
+    <string name="on_the_way">运输中</string>
+    <string name="delivered">已送达</string>
+
+    <string name="package_name_default_pre">快递&#160;</string>
 
 </resources>
