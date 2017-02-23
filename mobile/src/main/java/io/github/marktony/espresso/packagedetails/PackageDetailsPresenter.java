@@ -3,8 +3,6 @@ package io.github.marktony.espresso.packagedetails;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-
 import io.github.marktony.espresso.constant.API;
 import io.github.marktony.espresso.data.PackagesRepository;
 import io.github.marktony.espresso.entity.Package;
@@ -15,6 +13,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**

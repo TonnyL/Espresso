@@ -15,7 +15,7 @@
     <string name="nav_settings">设置</string>
     <string name="nav_about">关于</string>
     <string name="package_status">物流信息</string>
-    <string name="company">公司</string>
+    <string name="company_name">公司名称</string>
     <string name="package_number">单号</string>
     <string name="share">分享</string>
     <string name="delete">删除</string>
@@ -28,5 +28,10 @@
     <string name="delivered">已送达</string>
 
     <string name="package_name_default_pre">快递&#160;</string>
+    <string name="wrong_number_and_check">单号错误，请检查后重试</string>
+    <string name="require_permission">需要授予权限才能运行！</string>
+    <string name="go_to_settings">去设置</string>
+    <string name="phone_number">电话号码</string>
+    <string name="official_website">官方网站</string>
 
 </resources>

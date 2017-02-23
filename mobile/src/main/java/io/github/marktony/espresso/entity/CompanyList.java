@@ -12,7 +12,7 @@ import java.util.List;
 public class CompanyList {
 
     @Expose
-    @SerializedName("company")
+    @SerializedName("company_name")
     private List<Company> companies;
     @Expose
     @SerializedName("error_size")

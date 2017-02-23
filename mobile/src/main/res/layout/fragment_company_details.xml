@@ -8,9 +8,9 @@
     android:id="@+id/coordinatorLayout">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
+        android:layout_height="wrap_content"
+        android:id="@+id/app_bar"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -20,8 +20,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/nav_header"
             app:contentScrim="@color/colorPrimary"
-            android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways">
+            android:fitsSystemWindows="true">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -35,27 +34,45 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/swipeRefreshLayout">
+        android:id="@+id/scrollView"
+        android:scrollbars="vertical"
+        android:scrollbarFadeDuration="1"
+        android:fadeScrollbars="true">
 
-        <android.support.v4.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scrollView"
-            android:scrollbars="vertical"
-            android:scrollbarFadeDuration="1"
-            android:fadeScrollbars="true">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:text="@string/company_name"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:id="@+id/textViewCompany"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:text="京东"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin">
+                android:id="@+id/layoutCompanyPhoneNumber">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
@@ -63,62 +80,46 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="4dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:text="@string/company_name"/>
+                    android:text="@string/phone_number"/>
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:id="@+id/textViewCompany"
+                    android:id="@+id/textViewCompanyPhoneNumber"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="京东"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:text="@string/package_number"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:id="@+id/textViewPackageNumber"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="47258833022"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:text="@string/package_status"
-                    android:textColor="@color/colorPrimary"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/recyclerView"
-                    android:nestedScrollingEnabled="false"/>
+                    android:text="95543"/>
 
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutCompanyOfficialWebsite">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:text="@string/official_website"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fab"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        android:src="@drawable/ic_mode_edit_white_24dp"/>
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/textViewCompanyWebsite"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:text="http://www.sf-express.com"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -2,8 +2,6 @@ package io.github.marktony.espresso.packages;
 
 import android.support.annotation.NonNull;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 

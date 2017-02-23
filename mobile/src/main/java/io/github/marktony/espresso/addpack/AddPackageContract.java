@@ -11,9 +11,13 @@ public interface AddPackageContract {
 
     interface View extends BaseView<Presenter> {
 
-        void showAddingNumberError();
+        void showNumberExistError();
 
         void showNumberError();
+
+        void setProgressIndicator(boolean loading);
+
+        void showSuccess();
 
     }
 

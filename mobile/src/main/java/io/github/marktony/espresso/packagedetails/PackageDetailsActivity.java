@@ -30,7 +30,7 @@ public class PackageDetailsActivity extends AppCompatActivity{
 
         if (!fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, fragment)
+                    .add(R.id.container, fragment)
                     .commit();
         }
 

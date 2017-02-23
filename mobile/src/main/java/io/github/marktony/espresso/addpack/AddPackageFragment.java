@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import io.github.marktony.espresso.R;
@@ -38,6 +39,7 @@ public class AddPackageFragment extends Fragment
     private TextInputEditText editTextNumber, editTextName;
     private AppCompatTextView textViewScanCode;
     private FloatingActionButton fab;
+    private ProgressBar progressBar;
 
     private AddPackageContract.Presenter presenter;
 
@@ -97,6 +99,8 @@ public class AddPackageFragment extends Fragment
             }
         });
 
+        presenter.subscribe();
+
         return view;
     }
 
@@ -111,6 +115,7 @@ public class AddPackageFragment extends Fragment
 
     @Override
     public void initViews(View view) {
+
         AddPackageActivity activity = (AddPackageActivity) getActivity();
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -119,6 +124,7 @@ public class AddPackageFragment extends Fragment
         editTextNumber = (TextInputEditText) view.findViewById(R.id.editTextNumber);
         textViewScanCode = (AppCompatTextView) view.findViewById(R.id.textViewScanCode);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
     }
 
@@ -154,14 +160,14 @@ public class AddPackageFragment extends Fragment
                 } else {
                     AlertDialog dialog = new  AlertDialog.Builder(getContext())
                             .create();
-                    dialog.setMessage("需要授予权限才能运行！");
-                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, "去设置", new DialogInterface.OnClickListener() {
+                    dialog.setMessage(getString(R.string.require_permission));
+                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     });
-                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -189,12 +195,33 @@ public class AddPackageFragment extends Fragment
     }
 
     @Override
-    public void showAddingNumberError() {
+    public void showNumberExistError() {
 
     }
 
     @Override
     public void showNumberError() {
-        Toast.makeText(getContext(), "单号错误，请检查后重试", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.wrong_number_and_check, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void setProgressIndicator(boolean loading) {
+        if (loading) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unsubscribe();
+    }
+
+    @Override
+    public void showSuccess() {
+        Toast.makeText(getContext(), "添加成功", Toast.LENGTH_SHORT).show();
+    }
+
 }

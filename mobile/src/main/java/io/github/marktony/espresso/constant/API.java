@@ -18,7 +18,7 @@ public class API {
     public static final String COMPANY_QUERY = "autonumber/autoComNum";
 
     // 获取所有快递公司信息
-    public static final String COMPANIES = "js/share/company.js";
+    public static final String COMPANIES = "js/share/company_name.js";
 
     // 测试单号，京东
     public static final String TEST_NUMBER = "47258833029";
