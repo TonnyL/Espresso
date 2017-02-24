@@ -12,7 +12,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.component.Timeline;
-import io.github.marktony.espresso.entity.Package;
+import io.github.marktony.espresso.entity.PackageStatus;
 
 /**
  * Created by lizhaotailang on 2017/2/12.
@@ -24,13 +24,13 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
     private final Context context;
 
     private final LayoutInflater inflater;
-    private List<Package.Data> list;
+    private List<PackageStatus> list;
 
     public static final int TYPE_NORMAL = 0x00;
     public static final int TYPE_START = 0x01;
     public static final int TYPE_FINISH = 0x02;
 
-    public PackageStatusAdapter(@NonNull Context context, List<Package.Data> list) {
+    public PackageStatusAdapter(@NonNull Context context, List<PackageStatus> list) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.list = list;
@@ -44,7 +44,7 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        Package.Data item = list.get(position);
+        PackageStatus item = list.get(position);
         // here can be simplified
         if (getItemViewType(position) == TYPE_START) {
             ((PackageStatusViewHolder)holder).timeLine.setStartLine(null);

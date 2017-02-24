@@ -4,19 +4,65 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
+ * 示例JSON格式
+ * JSON format sample
+ * {
+ * "message":"ok",
+ * "nu":"47258833029",
+ * "ischeck":"1",
+ * "condition":"F00",
+ * "com":"jd",
+ * "status":"200",
+ * "state":"3",
+ * "data":
+ * [
+ * {
+ * "time":"2016-12-13 21:35:51",
+ * "ftime":"2016-12-13 21:35:51",
+ * "context":"货物已完成配送，感谢您选择京东配送",
+ * "location":""
+ * },
+ * {
+ * "time":"2016-12-13 11:01:55",
+ * "ftime":"2016-12-13 11:01:55",
+ * "context":"配送员开始配送，请您准备收货，配送员，朱小宝，手机号，13060495388或0917-2622505",
+ * "location":""
+ * },
+ * {
+ * "time":"2016-12-13 10:06:25",
+ * "ftime":"2016-12-13 10:06:25",
+ * "context":"货物已分配，等待配送",
+ * "location":""
+ * },
+ * {
+ * "time":"2016-12-13 10:06:22",
+ * "ftime":"2016-12-13 10:06:22",
+ * "context":"货物已到达【宝鸡北环站】","location":""
+ * },
+ * ...
+ * ]
+ * }
  */
 
-public class Package {
+public class Package extends RealmObject {
+
+    public static final int STATUS_FAILED = 2, STATUS_NORMAL = 0,
+                            STATUS_ON_THE_WAY = 5, STATUS_DELIVERED = 3,
+                            STATUS_RETURNED = 4, STATUS_RETURNING = 6,
+                            STATUS_OTHER = 1;
 
     @Expose
     @SerializedName("message")
     private String message;
     @Expose
     @SerializedName("nu")
+    @PrimaryKey
     private String number;
     @Expose
     @SerializedName("ischeck")
@@ -35,7 +81,16 @@ public class Package {
     private String state;
     @Expose
     @SerializedName("data")
-    private List<Data> data;
+    private RealmList<PackageStatus> data;
+
+    @Expose
+    private boolean pushable = false;
+    @Expose
+    private boolean unread = false;
+    @Expose
+    private String name;
+    @Expose
+    private String companyChineseName;
 
     public String getMessage() {
         return message;
@@ -93,64 +148,57 @@ public class Package {
         this.state = state;
     }
 
-    public List<Data> getData() {
+    public RealmList<PackageStatus> getData() {
         return data;
     }
 
-    public void setData(List<Data> data) {
+    public void setData(RealmList<PackageStatus> data) {
         this.data = data;
     }
 
-    public class Data {
+    public boolean isUnread() {
+        return unread;
+    }
 
-        @Expose
-        @SerializedName("time")
-        private String time;
-        @Expose
-        @SerializedName("ftime")
-        private String ftime;
-        @Expose
-        @SerializedName("context")
-        private String context;
-        @Expose
-        @SerializedName("location")
-        private String location;
+    public void setUnread(boolean unread) {
+        this.unread = unread;
+    }
 
-        public String getTime() {
-            return time;
-        }
+    public String getCompany() {
+        return company;
+    }
 
-        public void setTime(String time) {
-            this.time = time;
-        }
+    public void setCompany(String company) {
+        this.company = company;
+    }
 
-        public String getFtime() {
-            return ftime;
-        }
+    public boolean isPushable() {
+        return pushable;
+    }
 
-        public void setFtime(String ftime) {
-            this.ftime = ftime;
-        }
+    public void setPushable(boolean pushable) {
+        this.pushable = pushable;
+    }
 
-        public String getContext() {
-            return context;
-        }
+    public String getName() {
+        return name;
+    }
 
-        public void setContext(String context) {
-            this.context = context;
-        }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        public String getLocation() {
-            return location;
-        }
+    public String getCompanyChineseName() {
+        return companyChineseName;
+    }
 
-        public void setLocation(String location) {
-            this.location = location;
-        }
+    public void setCompanyChineseName(String companyChineseName) {
+        this.companyChineseName = companyChineseName;
     }
 
     @Override
     public String toString() {
         return new Gson().toJson(this);
     }
+
 }

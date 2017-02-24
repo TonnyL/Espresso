@@ -3,10 +3,34 @@ package io.github.marktony.espresso.entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by lizhaotailang on 2017/2/23.
+ * JSON格式示例
+ * JSON format sample
+ * {
+ * 'cid':'9',
+ * 'id':'2',
+ * 'companyname':'EMS',
+ * shortname':'EMS',
+ * 'tel':'11183',
+ * 'url':'ems',
+ * 'code':'ems',
+ * 'hasvali':0,
+ * 'comurl':'http://www.ems.com.cn/',
+ * 'isavailable':'0',
+ * 'promptinfo':'',
+ * 'testnu':'5116741128399',
+ * 'freg':'',
+ * 'freginfo':'13位纯数字或者开头和结尾各2位字母中间9位数字',
+ * 'telcomplaintnum':'11183',
+ * 'queryurl':'http://www.11183.com.cn/ems/order/singleQuery_t?mailNum=',
+ * 'serversite':''
+ * }
  */
-public class Company {
+
+public class Company extends RealmObject {
 
     @Expose
     @SerializedName("cid")

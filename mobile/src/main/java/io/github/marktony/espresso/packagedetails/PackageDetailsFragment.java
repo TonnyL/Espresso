@@ -22,7 +22,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.adapter.PackageStatusAdapter;
-import io.github.marktony.espresso.entity.Package;
+import io.github.marktony.espresso.entity.PackageStatus;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -122,7 +122,7 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
-    public void showPackageStatus(List<Package.Data> list) {
+    public void showPackageStatus(List<PackageStatus> list) {
         if (adapter == null) {
             adapter = new PackageStatusAdapter(getContext(), list);
             recyclerView.setAdapter(adapter);

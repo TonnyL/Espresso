@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+// Realm support
 apply plugin: 'realm-android'
 
 android {
@@ -29,16 +30,27 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     wearApp project(':wear')
+    // Google Mobile Service
     compile 'com.google.android.gms:play-services:10.2.0'
+
+    // Support libraries
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support:design:25.2.0'
+
+    // ReactiveX series
     compile 'io.reactivex.rxjava2:rxjava:2.0.1'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    // Retrofit series
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+
+    // Gson
     compile 'com.google.code.gson:gson:2.8.0'
+
+    // Zxing
     compile 'com.google.zxing:core:3.3.0'
     testCompile 'junit:junit:4.12'
 }

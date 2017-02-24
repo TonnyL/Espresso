@@ -65,7 +65,7 @@ public class AddPackageFragment extends Fragment
             @Override
             public void onClick(View v) {
                 String name = editTextName.getText().toString();
-                String number = editTextNumber.getText().toString();
+                String number = editTextNumber.getText().toString().replaceAll("\\s*", "");
 
                 // 对运单号长度进行验证
                 // check the length of the input number

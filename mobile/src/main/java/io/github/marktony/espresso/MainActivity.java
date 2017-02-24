@@ -1,6 +1,7 @@
 package io.github.marktony.espresso;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -8,12 +9,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import io.github.marktony.espresso.companies.CompaniesFragment;
+import io.github.marktony.espresso.companies.CompaniesPresenter;
 import io.github.marktony.espresso.packages.PackagesFragment;
-import io.github.marktony.espresso.packages.PackagesPresenter;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
+    private NavigationView navigationView;
 
     private PackagesFragment packagesFragment;
     private CompaniesFragment companiesFragment;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity
 
         showPackagesFragment();
 
+        new CompaniesPresenter(companiesFragment);
+
     }
 
     @Override
@@ -68,26 +71,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
 
@@ -137,7 +123,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
     }
@@ -149,7 +135,8 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.hide(companiesFragment);
         fragmentTransaction.commit();
 
-        toolbar.setTitle(getResources().getString(R.string.nav_home));
+        toolbar.setTitle(getResources().getString(R.string.app_name));
+        navigationView.setCheckedItem(R.id.nav_home);
 
     }
 
@@ -161,6 +148,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
 
         toolbar.setTitle(getResources().getString(R.string.nav_companies));
+        navigationView.setCheckedItem(R.id.nav_companies);
 
     }
 

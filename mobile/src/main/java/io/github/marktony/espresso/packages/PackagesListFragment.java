@@ -17,7 +17,7 @@ import io.github.marktony.espresso.R;
  * Created by lizhaotailang on 2017/2/20.
  */
 
-public class PackagesBaseFragment extends Fragment
+public class PackagesListFragment extends Fragment
         implements PackagesContract.View{
 
     public static final String TYPE = "ARG_TYPE";
@@ -29,10 +29,10 @@ public class PackagesBaseFragment extends Fragment
 
     private PackagesContract.Presenter presenter;
 
-    public PackagesBaseFragment() {}
+    public PackagesListFragment() {}
 
-    public static PackagesBaseFragment newInstance(int type) {
-        PackagesBaseFragment fragment = new PackagesBaseFragment();
+    public static PackagesListFragment newInstance(int type) {
+        PackagesListFragment fragment = new PackagesListFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(TYPE, type);
         fragment.setArguments(bundle);

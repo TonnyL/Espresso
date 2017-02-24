@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.BasePresenter;
 import io.github.marktony.espresso.BaseView;
-import io.github.marktony.espresso.entity.Package;
+import io.github.marktony.espresso.entity.PackageStatus;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -16,7 +16,7 @@ public interface PackageDetailsContract {
 
         void showDetailError();
 
-        void showPackageStatus(List<Package.Data> list);
+        void showPackageStatus(List<PackageStatus> list);
 
         void setCompanyName(String companyName);
 

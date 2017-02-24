@@ -6,11 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class PackagesFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton fab;
 
-    private PackagesBaseFragment allFragment, onTheWayFragment, deliveredFragment;
+    private PackagesListFragment allFragment, onTheWayFragment, deliveredFragment;
 
     public PackagesFragment() {}
 
@@ -41,13 +42,13 @@ public class PackagesFragment extends Fragment {
 
         if (savedInstanceState != null) {
             FragmentManager manager = getFragmentManager();
-            allFragment = (PackagesBaseFragment) manager.getFragment(savedInstanceState, "AllFragment");
-            onTheWayFragment = (PackagesBaseFragment) manager.getFragment(savedInstanceState, "OnTheWayFragment");
-            deliveredFragment = (PackagesBaseFragment) manager.getFragment(savedInstanceState, "DeliveredFragment");
+            allFragment = (PackagesListFragment) manager.getFragment(savedInstanceState, "AllFragment");
+            onTheWayFragment = (PackagesListFragment) manager.getFragment(savedInstanceState, "OnTheWayFragment");
+            deliveredFragment = (PackagesListFragment) manager.getFragment(savedInstanceState, "DeliveredFragment");
         } else {
-            allFragment = PackagesBaseFragment.newInstance(PackagesBaseFragment.TYPE_ALL);
-            onTheWayFragment = PackagesBaseFragment.newInstance(PackagesBaseFragment.TYPE_ON_THE_WAY);
-            deliveredFragment = PackagesBaseFragment.newInstance(PackagesBaseFragment.TYPE_DELIVERED);
+            allFragment = PackagesListFragment.newInstance(PackagesListFragment.TYPE_ALL);
+            onTheWayFragment = PackagesListFragment.newInstance(PackagesListFragment.TYPE_ON_THE_WAY);
+            deliveredFragment = PackagesListFragment.newInstance(PackagesListFragment.TYPE_DELIVERED);
         }
 
         new PackagesPresenter(allFragment);
@@ -95,7 +96,26 @@ public class PackagesFragment extends Fragment {
             }
         });
 
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.packages_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_search) {
+
+        } else if (id == R.id.action_mark_all_read) {
+
+        }
+        return true;
     }
 
     @Override

@@ -33,5 +33,6 @@
     <string name="go_to_settings">去设置</string>
     <string name="phone_number">电话号码</string>
     <string name="official_website">官方网站</string>
+    <string name="mark_all_read">全部标记为已读</string>
 
 </resources>

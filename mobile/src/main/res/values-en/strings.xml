@@ -34,4 +34,5 @@
     <string name="go_to_settings">Go to settings</string>
     <string name="phone_number">Phone Number</string>
     <string name="official_website">Official Website</string>
+    <string name="mark_all_read">Mark all read</string>
 </resources>
