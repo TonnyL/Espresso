@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.data.PackagesRepository;
+import io.github.marktony.espresso.data.source.PackagesRepository;
 
 /**
  * Created by lizhaotailang on 2017/2/10.

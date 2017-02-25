@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import io.github.marktony.espresso.constant.API;
-import io.github.marktony.espresso.data.PackagesRepository;
-import io.github.marktony.espresso.entity.Package;
+import io.github.marktony.espresso.data.source.PackagesRepository;
+import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

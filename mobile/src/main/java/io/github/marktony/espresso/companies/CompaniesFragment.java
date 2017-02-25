@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.entity.Company;
+import io.github.marktony.espresso.data.Company;
 
 /**
  * Created by lizhaotailang on 2017/2/10.

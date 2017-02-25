@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.BasePresenter;
 import io.github.marktony.espresso.BaseView;
-import io.github.marktony.espresso.entity.PackageStatus;
+import io.github.marktony.espresso.data.PackageStatus;
 
 /**
  * Created by lizhaotailang on 2017/2/10.

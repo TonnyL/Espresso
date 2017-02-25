@@ -1,10 +1,10 @@
-package io.github.marktony.espresso.data;
+package io.github.marktony.espresso.data.source;
 
 import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import io.github.marktony.espresso.entity.Package;
+import io.github.marktony.espresso.data.Package;
 import io.reactivex.Observable;
 
 /**
@@ -15,7 +15,7 @@ public interface PackagesDataSource {
 
     Observable<List<Package>> getPackages();
 
-    Observable<Package> getPackage();
+    Observable<Package> getPackage(@NonNull final String packNumber);
 
     void savePackage(@NonNull Package pack);
 

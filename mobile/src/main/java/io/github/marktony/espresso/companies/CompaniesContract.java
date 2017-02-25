@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import io.github.marktony.espresso.BasePresenter;
 import io.github.marktony.espresso.BaseView;
-import io.github.marktony.espresso.entity.Company;
+import io.github.marktony.espresso.data.Company;
 
 /**
  * Created by lizhaotailang on 2017/2/10.

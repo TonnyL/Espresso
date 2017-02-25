@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.entity;
+package io.github.marktony.espresso.data;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;

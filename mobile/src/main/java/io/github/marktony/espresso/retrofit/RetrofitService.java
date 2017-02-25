@@ -1,9 +1,9 @@
 package io.github.marktony.espresso.retrofit;
 
 import io.github.marktony.espresso.constant.API;
-import io.github.marktony.espresso.entity.CompanyAuto;
-import io.github.marktony.espresso.entity.CompanyList;
-import io.github.marktony.espresso.entity.Package;
+import io.github.marktony.espresso.data.CompanyAuto;
+import io.github.marktony.espresso.data.CompanyList;
+import io.github.marktony.espresso.data.Package;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

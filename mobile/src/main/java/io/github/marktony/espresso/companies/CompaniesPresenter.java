@@ -2,7 +2,7 @@ package io.github.marktony.espresso.companies;
 
 import android.support.annotation.NonNull;
 
-import io.github.marktony.espresso.entity.CompanyList;
+import io.github.marktony.espresso.data.CompanyList;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.reactivex.Observer;

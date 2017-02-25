@@ -2,19 +2,7 @@ package io.github.marktony.espresso.packages;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.github.marktony.espresso.constant.API;
-import io.github.marktony.espresso.entity.Package;
-import io.github.marktony.espresso.retrofit.RetrofitService;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by lizhaotailang on 2017/2/10.

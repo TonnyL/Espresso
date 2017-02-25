@@ -12,7 +12,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.component.Timeline;
-import io.github.marktony.espresso.entity.PackageStatus;
+import io.github.marktony.espresso.data.PackageStatus;
 
 /**
  * Created by lizhaotailang on 2017/2/12.
