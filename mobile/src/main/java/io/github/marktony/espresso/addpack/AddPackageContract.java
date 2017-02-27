@@ -19,11 +19,13 @@ public interface AddPackageContract {
 
         void showSuccess();
 
+        void showPackagesList();
+
     }
 
     interface Presenter extends BasePresenter {
 
-        void addNumber(String number, String name);
+        void savePackage(String number, String name);
 
     }
 

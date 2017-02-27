@@ -27,12 +27,12 @@
     <string name="on_the_way">运输中</string>
     <string name="delivered">已送达</string>
 
-    <string name="package_name_default_pre">快递&#160;</string>
     <string name="wrong_number_and_check">单号错误，请检查后重试</string>
     <string name="require_permission">需要授予权限才能运行！</string>
     <string name="go_to_settings">去设置</string>
     <string name="phone_number">电话号码</string>
     <string name="official_website">官方网站</string>
     <string name="mark_all_read">全部标记为已读</string>
+    <string name="package_name_default_pre">快递</string>
 
 </resources>

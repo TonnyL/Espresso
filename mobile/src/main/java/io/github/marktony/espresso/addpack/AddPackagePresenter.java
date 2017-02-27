@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import io.github.marktony.espresso.data.CompanyAuto;
 import io.github.marktony.espresso.data.Package;
+import io.github.marktony.espresso.data.source.PackagesDataSource;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.reactivex.Observer;
@@ -18,12 +19,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AddPackagePresenter implements AddPackageContract.Presenter{
 
-    private AddPackageContract.View view;
+    @NonNull
+    private final AddPackageContract.View view;
+
+    @NonNull
+    private final PackagesDataSource packagesDataSource;
+
+    @NonNull
     private CompositeDisposable compositeDisposable;
 
-    public AddPackagePresenter(@NonNull AddPackageContract.View view) {
+    public AddPackagePresenter(@NonNull PackagesDataSource dataSource, @NonNull AddPackageContract.View view) {
         this.view = view;
         this.view.setPresenter(this);
+        this.packagesDataSource = dataSource;
         compositeDisposable = new CompositeDisposable();
     }
 
@@ -38,15 +46,15 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
     }
 
     @Override
-    public void addNumber(String number, String name) {
+    public void savePackage(String number, String name) {
 
         compositeDisposable.clear();
 
-        checkNumber(number);
+        checkNumber(number, name);
 
     }
 
-    private void checkNumber(final String number) {
+    private void checkNumber(final String number, final String name) {
 
         view.setProgressIndicator(true);
 
@@ -63,7 +71,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                     @Override
                     public void onNext(CompanyAuto value) {
                         if (value.getAuto().size() > 0) {
-                            checkPackageLatestStatus(value.getAuto().get(0).getCompanyCode(), number);
+                            checkPackageLatestStatus(value.getAuto().get(0).getCompanyCode(), number, name);
                         } else {
                             view.showNumberError();
                             view.setProgressIndicator(false);
@@ -83,7 +91,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                 });
     }
 
-    private void checkPackageLatestStatus(String type, String number) {
+    private void checkPackageLatestStatus(String type, String number, final String name) {
 
         RetrofitClient.getInstance().create(RetrofitService.class)
                 .getPackageState(type, number)
@@ -97,7 +105,10 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
                     @Override
                     public void onNext(Package value) {
-
+                        value.setName(name);
+                        packagesDataSource.savePackage(value);
+                        view.showSuccess();
+                        view.showPackagesList();
                     }
 
                     @Override

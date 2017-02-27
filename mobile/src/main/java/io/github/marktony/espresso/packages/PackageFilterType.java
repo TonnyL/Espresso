@@ -10,15 +10,15 @@ public enum PackageFilterType {
     /**
      * Do not filter the packages.
      */
-    ALL,
+    ALL_PACKAGES,
 
     /**
      * Filters only the on the way (not complete or delivered) packages.
      */
-    ON_THE_WAY,
+    ON_THE_WAY_PACKAGES,
 
     /**
      * Filters only the delivered packages.
      */
-    DELIVERED
+    DELIVERED_PACKAGES
 }

@@ -22,9 +22,9 @@
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/textViewAvatar"
             android:layout_gravity="center"
             android:textColor="@android:color/white"
-            android:text="A"
             android:textSize="32sp"/>
 
     </FrameLayout>
@@ -40,24 +40,20 @@
             android:layout_height="wrap_content"
             android:id="@+id/textViewPackageName"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:text="Package Name"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewStatus"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:maxLines="2"
-            android:text="已分发"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewTime"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:text="2017.2.10"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     </LinearLayout>
 

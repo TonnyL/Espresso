@@ -7,28 +7,42 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import java.util.List;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.adapter.PackageAdapter;
 import io.github.marktony.espresso.addpack.AddPackageActivity;
+import io.github.marktony.espresso.data.Package;
+import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
+import io.github.marktony.espresso.packagedetails.PackageDetailsActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
  */
 
-public class PackagesFragment extends Fragment {
+public class PackagesFragment extends Fragment
+        implements PackagesContract.View {
 
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton fab;
+    private SwipeRefreshLayout refreshLayout;
+    private RecyclerView recyclerView;
+    private LinearLayout emptyView;
 
-    private PackagesListFragment allFragment, onTheWayFragment, deliveredFragment;
+    private PackageAdapter adapter;
+
+    private PackagesContract.Presenter presenter;
 
     public PackagesFragment() {}
 
@@ -39,22 +53,6 @@ public class PackagesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            FragmentManager manager = getFragmentManager();
-            allFragment = (PackagesListFragment) manager.getFragment(savedInstanceState, "AllFragment");
-            onTheWayFragment = (PackagesListFragment) manager.getFragment(savedInstanceState, "OnTheWayFragment");
-            deliveredFragment = (PackagesListFragment) manager.getFragment(savedInstanceState, "DeliveredFragment");
-        } else {
-            allFragment = PackagesListFragment.newInstance(PackagesListFragment.TYPE_ALL);
-            onTheWayFragment = PackagesListFragment.newInstance(PackagesListFragment.TYPE_ON_THE_WAY);
-            deliveredFragment = PackagesListFragment.newInstance(PackagesListFragment.TYPE_DELIVERED);
-        }
-
-        new PackagesPresenter(allFragment);
-        new PackagesPresenter(onTheWayFragment);
-        new PackagesPresenter(deliveredFragment);
-
     }
 
     @Nullable
@@ -67,11 +65,9 @@ public class PackagesFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), AddPackageActivity.class));
+                startActivityForResult(new Intent(getContext(), AddPackageActivity.class), AddPackageActivity.REQUEST_ADD_PACKAGE);
             }
         });
-
-        switchToFragment(allFragment, "AllFragment");
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -79,15 +75,12 @@ public class PackagesFragment extends Fragment {
                 switch (item.getItemId()) {
 
                     case R.id.nav_all:
-                        switchToFragment(allFragment, "AllFragment");
                         break;
 
                     case R.id.nav_on_the_way:
-                        switchToFragment(onTheWayFragment, "OnTheWayFragment");
                         break;
 
                     case R.id.nav_delivered:
-                        switchToFragment(deliveredFragment, "DeliveredFragment");
                         break;
 
                 }
@@ -99,6 +92,18 @@ public class PackagesFragment extends Fragment {
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.unsubscribe();
     }
 
     @Override
@@ -121,30 +126,54 @@ public class PackagesFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        FragmentManager manager = getFragmentManager();
-        if (allFragment.isAdded()) {
-            manager.putFragment(outState, "AllFragment", allFragment);
-        }
-        if (onTheWayFragment.isAdded()) {
-            manager.putFragment(outState, "OnTheWayFragment", onTheWayFragment);
-        }
-        if (deliveredFragment.isAdded()) {
-            manager.putFragment(outState, "DeliveredFragment", deliveredFragment);
-        }
-    }
-    
-    private void initViews(View view) {
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        bottomNavigationView = (BottomNavigationView) view.findViewById(R.id.bottomNavigationView);
     }
 
-    private void switchToFragment(Fragment fragment, String tag) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if (!fragment.isAdded()) {
-            transaction.add(R.id.frameLayout, fragment, tag);
+    @Override
+    public void initViews(View view) {
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        bottomNavigationView = (BottomNavigationView) view.findViewById(R.id.bottomNavigationView);
+        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        emptyView = (LinearLayout) view.findViewById(R.id.emptyView);
+    }
+
+    @Override
+    public void setPresenter(@NonNull PackagesContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void setLoadingIndicator(boolean active) {
+        refreshLayout.setRefreshing(active);
+    }
+
+    @Override
+    public void showNoPackages() {
+
+    }
+
+    @Override
+    public void showPackages(@NonNull final List<Package> list) {
+        if (adapter == null) {
+            adapter = new PackageAdapter(getContext(), list);
+            adapter.setOnRecyclerViewItemOnClickListener(new OnRecyclerViewItemClickListener() {
+                @Override
+                public void OnItemClick(View v, int position) {
+                    Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
+                    intent.putExtra(PackageDetailsActivity.PACKAGE_ID, list.get(position).getNumber());
+                    startActivity(intent);
+                }
+            });
+            recyclerView.setAdapter(adapter);
+        } else {
+            if (list.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                emptyView.setVisibility(View.INVISIBLE);
+            }
         }
-        transaction.show(fragment);
-        transaction.commit();
+        adapter.notifyDataSetChanged();
     }
 
 }

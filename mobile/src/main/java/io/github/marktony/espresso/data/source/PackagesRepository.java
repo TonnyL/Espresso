@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
 import io.github.marktony.espresso.data.Package;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -32,9 +33,9 @@ public class PackagesRepository implements PackagesDataSource {
     @NonNull
     private final PackagesDataSource packagesLocalDataSource;
 
-    Map<String, Package> cachedPackages;
+    private Map<String, Package> cachedPackages;
 
-    boolean cacheIsDirty;
+    private boolean cacheIsDirty;
 
     // Prevent direct instantiation
     private PackagesRepository(@NonNull PackagesDataSource packagesRemoteDataSource,
@@ -168,40 +169,42 @@ public class PackagesRepository implements PackagesDataSource {
     }
 
     public Observable<List<Package>> getAndSaveRemotePackages() {
-        /*return packagesRemoteDataSource
+        return packagesRemoteDataSource
                 .getPackages()
-                .flatMap(new Function<List<Package>, ObservableSource<?>>() {
+                .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
                     @Override
-                    public ObservableSource<?> apply(List<Package> packages) throws Exception {
+                    public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
                         return Observable.fromIterable(packages)
                                 .doOnNext(new Consumer<Package>() {
                                     @Override
                                     public void accept(Package aPackage) throws Exception {
-                                        // packagesLocalDataSource.savePackage(aPackage);
-                                        // cachedPackages.put(aPackage.getNumber(), aPackage);
+                                        packagesLocalDataSource.savePackage(aPackage);
+                                        cachedPackages.put(aPackage.getNumber(), aPackage);
                                     }
-                                }).toList();
+                                }).toList().toObservable();
                     }
-                });*/
-
-        return null;
+                }).doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        cacheIsDirty = false;
+                    }
+                });
     }
 
     public Observable<List<Package>> getAndCacheLocalPackages() {
-        /*return packagesLocalDataSource.getPackages()
-                .flatMap(new Function<List<Package>, ObservableSource<?>>() {
+        return packagesLocalDataSource
+                .getPackages()
+                .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
                     @Override
-                    public ObservableSource<?> apply(List<Package> packages) throws Exception {
-                        return Observable.just(packages)
-                                .doOnNext(new Consumer<List<Package>>() {
+                    public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
+                        return Observable.fromIterable(packages)
+                                .doOnNext(new Consumer<Package>() {
                                     @Override
-                                    public void accept(List<Package> packages) throws Exception {
-
+                                    public void accept(Package aPackage) throws Exception {
+                                        cachedPackages.put(aPackage.getNumber(), aPackage);
                                     }
-                                })
+                                }).toList().toObservable();
                     }
-                });*/
-
-        return null;
+                });
     }
 }

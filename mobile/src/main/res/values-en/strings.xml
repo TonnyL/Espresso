@@ -28,11 +28,11 @@
     <string name="on_the_way">On the way</string>
     <string name="delivered">Delivered</string>
 
-    <string name="package_name_default_pre">Package&#160;</string>
     <string name="wrong_number_and_check">单号错误，请检查后重试</string>
     <string name="require_permission">需要授予权限才能运行！</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="phone_number">Phone Number</string>
     <string name="official_website">Official Website</string>
     <string name="mark_all_read">Mark all read</string>
+    <string name="package_name_default_pre">Package</string>
 </resources>

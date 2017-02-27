@@ -3,18 +3,12 @@ package io.github.marktony.espresso.packagedetails;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import io.github.marktony.espresso.constant.API;
-import io.github.marktony.espresso.data.source.PackagesRepository;
 import io.github.marktony.espresso.data.Package;
-import io.github.marktony.espresso.retrofit.RetrofitService;
-import io.reactivex.Observer;
+import io.github.marktony.espresso.data.source.PackagesRepository;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -29,7 +23,7 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
     private PackagesRepository packagesRepository;
 
     @NonNull
-    private CompositeDisposable disposable;
+    private CompositeDisposable compositeDisposable;
 
     @Nullable
     private String packageId;
@@ -39,8 +33,8 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                                    @NonNull PackageDetailsContract.View packageDetailView) {
         this.packageId = packageId;
         this.view = packageDetailView;
-
-        disposable = new CompositeDisposable();
+        this.packagesRepository = packagesRepository;
+        compositeDisposable = new CompositeDisposable();
         this.view.setPresenter(this);
     }
 
@@ -51,7 +45,7 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
 
     @Override
     public void unsubscribe() {
-        disposable.clear();
+        compositeDisposable.clear();
     }
 
     private void openDetail() {
@@ -59,42 +53,17 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
             view.showDetailError();
             return;
         }
-
-        // just for test
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API.API_BASE)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
-        service.getPackageState("jd", API.TEST_NUMBER)
-                .subscribeOn(Schedulers.io())
+        compositeDisposable.add(packagesRepository
+                .getPackage(packageId)
+                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Package>() {
+                .subscribe(new Consumer<Package>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-
+                    public void accept(Package aPackage) throws Exception {
+                        view.showPackageStatus(aPackage.getData());
                     }
+                }));
 
-                    @Override
-                    public void onNext(Package value) {
-                        view.showPackageStatus(value.getData());
-                        view.setPackageNumber(value.getNumber());
-                        view.setCompanyName(value.getCom());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
     }
 
 }

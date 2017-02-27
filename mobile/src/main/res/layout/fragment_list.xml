@@ -24,6 +24,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:id="@+id/emptyView"
+            android:visibility="invisible"
             android:gravity="center"
             android:clickable="true"
             android:focusable="true">

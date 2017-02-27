@@ -5,6 +5,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.data.local.PackagesLocalDataSource;
+import io.github.marktony.espresso.data.remote.PackagesRemoteDataSource;
+import io.github.marktony.espresso.data.source.PackagesDataSource;
+import io.github.marktony.espresso.data.source.PackagesRepository;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -13,6 +17,10 @@ import io.github.marktony.espresso.R;
 public class AddPackageActivity extends AppCompatActivity {
 
     private AddPackageFragment fragment;
+
+    public static final int REQUEST_ADD_PACKAGE = 1;
+
+    public static final String SHOULD_LOAD_DATA_FROM_REPO_KEY = "SHOULD_LOAD_DATA_FROM_REPO_KEY";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,20 +35,19 @@ public class AddPackageActivity extends AppCompatActivity {
 
         if (!fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment, "AddPackageFragment")
+                    .replace(R.id.container, fragment, "AddPackageFragment")
                     .commit();
         }
 
-        new AddPackagePresenter(fragment);
+        new AddPackagePresenter(PackagesRepository.getInstance(PackagesRemoteDataSource.getInstance(), PackagesLocalDataSource.getInstance()),
+                fragment);
 
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (fragment.isAdded()) {
-            getSupportFragmentManager().putFragment(outState, "AddPackageFragment", fragment);
-        }
+        getSupportFragmentManager().putFragment(outState, "AddPackageFragment", fragment);
     }
 
 }

@@ -2,7 +2,20 @@ package io.github.marktony.espresso.packages;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
+import io.github.marktony.espresso.data.Package;
+import io.github.marktony.espresso.data.source.PackagesRepository;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -14,66 +27,114 @@ public class PackagesPresenter implements PackagesContract.Presenter {
     private final PackagesContract.View view;
 
     @NonNull
-    private final CompositeDisposable disposable;
+    private final PackagesRepository packagesRepository;
 
-    public PackagesPresenter(@NonNull PackagesContract.View view) {
+    @NonNull
+    private final CompositeDisposable compositeDisposable;
+
+    @NonNull
+    private PackageFilterType currentFiltering = PackageFilterType.ALL_PACKAGES;
+
+    public PackagesPresenter(@NonNull PackagesContract.View view,
+                             @NonNull PackagesRepository packagesRepository) {
         this.view = view;
-
-        disposable = new CompositeDisposable();
+        this.packagesRepository = packagesRepository;
+        compositeDisposable = new CompositeDisposable();
         this.view.setPresenter(this);
     }
 
     @Override
     public void subscribe() {
-        loadPackageStates();
+        loadPackages(false);
     }
 
     @Override
     public void unsubscribe() {
-        disposable.clear();
+        compositeDisposable.clear();
     }
 
-    private void loadPackageStates() {
-
-        /*view.setProgressIndicator(true);
-
-        // just for test
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API.API_BASE)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitService service = retrofit.create(RetrofitService.class);
-
-        service.getPackageState("jd", API.TEST_NUMBER)
+    @Override
+    public void loadPackages(boolean forceUpdate) {
+        Disposable disposable = packagesRepository
+                .getPackages()
+                .flatMap(new Function<List<Package>, ObservableSource<Package>>() {
+                    @Override
+                    public ObservableSource<Package> apply(List<Package> list) throws Exception {
+                        return Observable.fromIterable(list);
+                    }
+                })
+                .filter(new Predicate<Package>() {
+                    @Override
+                    public boolean test(Package aPackage) throws Exception {
+                        switch (currentFiltering) {
+                            case ON_THE_WAY_PACKAGES:
+                                return Integer.valueOf(aPackage.getState()) == (Package.STATUS_ON_THE_WAY);
+                            case DELIVERED_PACKAGES:
+                                return Integer.valueOf(aPackage.getState()) == (Package.STATUS_DELIVERED);
+                            case ALL_PACKAGES:
+                            default:
+                                return true;
+                        }
+                    }
+                })
+                .toList()
+                .toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Package>() {
+                .subscribe(new Consumer<List<Package>>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
+                    public void accept(List<Package> list) throws Exception {
+                        view.showPackages(list);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
 
                     }
-
+                }, new Action() {
                     @Override
-                    public void onNext(Package value) {
-                        List<Package> list = new ArrayList<Package>();
-                        list.add(value);
-                        view.showPackageStates(list);
-                    }
+                    public void run() throws Exception {
 
+                    }
+                }, new Consumer<Disposable>() {
                     @Override
-                    public void onError(Throwable e) {
-                        view.showLoadingPackageStatesError();
-                        view.setProgressIndicator(false);
-                    }
+                    public void accept(Disposable disposable) throws Exception {
 
-                    @Override
-                    public void onComplete() {
-                        view.setProgressIndicator(false);
                     }
-                });*/
+                });
 
+        compositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void openPackageDetails(@NonNull Package pack) {
+
+    }
+
+    @Override
+    public void markAllPacksRead() {
+
+    }
+
+    /**
+     * Sets the current package filtering type.
+     *
+     * @param requestType Can be {@Link PackageFilterType#ALL_PACKAGES},
+     *                    {@Link PackageFilterType#ON_THE_WAY_PACKAGES}, or
+     *                    {@Link PackageFilterType#DELIVERED_PACKAGES}
+     */
+    @Override
+    public void setFiltering(@NonNull PackageFilterType requestType) {
+        currentFiltering = requestType;
+    }
+
+    /**
+     * Get current package filtering type.
+     * @return Current filtering type.
+     */
+    @Override
+    public PackageFilterType getFiltering() {
+        return currentFiltering;
     }
 
 }

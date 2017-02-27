@@ -1,4 +1,4 @@
-package io.github.marktony.espresso;
+package io.github.marktony.espresso.packages;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,9 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.companies.CompaniesFragment;
 import io.github.marktony.espresso.companies.CompaniesPresenter;
-import io.github.marktony.espresso.packages.PackagesFragment;
+import io.github.marktony.espresso.data.local.PackagesLocalDataSource;
+import io.github.marktony.espresso.data.remote.PackagesRemoteDataSource;
+import io.github.marktony.espresso.data.source.PackagesRepository;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -22,11 +25,15 @@ import io.github.marktony.espresso.packages.PackagesFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
+
     private Toolbar toolbar;
     private NavigationView navigationView;
 
     private PackagesFragment packagesFragment;
     private CompaniesFragment companiesFragment;
+
+    private PackagesPresenter packagesPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +64,15 @@ public class MainActivity extends AppCompatActivity
 
         showPackagesFragment();
 
+        packagesPresenter = new PackagesPresenter(packagesFragment,
+                PackagesRepository.getInstance(PackagesRemoteDataSource.getInstance(), PackagesLocalDataSource.getInstance()));
+
         new CompaniesPresenter(companiesFragment);
+
+        if (savedInstanceState != null) {
+            PackageFilterType currentFiltering = (PackageFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
+            packagesPresenter.setFiltering(currentFiltering);
+        }
 
     }
 
@@ -100,7 +115,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(CURRENT_FILTERING_KEY, packagesPresenter.getFiltering());
         super.onSaveInstanceState(outState);
+
         if (packagesFragment.isAdded()) {
             getSupportFragmentManager().putFragment(outState, "PackagesFragment", packagesFragment);
         }

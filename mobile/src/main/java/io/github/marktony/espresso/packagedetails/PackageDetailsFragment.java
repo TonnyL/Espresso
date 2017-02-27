@@ -59,8 +59,6 @@ public class PackageDetailsFragment extends Fragment
 
         initViews(view);
 
-        setHasOptionsMenu(true);
-
         presenter.subscribe();
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +75,21 @@ public class PackageDetailsFragment extends Fragment
             }
         });
 
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.unsubscribe();
     }
 
     @Override
@@ -92,7 +104,7 @@ public class PackageDetailsFragment extends Fragment
         if (id == android.R.id.home) {
             getActivity().onBackPressed();
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

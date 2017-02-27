@@ -82,7 +82,8 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     @Override
     public void refreshPackages() {
-        INSTANCE = null;
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
     }
 
 }

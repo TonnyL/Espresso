@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.companydetail;
+package io.github.marktony.espresso.companydetails;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

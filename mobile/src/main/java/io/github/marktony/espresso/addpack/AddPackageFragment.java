@@ -1,6 +1,7 @@
 package io.github.marktony.espresso.addpack;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -32,7 +33,7 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class AddPackageFragment extends Fragment
-        implements AddPackageContract.View{
+        implements AddPackageContract.View {
 
     public final static int SCANNING_REQUEST_CODE = 1;
 
@@ -88,7 +89,7 @@ public class AddPackageFragment extends Fragment
                 }
 
                 editTextName.setText(name);
-                presenter.addNumber(editTextNumber.getText().toString(), name);
+                presenter.savePackage(editTextNumber.getText().toString(), name);
             }
         });
 
@@ -99,7 +100,7 @@ public class AddPackageFragment extends Fragment
             }
         });
 
-        presenter.subscribe();
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -119,7 +120,6 @@ public class AddPackageFragment extends Fragment
         AddPackageActivity activity = (AddPackageActivity) getActivity();
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         editTextName = (TextInputEditText) view.findViewById(R.id.editTextName);
         editTextNumber = (TextInputEditText) view.findViewById(R.id.editTextNumber);
         textViewScanCode = (AppCompatTextView) view.findViewById(R.id.textViewScanCode);
@@ -214,14 +214,26 @@ public class AddPackageFragment extends Fragment
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onResume() {
+        super.onResume();
+        presenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         presenter.unsubscribe();
     }
 
     @Override
     public void showSuccess() {
         Toast.makeText(getContext(), "添加成功", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showPackagesList() {
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
     }
 
 }

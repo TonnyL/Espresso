@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.companydetail;
+package io.github.marktony.espresso.companydetails;
 
 import io.github.marktony.espresso.BasePresenter;
 import io.github.marktony.espresso.BaseView;
