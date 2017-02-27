@@ -18,8 +18,8 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/nav_header"
+            android:layout_height="@dimen/app_bar_height"
+            android:background="@drawable/banner_background_add"
             app:contentScrim="@color/colorPrimary"
             android:fitsSystemWindows="true">
 

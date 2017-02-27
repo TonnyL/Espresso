@@ -30,14 +30,12 @@ public class PackageDetailsActivity extends AppCompatActivity{
             fragment = PackageDetailsFragment.newInstance();
         }
 
-        if (!fragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment)
-                    .commit();
-        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
 
-        new PackageDetailsPresenter(getIntent().getStringExtra(PACKAGE_ID),
-                // only for test
+        new PackageDetailsPresenter(
+                getIntent().getStringExtra(PACKAGE_ID),
                 PackagesRepository.getInstance(PackagesRemoteDataSource.getInstance(),
                         PackagesLocalDataSource.getInstance()),
                 fragment);
@@ -47,8 +45,6 @@ public class PackageDetailsActivity extends AppCompatActivity{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (fragment.isAdded()) {
-            getSupportFragmentManager().putFragment(outState, "PackageDetailsFragment", fragment);
-        }
+        getSupportFragmentManager().putFragment(outState, "PackageDetailsFragment", fragment);
     }
 }

@@ -1,8 +1,8 @@
 package io.github.marktony.espresso.packagedetails;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesRepository;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,10 +25,10 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
     @NonNull
     private CompositeDisposable compositeDisposable;
 
-    @Nullable
+    @NonNull
     private String packageId;
 
-    public PackageDetailsPresenter(@Nullable String packageId,
+    public PackageDetailsPresenter(@NonNull String packageId,
                                    @NonNull PackagesRepository packagesRepository,
                                    @NonNull PackageDetailsContract.View packageDetailView) {
         this.packageId = packageId;
@@ -49,10 +49,6 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
     }
 
     private void openDetail() {
-        if (packageId == null || packageId.isEmpty()) {
-            view.showDetailError();
-            return;
-        }
         compositeDisposable.add(packagesRepository
                 .getPackage(packageId)
                 .subscribeOn(Schedulers.computation())
@@ -60,7 +56,22 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                 .subscribe(new Consumer<Package>() {
                     @Override
                     public void accept(Package aPackage) throws Exception {
+                        if (aPackage.getData() == null || aPackage.getData().size() < 1) {
+                            view.setPackageNumber(packageId);
+                        } else {
+                            view.setPackageNumber(aPackage.getNumber());
+                        }
                         view.showPackageStatus(aPackage.getData());
+                        view.setPackageName(aPackage.getName());
+
+                        int state = Integer.parseInt(aPackage.getState());
+                        if (state == Package.STATUS_FAILED) {
+                            view.setToolbarBackground(R.drawable.banner_background_error);
+                        } else if (state == Package.STATUS_DELIVERED) {
+                            view.setToolbarBackground(R.drawable.banner_background_delivered);
+                        } else {
+                            view.setToolbarBackground(R.drawable.banner_background_on_the_way);
+                        }
                     }
                 }));
 

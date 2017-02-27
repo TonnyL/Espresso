@@ -69,21 +69,27 @@ public class PackagesFragment extends Fragment
             }
         });
 
+        presenter.loadPackages(false);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
 
                     case R.id.nav_all:
+                        presenter.setFiltering(PackageFilterType.ALL_PACKAGES);
                         break;
 
                     case R.id.nav_on_the_way:
+                        presenter.setFiltering(PackageFilterType.ON_THE_WAY_PACKAGES);
                         break;
 
                     case R.id.nav_delivered:
+                        presenter.setFiltering(PackageFilterType.DELIVERED_PACKAGES);
                         break;
 
                 }
+                presenter.loadPackages(false);
 
                 return true;
             }
@@ -168,8 +174,10 @@ public class PackagesFragment extends Fragment
             recyclerView.setAdapter(adapter);
         } else {
             if (list.isEmpty()) {
+                recyclerView.setVisibility(View.INVISIBLE);
                 emptyView.setVisibility(View.VISIBLE);
             } else {
+                recyclerView.setVisibility(View.VISIBLE);
                 emptyView.setVisibility(View.INVISIBLE);
             }
         }

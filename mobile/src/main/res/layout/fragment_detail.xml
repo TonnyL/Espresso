@@ -18,7 +18,6 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/nav_header"
             app:contentScrim="@color/colorPrimary"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways">
@@ -63,16 +62,15 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="4dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:text="@string/company_name"/>
+                    android:text="@string/package_name"/>
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:id="@+id/textViewCompany"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="京东"/>
+                    android:id="@+id/textViewName"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"
@@ -88,8 +86,24 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
                     android:id="@+id/textViewPackageNumber"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:text="@string/company_name"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/textViewCompany"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="47258833022"/>
+                    android:text="京东"/>
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="match_parent"

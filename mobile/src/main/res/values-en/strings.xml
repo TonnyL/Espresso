@@ -35,4 +35,6 @@
     <string name="official_website">Official Website</string>
     <string name="mark_all_read">Mark all read</string>
     <string name="package_name_default_pre">Package</string>
+    <string name="package_name">Package Name</string>
+    <string name="get_status_error">Unable to get the latest status.</string>
 </resources>

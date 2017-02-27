@@ -1,10 +1,11 @@
 package io.github.marktony.espresso.packagedetails;
 
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
@@ -34,8 +35,10 @@ public class PackageDetailsFragment extends Fragment
     private RecyclerView recyclerView;
     private AppCompatTextView textViewCompany;
     private AppCompatTextView textViewNumber;
+    private AppCompatTextView textViewName;
     private FloatingActionButton fab;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private CollapsingToolbarLayout toolbarLayout;
 
     private PackageStatusAdapter adapter;
 
@@ -58,8 +61,6 @@ public class PackageDetailsFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
         initViews(view);
-
-        presenter.subscribe();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,8 +119,10 @@ public class PackageDetailsFragment extends Fragment
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         textViewCompany = (AppCompatTextView) view.findViewById(R.id.textViewCompany);
         textViewNumber = (AppCompatTextView) view.findViewById(R.id.textViewPackageNumber);
+        textViewName = (AppCompatTextView) view.findViewById(R.id.textViewName);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        toolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
 
     }
 
@@ -129,28 +132,31 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
-    public void showDetailError() {
-        Snackbar.make(fab, "Error", Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void showPackageStatus(List<PackageStatus> list) {
         if (adapter == null) {
             adapter = new PackageStatusAdapter(getContext(), list);
             recyclerView.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void setCompanyName(String companyName) {
+    public void setCompanyName(@NonNull String companyName) {
         textViewCompany.setText(companyName);
     }
 
     @Override
-    public void setPackageNumber(String packageNumber) {
+    public void setPackageNumber(@NonNull String packageNumber) {
         textViewNumber.setText(packageNumber);
+    }
+
+    @Override
+    public void setPackageName(@NonNull String name) {
+        textViewName.setText(name);
+    }
+
+    @Override
+    public void setToolbarBackground(@DrawableRes int resId) {
+        toolbarLayout.setBackgroundResource(resId);
     }
 
 }

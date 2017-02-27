@@ -1,5 +1,8 @@
 package io.github.marktony.espresso.packagedetails;
 
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import io.github.marktony.espresso.BasePresenter;
@@ -14,13 +17,15 @@ public interface PackageDetailsContract {
 
     interface View extends BaseView<Presenter> {
 
-        void showDetailError();
+        void showPackageStatus(@NonNull List<PackageStatus> list);
 
-        void showPackageStatus(List<PackageStatus> list);
+        void setCompanyName(@NonNull String companyName);
 
-        void setCompanyName(String companyName);
+        void setPackageNumber(@NonNull String packageNumber);
 
-        void setPackageNumber(String packageNumber);
+        void setPackageName(@NonNull String name);
+
+        void setToolbarBackground(@DrawableRes int resId);
 
     }
 

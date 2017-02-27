@@ -34,5 +34,7 @@
     <string name="official_website">官方网站</string>
     <string name="mark_all_read">全部标记为已读</string>
     <string name="package_name_default_pre">快递</string>
+    <string name="package_name">快递名称</string>
+    <string name="get_status_error">无法获取最新状态</string>
 
 </resources>

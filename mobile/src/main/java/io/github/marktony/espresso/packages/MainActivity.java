@@ -46,8 +46,15 @@ public class MainActivity extends AppCompatActivity
             packagesFragment = (PackagesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "PackagesFragment");
             companiesFragment = (CompaniesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "CompaniesFragment");
         } else {
-            packagesFragment = PackagesFragment.newInstance();
-            companiesFragment = CompaniesFragment.newInstance();
+            packagesFragment = (PackagesFragment) getSupportFragmentManager().findFragmentById(R.id.content_main);
+            if (packagesFragment == null) {
+                packagesFragment = PackagesFragment.newInstance();
+            }
+
+            companiesFragment = (CompaniesFragment) getSupportFragmentManager().findFragmentById(R.id.content_main);
+            if (companiesFragment == null) {
+                companiesFragment = CompaniesFragment.newInstance();
+            }
         }
 
         if (!packagesFragment.isAdded()) {
@@ -62,8 +69,6 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
 
-        showPackagesFragment();
-
         packagesPresenter = new PackagesPresenter(packagesFragment,
                 PackagesRepository.getInstance(PackagesRemoteDataSource.getInstance(), PackagesLocalDataSource.getInstance()));
 
@@ -73,6 +78,8 @@ public class MainActivity extends AppCompatActivity
             PackageFilterType currentFiltering = (PackageFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
             packagesPresenter.setFiltering(currentFiltering);
         }
+
+        showPackagesFragment();
 
     }
 

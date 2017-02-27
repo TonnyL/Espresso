@@ -49,15 +49,23 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Package item = list.get(position);
         PackageViewHolder pvh = (PackageViewHolder) holder;
 
-        String status;
-        if (Integer.valueOf(item.getState()) == Package.STATUS_DELIVERED) {
-            status = context.getString(R.string.delivered) + " - " + item.getData().get(0).getContext();
+        if (item.getData() != null && item.getData().size() > 0) {
+
+            int state = Integer.parseInt(item.getState());
+            if (state == Package.STATUS_DELIVERED) {
+                pvh.textViewStatus.setText(String.valueOf(context.getString(R.string.delivered) + " - " + item.getData().get(0).getContext()));
+                pvh.textViewTime.setText(item.getData().get(0).getTime());
+            } else {
+                pvh.textViewTime.setText(item.getData().get(0).getTime());
+                pvh.textViewStatus.setText(String.valueOf(context.getString(R.string.on_the_way) + " - " + item.getData().get(0).getContext()));
+            }
+
         } else {
-            status = context.getString(R.string.on_the_way) + " - " + item.getData().get(0).getContext();
+            pvh.textViewTime.setText("");
+            pvh.textViewStatus.setText(R.string.get_status_error);
         }
-        pvh.textViewStatus.setText(status);
+
         pvh.textViewPackageName.setText(item.getName());
-        pvh.textViewTime.setText(item.getData().get(0).getTime());
         pvh.textViewAvatar.setText(item.getName().substring(0,1));
 
     }

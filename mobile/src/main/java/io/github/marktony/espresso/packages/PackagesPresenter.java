@@ -66,11 +66,12 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                 .filter(new Predicate<Package>() {
                     @Override
                     public boolean test(Package aPackage) throws Exception {
+                        int state = Integer.parseInt(aPackage.getState());
                         switch (currentFiltering) {
                             case ON_THE_WAY_PACKAGES:
-                                return Integer.valueOf(aPackage.getState()) == (Package.STATUS_ON_THE_WAY);
+                                return (state != Package.STATUS_FAILED) && (state != Package.STATUS_DELIVERED);
                             case DELIVERED_PACKAGES:
-                                return Integer.valueOf(aPackage.getState()) == (Package.STATUS_DELIVERED);
+                                return state == Package.STATUS_DELIVERED;
                             case ALL_PACKAGES:
                             default:
                                 return true;

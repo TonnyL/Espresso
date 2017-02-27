@@ -91,7 +91,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                 });
     }
 
-    private void checkPackageLatestStatus(String type, String number, final String name) {
+    private void checkPackageLatestStatus(String type, final String number, final String name) {
 
         RetrofitClient.getInstance().create(RetrofitService.class)
                 .getPackageState(type, number)
@@ -106,6 +106,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                     @Override
                     public void onNext(Package value) {
                         value.setName(name);
+                        value.setNumber(number);
                         packagesDataSource.savePackage(value);
                         view.showSuccess();
                         view.showPackagesList();
