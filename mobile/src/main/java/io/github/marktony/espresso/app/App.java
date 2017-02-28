@@ -10,16 +10,10 @@ import io.realm.Realm;
 
 public class App extends Application {
 
-    private static App INSTANCE;
-
     @Override
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
-    }
-
-    public static synchronized App getApplication() {
-        return INSTANCE;
     }
 
 }

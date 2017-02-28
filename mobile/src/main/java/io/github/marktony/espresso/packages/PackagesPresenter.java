@@ -8,11 +8,10 @@ import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesRepository;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
@@ -69,10 +68,11 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                         int state = Integer.parseInt(aPackage.getState());
                         switch (currentFiltering) {
                             case ON_THE_WAY_PACKAGES:
-                                return (state != Package.STATUS_FAILED) && (state != Package.STATUS_DELIVERED);
+                                return false;
                             case DELIVERED_PACKAGES:
-                                return state == Package.STATUS_DELIVERED;
+                                return false;
                             case ALL_PACKAGES:
+                                return true;
                             default:
                                 return true;
                         }
@@ -82,27 +82,43 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                 .toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Package>>() {
+                .subscribeWith(new DisposableObserver<List<Package>>() {
                     @Override
-                    public void accept(List<Package> list) throws Exception {
-                        view.showPackages(list);
+                    public void onNext(List<Package> value) {
+                        view.showPackages(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+                /*.subscribe(new Consumer<List<Package>>() {
+                    @Override
+                    public void accept(List<Package> packages) throws Exception {
+                        // onNext
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        // onError
                     }
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
-
+                        // onComplete
                     }
                 }, new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
-
+                        // onSubscribe
                     }
-                });
+                });*/
 
         compositeDisposable.add(disposable);
     }

@@ -7,16 +7,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
 import io.github.marktony.espresso.data.Package;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 
 /**
  * Created by lizhaotailang on 2017/2/12.
@@ -28,28 +25,19 @@ public class PackagesRepository implements PackagesDataSource {
     private static PackagesRepository INSTANCE = null;
 
     @NonNull
-    private final PackagesDataSource packagesRemoteDataSource;
-
-    @NonNull
     private final PackagesDataSource packagesLocalDataSource;
 
     private Map<String, Package> cachedPackages;
 
-    private boolean cacheIsDirty;
-
     // Prevent direct instantiation
-    private PackagesRepository(@NonNull PackagesDataSource packagesRemoteDataSource,
-                               @NonNull PackagesDataSource packagesLocalDataSource) {
-        this.packagesRemoteDataSource = packagesRemoteDataSource;
+    private PackagesRepository(@NonNull PackagesDataSource packagesLocalDataSource) {
         this.packagesLocalDataSource = packagesLocalDataSource;
     }
 
-    public static PackagesRepository getInstance(@NonNull PackagesDataSource packagesRemoteDataSource,
-                                                 @NonNull PackagesDataSource packagesLocalDataSource) {
+    public static PackagesRepository getInstance(@NonNull PackagesDataSource packagesLocalDataSource) {
         if (INSTANCE == null) {
-            INSTANCE = new PackagesRepository(packagesRemoteDataSource, packagesLocalDataSource);
+            INSTANCE = new PackagesRepository(packagesLocalDataSource);
         }
-
         return INSTANCE;
     }
 
@@ -60,29 +48,31 @@ public class PackagesRepository implements PackagesDataSource {
 
     @Override
     public Observable<List<Package>> getPackages() {
-        if (cachedPackages != null && !cacheIsDirty) {
+        if (cachedPackages != null) {
             return Observable.fromCallable(new Callable<List<Package>>() {
                 @Override
                 public List<Package> call() throws Exception {
                     return new ArrayList<Package>(cachedPackages.values());
                 }
             });
-        } else if (cachedPackages == null) {
-            cachedPackages = new LinkedHashMap<>();
-        }
-
-        Observable<List<Package>> remotePackages = getAndSaveRemotePackages();
-
-        if (cacheIsDirty) {
-            return remotePackages;
         } else {
-            // Query the local storage if available. If not, query the internet.
-            Observable<List<Package>> localPackages = getAndCacheLocalPackages();
-            return Observable.concat(localPackages, remotePackages)
-                    .filter(new Predicate<List<Package>>() {
+            cachedPackages = new LinkedHashMap<>();
+
+            return packagesLocalDataSource
+                    .getPackages()
+                    .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
                         @Override
-                        public boolean test(List<Package> packages) throws Exception {
-                            return packages.isEmpty();
+                        public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
+                            return Observable
+                                    .fromIterable(packages)
+                                    .doOnNext(new Consumer<Package>() {
+                                        @Override
+                                        public void accept(Package aPackage) throws Exception {
+                                            cachedPackages.put(aPackage.getNumber(), aPackage);
+                                        }
+                                    })
+                                    .toList()
+                                    .toObservable();
                         }
                     });
         }
@@ -96,38 +86,12 @@ public class PackagesRepository implements PackagesDataSource {
             return Observable.just(cachedPackage);
         }
 
-        if (cachedPackages == null) {
-            cachedPackages = new LinkedHashMap<>();
-        }
-
-        Observable<Package> localPackage = getPackageWithNumberFromLocalRepository(packNumber);
-        Observable<Package> remotePackage = packagesRemoteDataSource
-                .getPackage(packNumber)
-                .doOnNext(new Consumer<Package>() {
-                    @Override
-                    public void accept(Package aPackage) throws Exception {
-                        packagesLocalDataSource.savePackage(aPackage);
-                        cachedPackages.put(aPackage.getNumber(), aPackage);
-                    }
-                });
-
-        return Observable.concat(localPackage, remotePackage)
-                .first(null)
-                .flatMapObservable(new Function<Package, ObservableSource<? extends Package>>() {
-                    @Override
-                    public ObservableSource<? extends Package> apply(Package aPackage) throws Exception {
-                        if (aPackage == null) {
-                            throw new NoSuchElementException("No package found with package number" + packNumber);
-                        }
-                        return null;
-                    }
-                });
+        return getPackageWithNumberFromLocalRepository(packNumber);
     }
 
     @Override
     public void savePackage(@NonNull Package pack) {
         packagesLocalDataSource.savePackage(pack);
-        packagesRemoteDataSource.savePackage(pack);
         if (cachedPackages == null) {
             cachedPackages = new LinkedHashMap<>();
         }
@@ -137,14 +101,12 @@ public class PackagesRepository implements PackagesDataSource {
     @Override
     public void deletePackage(@NonNull String packageId) {
         packagesLocalDataSource.deletePackage(packageId);
-        packagesRemoteDataSource.deletePackage(packageId);
-
         cachedPackages.remove(packageId);
     }
 
     @Override
     public void refreshPackages() {
-        cacheIsDirty = true;
+
     }
 
     @Nullable
@@ -168,43 +130,4 @@ public class PackagesRepository implements PackagesDataSource {
                 });
     }
 
-    public Observable<List<Package>> getAndSaveRemotePackages() {
-        return packagesRemoteDataSource
-                .getPackages()
-                .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
-                    @Override
-                    public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
-                        return Observable.fromIterable(packages)
-                                .doOnNext(new Consumer<Package>() {
-                                    @Override
-                                    public void accept(Package aPackage) throws Exception {
-                                        packagesLocalDataSource.savePackage(aPackage);
-                                        cachedPackages.put(aPackage.getNumber(), aPackage);
-                                    }
-                                }).toList().toObservable();
-                    }
-                }).doOnComplete(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        cacheIsDirty = false;
-                    }
-                });
-    }
-
-    public Observable<List<Package>> getAndCacheLocalPackages() {
-        return packagesLocalDataSource
-                .getPackages()
-                .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
-                    @Override
-                    public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
-                        return Observable.fromIterable(packages)
-                                .doOnNext(new Consumer<Package>() {
-                                    @Override
-                                    public void accept(Package aPackage) throws Exception {
-                                        cachedPackages.put(aPackage.getNumber(), aPackage);
-                                    }
-                                }).toList().toObservable();
-                    }
-                });
-    }
 }

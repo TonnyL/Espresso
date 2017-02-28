@@ -69,8 +69,6 @@ public class PackagesFragment extends Fragment
             }
         });
 
-        presenter.loadPackages(false);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
