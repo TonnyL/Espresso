@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.component.CircleImageView;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 
@@ -67,6 +68,7 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         pvh.textViewPackageName.setText(item.getName());
         pvh.textViewAvatar.setText(item.getName().substring(0,1));
+        pvh.circleImageViewAvatar.setImageResource(item.getColorAvatar());
 
     }
 
@@ -79,6 +81,12 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.listener = listener;
     }
 
+    public void updateData(@NonNull List<Package> list) {
+        this.list.clear();
+        this.list.addAll(list);
+        notifyDataSetChanged();
+    }
+
     public class PackageViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
@@ -86,6 +94,7 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private AppCompatTextView textViewStatus;
         private AppCompatTextView textViewTime;
         private AppCompatTextView textViewAvatar;
+        private CircleImageView circleImageViewAvatar;
 
         private OnRecyclerViewItemClickListener listener;
 
@@ -95,6 +104,8 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             textViewStatus = (AppCompatTextView) itemView.findViewById(R.id.textViewStatus);
             textViewTime = (AppCompatTextView) itemView.findViewById(R.id.textViewTime);
             textViewAvatar = (AppCompatTextView) itemView.findViewById(R.id.textViewAvatar);
+            circleImageViewAvatar = (CircleImageView) itemView.findViewById(R.id.circleImageView);
+
             this.listener = listener;
             itemView.setOnClickListener(this);
         }

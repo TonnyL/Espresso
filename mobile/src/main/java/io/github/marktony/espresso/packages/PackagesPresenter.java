@@ -1,6 +1,7 @@
 package io.github.marktony.espresso.packages;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 
@@ -68,9 +69,9 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                         int state = Integer.parseInt(aPackage.getState());
                         switch (currentFiltering) {
                             case ON_THE_WAY_PACKAGES:
-                                return false;
+                                return state == Package.STATUS_ON_THE_WAY || state == Package.STATUS_OTHER;
                             case DELIVERED_PACKAGES:
-                                return false;
+                                return state == Package.STATUS_DELIVERED;
                             case ALL_PACKAGES:
                                 return true;
                             default:
@@ -90,7 +91,7 @@ public class PackagesPresenter implements PackagesContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        view.showEmptyView(true);
                     }
 
                     @Override
@@ -98,27 +99,6 @@ public class PackagesPresenter implements PackagesContract.Presenter {
 
                     }
                 });
-                /*.subscribe(new Consumer<List<Package>>() {
-                    @Override
-                    public void accept(List<Package> packages) throws Exception {
-                        // onNext
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        // onError
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        // onComplete
-                    }
-                }, new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        // onSubscribe
-                    }
-                });*/
 
         compositeDisposable.add(disposable);
     }

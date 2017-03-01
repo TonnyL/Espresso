@@ -2,6 +2,9 @@ package io.github.marktony.espresso.addpack;
 
 import android.support.annotation.NonNull;
 
+import java.util.Random;
+
+import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.CompanyAuto;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesDataSource;
@@ -27,6 +30,11 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
     @NonNull
     private CompositeDisposable compositeDisposable;
+
+    @NonNull
+    private int[] avatarColors = {R.color.cyan_500, R.color.amber_500, R.color.gray_500,
+            R.color.indigo_500, R.color.light_blue_500, R.color.lime_500,
+            R.color.teal_500};
 
     public AddPackagePresenter(@NonNull PackagesDataSource dataSource, @NonNull AddPackageContract.View view) {
         this.view = view;
@@ -105,8 +113,17 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
                     @Override
                     public void onNext(Package value) {
+                        // Set the name of package
                         value.setName(name);
+                        // Some package numbers, which are unable to get the latest status
+                        // has no number value after converted to a gson  value
+                        // We need to set the number manually.
                         value.setNumber(number);
+                        // Set a random color value for the package
+                        value.setColorAvatar(avatarColors[new Random().nextInt(avatarColors.length)]);
+                        // Set the add-time(timestamp) of package
+                        value.setTimestamp(System.currentTimeMillis());
+
                         packagesDataSource.savePackage(value);
                         view.showSuccess();
                         view.showPackagesList();

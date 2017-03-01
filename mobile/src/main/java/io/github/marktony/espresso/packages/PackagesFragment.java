@@ -1,5 +1,6 @@
 package io.github.marktony.espresso.packages;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -153,8 +154,14 @@ public class PackagesFragment extends Fragment
     }
 
     @Override
-    public void showNoPackages() {
-
+    public void showEmptyView(boolean toShow) {
+        if (toShow) {
+            recyclerView.setVisibility(View.INVISIBLE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -171,15 +178,18 @@ public class PackagesFragment extends Fragment
             });
             recyclerView.setAdapter(adapter);
         } else {
-            if (list.isEmpty()) {
-                recyclerView.setVisibility(View.INVISIBLE);
-                emptyView.setVisibility(View.VISIBLE);
-            } else {
-                recyclerView.setVisibility(View.VISIBLE);
-                emptyView.setVisibility(View.INVISIBLE);
-            }
+            adapter.updateData(list);
         }
-        adapter.notifyDataSetChanged();
+        showEmptyView(list.isEmpty());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AddPackageActivity.REQUEST_ADD_PACKAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                presenter.loadPackages(false);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
 }

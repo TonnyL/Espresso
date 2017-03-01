@@ -29,6 +29,7 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
     public static final int TYPE_NORMAL = 0x00;
     public static final int TYPE_START = 0x01;
     public static final int TYPE_FINISH = 0x02;
+    public static final int TYPE_SINGLE = 0x03;
 
     public PackageStatusAdapter(@NonNull Context context, List<PackageStatus> list) {
         this.context = context;
@@ -45,8 +46,10 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         PackageStatus item = list.get(position);
-        // here can be simplified
-        if (getItemViewType(position) == TYPE_START) {
+        if (getItemViewType(position) == TYPE_SINGLE) {
+            ((PackageStatusViewHolder)holder).timeLine.setStartLine(null);
+            ((PackageStatusViewHolder)holder).timeLine.setFinishLine(null);
+        } else if (getItemViewType(position) == TYPE_START) {
             ((PackageStatusViewHolder)holder).timeLine.setStartLine(null);
         } else if (getItemViewType(position) == TYPE_FINISH) {
             ((PackageStatusViewHolder)holder).timeLine.setFinishLine(null);
@@ -63,7 +66,9 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
+        if (position == 0 && position == list.size() - 1) {
+            return TYPE_SINGLE;
+        } else if (position == 0) {
             return TYPE_START;
         } else if (position == list.size() - 1) {
             return TYPE_FINISH;

@@ -18,7 +18,7 @@ public interface PackagesContract {
 
         void setLoadingIndicator(boolean active);
 
-        void showNoPackages();
+        void showEmptyView(boolean toShow);
 
         void showPackages(@NonNull List<Package> list);
 

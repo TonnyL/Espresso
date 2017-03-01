@@ -91,6 +91,10 @@ public class Package extends RealmObject {
     private String name;
     @Expose
     private String companyChineseName;
+    @Expose
+    private int colorAvatar;
+    @Expose
+    private long timestamp;
 
     public String getMessage() {
         return message;
@@ -194,6 +198,22 @@ public class Package extends RealmObject {
 
     public void setCompanyChineseName(String companyChineseName) {
         this.companyChineseName = companyChineseName;
+    }
+
+    public void setColorAvatar(int colorAvatar) {
+        this.colorAvatar = colorAvatar;
+    }
+
+    public int getColorAvatar() {
+        return colorAvatar;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     @Override
