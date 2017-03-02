@@ -1,6 +1,5 @@
 package io.github.marktony.espresso.packages;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -129,6 +128,11 @@ public class PackagesFragment extends Fragment
     }
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
@@ -175,6 +179,12 @@ public class PackagesFragment extends Fragment
                     intent.putExtra(PackageDetailsActivity.PACKAGE_ID, list.get(position).getNumber());
                     startActivity(intent);
                 }
+
+                @Override
+                public boolean OnItemLongClick(View v, int position) {
+                    v.showContextMenu();
+                    return true;
+                }
             });
             recyclerView.setAdapter(adapter);
         } else {
@@ -183,13 +193,4 @@ public class PackagesFragment extends Fragment
         showEmptyView(list.isEmpty());
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == AddPackageActivity.REQUEST_ADD_PACKAGE) {
-            if (resultCode == Activity.RESULT_OK) {
-                presenter.loadPackages(false);
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
 }

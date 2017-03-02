@@ -1,7 +1,6 @@
 package io.github.marktony.espresso.packages;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                         int state = Integer.parseInt(aPackage.getState());
                         switch (currentFiltering) {
                             case ON_THE_WAY_PACKAGES:
-                                return state == Package.STATUS_ON_THE_WAY || state == Package.STATUS_OTHER;
+                                return state != Package.STATUS_DELIVERED;
                             case DELIVERED_PACKAGES:
                                 return state == Package.STATUS_DELIVERED;
                             case ALL_PACKAGES:

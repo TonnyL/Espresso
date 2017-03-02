@@ -37,4 +37,15 @@
     <string name="package_name_default_pre">Package</string>
     <string name="package_name">Package Name</string>
     <string name="get_status_error">Unable to get the latest status.</string>
+
+    <string-array name="package_status">
+        <item>Normal</item>
+        <item>Other</item>
+        <item>Failed</item>
+        <item>Delivered</item>
+        <item>Returned</item>
+        <item>On the way</item>
+        <item>Returning</item>
+    </string-array>
+
 </resources>

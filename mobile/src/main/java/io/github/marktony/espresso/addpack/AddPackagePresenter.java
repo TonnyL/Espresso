@@ -10,10 +10,10 @@ import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesDataSource;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -66,16 +66,12 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
         view.setProgressIndicator(true);
 
-        RetrofitClient.getInstance().create(RetrofitService.class)
+        Disposable disposable = RetrofitClient.getInstance()
+                .create(RetrofitService.class)
                 .query(number)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CompanyAuto>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
+                .subscribeWith(new DisposableObserver<CompanyAuto>() {
                     @Override
                     public void onNext(CompanyAuto value) {
                         if (value.getAuto().size() > 0) {
@@ -97,20 +93,18 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
                     }
                 });
+
+        compositeDisposable.add(disposable);
     }
 
     private void checkPackageLatestStatus(String type, final String number, final String name) {
 
-        RetrofitClient.getInstance().create(RetrofitService.class)
+        Disposable disposable = RetrofitClient.getInstance()
+                .create(RetrofitService.class)
                 .getPackageState(type, number)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Package>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
+                .subscribeWith(new DisposableObserver<Package>() {
                     @Override
                     public void onNext(Package value) {
                         // Set the name of package
@@ -140,6 +134,8 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                         view.setProgressIndicator(false);
                     }
                 });
+
+        compositeDisposable.add(disposable);
     }
 
 }

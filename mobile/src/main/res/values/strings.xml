@@ -37,4 +37,14 @@
     <string name="package_name">快递名称</string>
     <string name="get_status_error">无法获取最新状态</string>
 
+    <string-array name="package_status">
+        <item>运输中</item>
+        <item>其它</item>
+        <item>错误</item>
+        <item>已送达</item>
+        <item>已退回</item>
+        <item>派送中</item>
+        <item>退回中</item>
+    </string-array>
+
 </resources>

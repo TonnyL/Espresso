@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +54,20 @@ public class PackagesRepository implements PackagesDataSource {
             return Observable.fromCallable(new Callable<List<Package>>() {
                 @Override
                 public List<Package> call() throws Exception {
-                    return new ArrayList<Package>(cachedPackages.values());
+                    List<Package> arrayList = new ArrayList<Package>(cachedPackages.values());
+                    // Sort by the timestamp to make the list shown in a descend way
+                    Collections.sort(arrayList, new Comparator<Package>() {
+                        @Override
+                        public int compare(Package o1, Package o2) {
+                            if (o1.getTimestamp() > o2.getTimestamp()) {
+                                return -1;
+                            } else if (o1.getTimestamp() < o2.getTimestamp()) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                    return arrayList;
                 }
             });
         } else {

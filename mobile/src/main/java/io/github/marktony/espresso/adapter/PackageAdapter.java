@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,10 +36,13 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Nullable
     private OnRecyclerViewItemClickListener listener;
 
+    private String[] packageStatus;
+
     public PackageAdapter(@NonNull Context context, @NonNull List<Package> list) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.list = list;
+        packageStatus = context.getResources().getStringArray(R.array.package_status);
     }
 
     @Override
@@ -51,16 +56,9 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         PackageViewHolder pvh = (PackageViewHolder) holder;
 
         if (item.getData() != null && item.getData().size() > 0) {
-
             int state = Integer.parseInt(item.getState());
-            if (state == Package.STATUS_DELIVERED) {
-                pvh.textViewStatus.setText(String.valueOf(context.getString(R.string.delivered) + " - " + item.getData().get(0).getContext()));
-                pvh.textViewTime.setText(item.getData().get(0).getTime());
-            } else {
-                pvh.textViewTime.setText(item.getData().get(0).getTime());
-                pvh.textViewStatus.setText(String.valueOf(context.getString(R.string.on_the_way) + " - " + item.getData().get(0).getContext()));
-            }
-
+            pvh.textViewStatus.setText(String.valueOf(packageStatus[state]) + " - " + item.getData().get(0).getContext());
+            pvh.textViewTime.setText(item.getData().get(0).getTime());
         } else {
             pvh.textViewTime.setText("");
             pvh.textViewStatus.setText(R.string.get_status_error);
@@ -88,7 +86,7 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class PackageViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+            implements View.OnClickListener, View.OnLongClickListener, View.OnCreateContextMenuListener {
 
         private AppCompatTextView textViewPackageName;
         private AppCompatTextView textViewStatus;
@@ -108,6 +106,9 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             this.listener = listener;
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+            itemView.setOnCreateContextMenuListener(this);
+
         }
 
         @Override
@@ -115,6 +116,21 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (this.listener != null) {
                 listener.OnItemClick(v, getLayoutPosition());
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (this.listener != null) {
+                listener.OnItemLongClick(v, getLayoutPosition());
+            }
+            return true;
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add("Select the action");
+            menu.add(Menu.NONE, v.getId(), 0, "Share");
+            menu.add(Menu.NONE, v.getId(), 0, "Delete");
         }
     }
 
