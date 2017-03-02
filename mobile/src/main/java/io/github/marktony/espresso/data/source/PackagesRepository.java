@@ -100,7 +100,6 @@ public class PackagesRepository implements PackagesDataSource {
         if (cachedPackage != null) {
             return Observable.just(cachedPackage);
         }
-
         return getPackageWithNumberFromLocalRepository(packNumber);
     }
 
@@ -122,6 +121,18 @@ public class PackagesRepository implements PackagesDataSource {
     @Override
     public void refreshPackages() {
 
+    }
+
+    @Override
+    public void setPackageReadUnread(@NonNull String packageId) {
+        Package p = cachedPackages.get(packageId);
+        p.setUnread(!p.isUnread());
+        packagesLocalDataSource.setPackageReadUnread(packageId);
+    }
+
+    @Override
+    public boolean isPackageExist(@NonNull String packageId) {
+        return getPackageWithNumber(packageId) != null;
     }
 
     @Nullable

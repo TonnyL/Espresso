@@ -21,6 +21,7 @@
     <string name="delete">删除</string>
     <string name="copy_code">复制运单号</string>
     <string name="set_unread">标记为未读</string>
+    <string name="set_read">标记为已读</string>
     <string name="scan_code">扫描运单号</string>
 
     <string name="all">全部</string>

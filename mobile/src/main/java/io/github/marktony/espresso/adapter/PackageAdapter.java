@@ -17,6 +17,7 @@ import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.component.CircleImageView;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
+import io.github.marktony.espresso.packages.MainActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/11.
@@ -86,7 +87,7 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class PackageViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener, View.OnLongClickListener, View.OnCreateContextMenuListener {
+            implements View.OnClickListener, View.OnCreateContextMenuListener {
 
         private AppCompatTextView textViewPackageName;
         private AppCompatTextView textViewStatus;
@@ -106,7 +107,6 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             this.listener = listener;
             itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
             itemView.setOnCreateContextMenuListener(this);
 
         }
@@ -119,18 +119,19 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         @Override
-        public boolean onLongClick(View v) {
-            if (this.listener != null) {
-                listener.OnItemLongClick(v, getLayoutPosition());
-            }
-            return true;
-        }
-
-        @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.add("Select the action");
-            menu.add(Menu.NONE, v.getId(), 0, "Share");
-            menu.add(Menu.NONE, v.getId(), 0, "Delete");
+            if (menu != null) {
+                ((MainActivity)context).setSelectedPackageId(list.get(getLayoutPosition()).getNumber());
+                Package pack = list.get(getLayoutPosition());
+                menu.setHeaderTitle(pack.getName());
+                if (pack.isUnread()) {
+                    menu.add(Menu.NONE, R.id.action_set_read_unread, 0, R.string.set_read);
+                } else {
+                    menu.add(Menu.NONE, R.id.action_set_read_unread, 0, R.string.set_unread);
+                }
+                menu.add(Menu.NONE, R.id.action_copy_code, 0, R.string.copy_code);
+                menu.add(Menu.NONE, R.id.action_share, 0, R.string.share);
+            }
         }
     }
 

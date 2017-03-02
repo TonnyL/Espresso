@@ -44,6 +44,8 @@ public class PackagesFragment extends Fragment
 
     private PackagesContract.Presenter presenter;
 
+    private String selectedPackageNumber;
+
     public PackagesFragment() {}
 
     public static PackagesFragment newInstance() {
@@ -129,7 +131,24 @@ public class PackagesFragment extends Fragment
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        return super.onContextItemSelected(item);
+        if (item == null || selectedPackageNumber == null) {
+            return false;
+        }
+        switch (item.getItemId()) {
+            case R.id.action_set_read_unread:
+                presenter.setPackageReadUnread(getSelectedPackageNumber());
+                break;
+            case R.id.action_copy_code:
+                presenter.copyPackageCode(getSelectedPackageNumber());
+                break;
+            case R.id.action_share:
+                String shareData = presenter.getShareData(getSelectedPackageNumber());
+
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -180,11 +199,6 @@ public class PackagesFragment extends Fragment
                     startActivity(intent);
                 }
 
-                @Override
-                public boolean OnItemLongClick(View v, int position) {
-                    v.showContextMenu();
-                    return true;
-                }
             });
             recyclerView.setAdapter(adapter);
         } else {
@@ -193,4 +207,11 @@ public class PackagesFragment extends Fragment
         showEmptyView(list.isEmpty());
     }
 
+    public void setSelectedPackage(@NonNull String packId) {
+        this.selectedPackageNumber = packId;
+    }
+
+    public String getSelectedPackageNumber() {
+        return selectedPackageNumber;
+    }
 }

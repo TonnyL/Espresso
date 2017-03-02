@@ -36,6 +36,14 @@ public interface PackagesContract {
 
         PackageFilterType getFiltering();
 
+        void setPackageReadUnread(@NonNull String packageId);
+
+        void deletePackage(@NonNull String packageId);
+
+        void copyPackageCode(@NonNull String packageId);
+
+        String getShareData(@NonNull String packageId);
+
     }
 
 }

@@ -10,7 +10,7 @@
     <item android:id="@+id/action_copy_code"
         android:title="@string/copy_code" />
 
-    <item android:id="@+id/action_unread"
+    <item android:id="@+id/action_set_read_unread"
         android:title="@string/set_unread" />
 
 </menu>

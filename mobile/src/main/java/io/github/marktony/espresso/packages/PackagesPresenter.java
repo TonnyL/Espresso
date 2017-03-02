@@ -133,4 +133,24 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         return currentFiltering;
     }
 
+    @Override
+    public void setPackageReadUnread(@NonNull String packageId) {
+        packagesRepository.setPackageReadUnread(packageId);
+    }
+
+    @Override
+    public void deletePackage(@NonNull String packageId) {
+
+    }
+
+    @Override
+    public void copyPackageCode(@NonNull String packageId) {
+
+    }
+
+    @Override
+    public String getShareData(@NonNull String packageId) {
+        return null;
+    }
+
 }

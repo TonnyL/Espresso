@@ -86,4 +86,25 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         // of refreshing the packages from all available data source
     }
 
+    @Override
+    public void setPackageReadUnread(@NonNull String packageId) {
+        realm.beginTransaction();
+        Package p = realm.where(Package.class)
+                .equalTo("number", packageId)
+                .findFirst();
+        if (p != null) {
+            p.setUnread(!p.isUnread());
+            realm.copyToRealmOrUpdate(p);
+        }
+        realm.commitTransaction();
+    }
+
+    @Override
+    public boolean isPackageExist(@NonNull String packageId) {
+        RealmResults<Package> results = realm.where(Package.class)
+                .equalTo("number", packageId)
+                .findAll();
+        return (results != null) && (!results.isEmpty());
+    }
+
 }

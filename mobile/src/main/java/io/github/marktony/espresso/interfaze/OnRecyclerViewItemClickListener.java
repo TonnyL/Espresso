@@ -10,6 +10,4 @@ public interface OnRecyclerViewItemClickListener {
 
     void OnItemClick(View v, int position);
 
-    boolean OnItemLongClick(View v, int position);
-
 }

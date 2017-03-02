@@ -23,4 +23,8 @@ public interface PackagesDataSource {
 
     void refreshPackages();
 
+    void setPackageReadUnread(@NonNull String packageId);
+
+    boolean isPackageExist(@NonNull String packageId);
+
 }

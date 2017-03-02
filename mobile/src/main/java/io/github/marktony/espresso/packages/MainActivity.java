@@ -175,4 +175,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void setSelectedPackageId(@NonNull String id) {
+        packagesFragment.setSelectedPackage(id);
+    }
+
 }
