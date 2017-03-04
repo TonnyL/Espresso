@@ -12,11 +12,10 @@ import android.view.View;
 import io.github.marktony.espresso.R;
 
 /**
- * Created by lizhaotailang on 2017/2/12.
+ * Created by lizhaotailang on 2017/3/4.
  */
 
-public class Timeline extends View {
-
+public class TimelineStep extends View {
 
     @Dimension private int atomSize = 24;
     @Dimension private int lineSize = 12;
@@ -25,15 +24,15 @@ public class Timeline extends View {
     private Drawable finishLine;
     private Drawable atomDrawable;
 
-    public Timeline(Context context) {
+    public TimelineStep(Context context) {
         this(context, null);
     }
 
-    public Timeline(Context context, AttributeSet attrs) {
+    public TimelineStep(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public Timeline(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TimelineStep(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
@@ -193,4 +192,5 @@ public class Timeline extends View {
             invalidate();
         }
     }
+
 }

@@ -34,6 +34,8 @@ public class PackagesPresenter implements PackagesContract.Presenter {
     @NonNull
     private PackageFilterType currentFiltering = PackageFilterType.ALL_PACKAGES;
 
+    private List<Package> packages;
+
     public PackagesPresenter(@NonNull PackagesContract.View view,
                              @NonNull PackagesRepository packagesRepository) {
         this.view = view;
@@ -85,6 +87,7 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                 .subscribeWith(new DisposableObserver<List<Package>>() {
                     @Override
                     public void onNext(List<Package> value) {
+                        packages = value;
                         view.showPackages(value);
                     }
 
@@ -151,6 +154,11 @@ public class PackagesPresenter implements PackagesContract.Presenter {
     @Override
     public String getShareData(@NonNull String packageId) {
         return null;
+    }
+
+    @Override
+    public Package getPackage(int position) {
+        return packages.get(position);
     }
 
 }

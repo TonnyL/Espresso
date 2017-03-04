@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.adapter.PackageStatusAdapter;
 import io.github.marktony.espresso.data.PackageStatus;
 
 /**

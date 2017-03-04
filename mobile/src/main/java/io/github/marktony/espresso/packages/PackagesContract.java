@@ -44,6 +44,8 @@ public interface PackagesContract {
 
         String getShareData(@NonNull String packageId);
 
+        Package getPackage(int position);
+
     }
 
 }
