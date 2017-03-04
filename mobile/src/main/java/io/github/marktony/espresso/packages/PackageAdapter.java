@@ -1,6 +1,7 @@
 package io.github.marktony.espresso.packages;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -17,7 +20,6 @@ import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.component.CircleImageView;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
-import io.github.marktony.espresso.packages.MainActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/11.
@@ -65,6 +67,16 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             pvh.textViewStatus.setText(R.string.get_status_error);
         }
 
+        if (item.isUnread()) {
+            pvh.textViewPackageName.setTypeface(null, Typeface.BOLD);
+            pvh.textViewTime.setTypeface(null, Typeface.BOLD);
+            pvh.textViewStatus.setTypeface(null, Typeface.BOLD);
+        } else {
+            pvh.textViewPackageName.setTypeface(null, Typeface.NORMAL);
+            pvh.textViewTime.setTypeface(null, Typeface.NORMAL);
+            pvh.textViewStatus.setTypeface(null, Typeface.NORMAL);
+        }
+
         pvh.textViewPackageName.setText(item.getName());
         pvh.textViewAvatar.setText(item.getName().substring(0,1));
         pvh.circleImageViewAvatar.setImageResource(item.getColorAvatar());
@@ -89,11 +101,15 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class PackageViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnCreateContextMenuListener {
 
-        private AppCompatTextView textViewPackageName;
-        private AppCompatTextView textViewStatus;
-        private AppCompatTextView textViewTime;
-        private AppCompatTextView textViewAvatar;
-        private CircleImageView circleImageViewAvatar;
+        AppCompatTextView textViewPackageName;
+        AppCompatTextView textViewTime;
+        AppCompatTextView textViewStatus;
+        AppCompatTextView textViewAvatar;
+        AppCompatTextView textViewRemove;
+        ImageView imageViewRemove;
+        CircleImageView circleImageViewAvatar;
+        LinearLayout layoutMain;
+        View wrapperView;
 
         private OnRecyclerViewItemClickListener listener;
 
@@ -103,7 +119,11 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             textViewStatus = (AppCompatTextView) itemView.findViewById(R.id.textViewStatus);
             textViewTime = (AppCompatTextView) itemView.findViewById(R.id.textViewTime);
             textViewAvatar = (AppCompatTextView) itemView.findViewById(R.id.textViewAvatar);
+            textViewRemove = (AppCompatTextView) itemView.findViewById(R.id.textViewRemove);
+            imageViewRemove = (ImageView) itemView.findViewById(R.id.imageViewRemove);
             circleImageViewAvatar = (CircleImageView) itemView.findViewById(R.id.circleImageView);
+            layoutMain = (LinearLayout) itemView.findViewById(R.id.layoutPackageItemMain);
+            wrapperView = itemView.findViewById(R.id.layoutPackageItem);
 
             this.listener = listener;
             itemView.setOnClickListener(this);

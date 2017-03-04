@@ -1,11 +1,14 @@
 package io.github.marktony.espresso.packages;
 
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -140,13 +143,16 @@ public class PackagesFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.action_set_read_unread:
                 presenter.setPackageReadUnread(getSelectedPackageNumber());
+                adapter.notifyDataSetChanged();
                 break;
             case R.id.action_copy_code:
-                presenter.copyPackageCode(getSelectedPackageNumber());
+                ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData data = ClipData.newPlainText("text", getSelectedPackageNumber());
+                manager.setPrimaryClip(data);
+                Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.action_share:
-                String shareData = presenter.getShareData(getSelectedPackageNumber());
-
+                presenter.setShareData(getSelectedPackageNumber());
                 break;
             default:
                 break;
@@ -176,42 +182,43 @@ public class PackagesFragment extends Fragment
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                final int positon = viewHolder.getAdapterPosition();
-                String content = presenter.getPackage(positon).getName() + "has been removed";
-                adapter.notifyItemRemoved(positon);
-                Snackbar.make(fab, content, Snackbar.LENGTH_SHORT)
-                        .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                            @Override
-                            public void onDismissed(Snackbar transientBottomBar, int event) {
-                                super.onDismissed(transientBottomBar, event);
-                            }
 
-                            @Override
-                            public void onShown(Snackbar transientBottomBar) {
-                                super.onShown(transientBottomBar);
-                            }
-                        })
-                        .setAction("UNDO", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                adapter.notifyDataSetChanged();
-                            }
-                        }).show();
             }
 
             @Override
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                super.clearView(recyclerView, viewHolder);
+                getDefaultUIUtil().clearView(((PackageAdapter.PackageViewHolder) viewHolder).layoutMain);
+                ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.GONE);
+                ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                if (viewHolder != null) {
+                    getDefaultUIUtil().onSelected(((PackageAdapter.PackageViewHolder) viewHolder).layoutMain);
+                }
             }
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                getDefaultUIUtil().onDraw(c, recyclerView, ((PackageAdapter.PackageViewHolder) viewHolder).layoutMain, dX, dY, actionState, isCurrentlyActive);
+                if (dX > 0) {
+                    ((PackageAdapter.PackageViewHolder) viewHolder).wrapperView.setBackgroundResource(R.color.deep_orange);
+                    ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.VISIBLE);
+                    ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.GONE);
+                }
+
+                if (dX < 0) {
+                    ((PackageAdapter.PackageViewHolder) viewHolder).wrapperView.setBackgroundResource(R.color.deep_orange);
+                    ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.GONE);
+                    ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
             public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                getDefaultUIUtil().onDrawOver(c, recyclerView, ((PackageAdapter.PackageViewHolder) viewHolder).layoutMain, dX, dY, actionState, isCurrentlyActive);
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -256,6 +263,33 @@ public class PackagesFragment extends Fragment
             adapter.updateData(list);
         }
         showEmptyView(list.isEmpty());
+    }
+
+    @Override
+    public void shareTo(@NonNull Package pack) {
+        try {
+            String shareData = pack.getName()
+                    + "\n( "
+                    + pack.getNumber()
+                    + " "
+                    + pack.getCompanyChineseName()
+                    + " )\n"
+                    + getString(R.string.latest_status);
+            if (pack.getData() != null && !pack.getData().isEmpty()) {
+                shareData = shareData
+                        + pack.getData().get(0).getContext()
+                        + pack.getData().get(0).getFtime();
+            } else {
+                shareData = shareData + getString(R.string.get_status_error);
+            }
+
+            Intent intent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, shareData);
+            startActivity(Intent.createChooser(intent, getString(R.string.share)));
+
+        } catch (ActivityNotFoundException e) {
+            Snackbar.make(fab, R.string.something_wrong, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     public void setSelectedPackage(@NonNull String packId) {

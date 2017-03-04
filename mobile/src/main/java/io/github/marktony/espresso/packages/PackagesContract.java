@@ -22,6 +22,8 @@ public interface PackagesContract {
 
         void showPackages(@NonNull List<Package> list);
 
+        void shareTo(@NonNull Package pack);
+
     }
 
     interface Presenter extends BasePresenter {
@@ -40,11 +42,7 @@ public interface PackagesContract {
 
         void deletePackage(@NonNull String packageId);
 
-        void copyPackageCode(@NonNull String packageId);
-
-        String getShareData(@NonNull String packageId);
-
-        Package getPackage(int position);
+        void setShareData(@NonNull String packageId);
 
     }
 

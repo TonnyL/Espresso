@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.component.TimelineStep;
+import io.github.marktony.espresso.component.Timeline;
 import io.github.marktony.espresso.data.PackageStatus;
 
 /**
@@ -80,13 +80,13 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         private AppCompatTextView textViewLocation;
         private AppCompatTextView textViewTime;
-        private TimelineStep timeLine;
+        private Timeline timeLine;
 
         public PackageStatusViewHolder(View itemView) {
             super(itemView);
             textViewLocation = (AppCompatTextView) itemView.findViewById(R.id.textViewLocation);
             textViewTime = (AppCompatTextView) itemView.findViewById(R.id.textViewTime);
-            timeLine = (TimelineStep) itemView.findViewById(R.id.timeLine);
+            timeLine = (Timeline) itemView.findViewById(R.id.timeLine);
         }
     }
 

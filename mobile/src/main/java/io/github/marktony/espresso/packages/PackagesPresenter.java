@@ -147,18 +147,29 @@ public class PackagesPresenter implements PackagesContract.Presenter {
     }
 
     @Override
-    public void copyPackageCode(@NonNull String packageId) {
+    public void setShareData(@NonNull String packageId) {
+        Disposable disposable = packagesRepository
+                .getPackage(packageId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<Package>() {
+                    @Override
+                    public void onNext(Package aPackage) {
+                        view.shareTo(aPackage);
+                    }
 
-    }
+                    @Override
+                    public void onError(Throwable throwable) {
 
-    @Override
-    public String getShareData(@NonNull String packageId) {
-        return null;
-    }
+                    }
 
-    @Override
-    public Package getPackage(int position) {
-        return packages.get(position);
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+        compositeDisposable.add(disposable);
     }
 
 }
