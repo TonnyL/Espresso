@@ -27,9 +27,13 @@ public interface PackageDetailsContract {
 
         void setToolbarBackground(@DrawableRes int resId);
 
+        void setPackageReadUnread(boolean readUnread);
+
     }
 
     interface Presenter extends BasePresenter {
+
+        void setPackageReadUnread(@NonNull String packageId);
 
     }
 

@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/action_set_read_unread"
+        android:orderInCategory="97"
+        android:title="@string/set_read" />
+
     <item android:id="@+id/action_share"
+        android:orderInCategory="99"
         android:title="@string/share" />
 
     <item android:id="@+id/action_delete"
+        android:orderInCategory="100"
         android:title="@string/delete" />
 
     <item android:id="@+id/action_copy_code"
+        android:orderInCategory="98"
         android:title="@string/copy_code" />
-
-    <item android:id="@+id/action_set_read_unread"
-        android:title="@string/set_unread" />
 
 </menu>

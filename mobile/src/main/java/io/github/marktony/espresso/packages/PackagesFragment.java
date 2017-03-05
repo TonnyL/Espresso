@@ -167,22 +167,24 @@ public class PackagesFragment extends Fragment
 
     @Override
     public void initViews(View view) {
+
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         bottomNavigationView = (BottomNavigationView) view.findViewById(R.id.bottomNavigationView);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         emptyView = (LinearLayout) view.findViewById(R.id.emptyView);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                // returning false means that do not handle the drag action
+                // returning false means that we need not to handle the drag action
                 return false;
             }
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
+                presenter.deletePackage(viewHolder.getLayoutPosition());
             }
 
             @Override
@@ -267,22 +269,21 @@ public class PackagesFragment extends Fragment
 
     @Override
     public void shareTo(@NonNull Package pack) {
+        String shareData = pack.getName()
+                + "\n( "
+                + pack.getNumber()
+                + " "
+                + pack.getCompanyChineseName()
+                + " )\n"
+                + getString(R.string.latest_status);
+        if (pack.getData() != null && !pack.getData().isEmpty()) {
+            shareData = shareData
+                    + pack.getData().get(0).getContext()
+                    + pack.getData().get(0).getFtime();
+        } else {
+            shareData = shareData + getString(R.string.get_status_error);
+        }
         try {
-            String shareData = pack.getName()
-                    + "\n( "
-                    + pack.getNumber()
-                    + " "
-                    + pack.getCompanyChineseName()
-                    + " )\n"
-                    + getString(R.string.latest_status);
-            if (pack.getData() != null && !pack.getData().isEmpty()) {
-                shareData = shareData
-                        + pack.getData().get(0).getContext()
-                        + pack.getData().get(0).getFtime();
-            } else {
-                shareData = shareData + getString(R.string.get_status_error);
-            }
-
             Intent intent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, shareData);
             startActivity(Intent.createChooser(intent, getString(R.string.share)));
@@ -290,6 +291,21 @@ public class PackagesFragment extends Fragment
         } catch (ActivityNotFoundException e) {
             Snackbar.make(fab, R.string.something_wrong, Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void showPackageRemovedMsg(String packageName) {
+        String msg = packageName
+                + " "
+                + getString(R.string.package_removed_msg);
+        Snackbar.make(fab, msg, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        presenter.recoverPackage();
+                    }
+                })
+                .show();
     }
 
     public void setSelectedPackage(@NonNull String packId) {

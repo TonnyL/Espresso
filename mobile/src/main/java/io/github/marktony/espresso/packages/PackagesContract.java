@@ -24,6 +24,8 @@ public interface PackagesContract {
 
         void shareTo(@NonNull Package pack);
 
+        void showPackageRemovedMsg(String packageName);
+
     }
 
     interface Presenter extends BasePresenter {
@@ -40,9 +42,11 @@ public interface PackagesContract {
 
         void setPackageReadUnread(@NonNull String packageId);
 
-        void deletePackage(@NonNull String packageId);
+        void deletePackage(int position);
 
         void setShareData(@NonNull String packageId);
+
+        void recoverPackage();
 
     }
 

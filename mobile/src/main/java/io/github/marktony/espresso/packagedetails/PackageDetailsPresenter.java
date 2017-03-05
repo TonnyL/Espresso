@@ -72,9 +72,18 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                         } else {
                             view.setToolbarBackground(R.drawable.banner_background_on_the_way);
                         }
+
+                        view.setPackageReadUnread(true);
+                        if (aPackage.isUnread()) {
+                            packagesRepository.setPackageReadUnread(aPackage.getNumber());
+                        }
                     }
                 }));
 
     }
 
+    @Override
+    public void setPackageReadUnread(@NonNull String packageId) {
+        packagesRepository.setPackageReadUnread(packageId);
+    }
 }

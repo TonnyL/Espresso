@@ -41,6 +41,10 @@
     <string name="package_number_copied">单号已复制到剪贴板</string>
     <string name="latest_status">最新状态:&#160;</string>
     <string name="something_wrong">发生了一些错误…</string>
+    <string name="undo">撤销</string>
+    <string name="package_removed_msg">删除成功</string>
+    <string name="add_to_list_successfully">添加成功</string>
+    <string name="package_exist">运单已存在</string>
 
     <string-array name="package_status">
         <item>运输中</item>

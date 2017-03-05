@@ -64,6 +64,11 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
     private void checkNumber(final String number, final String name) {
 
+        if (packagesDataSource.isPackageExist(number)) {
+            view.showNumberExistError();
+            return;
+        }
+
         view.setProgressIndicator(true);
 
         Disposable disposable = RetrofitClient.getInstance()

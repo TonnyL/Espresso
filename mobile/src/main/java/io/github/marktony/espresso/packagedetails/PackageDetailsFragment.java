@@ -43,6 +43,10 @@ public class PackageDetailsFragment extends Fragment
 
     private PackageDetailsContract.Presenter presenter;
 
+    // Whether the package is read or unread
+    // Default is false
+    private boolean isPackageRead = false;
+
     public PackageDetailsFragment() {}
 
     public static PackageDetailsFragment newInstance() {
@@ -99,10 +103,30 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.action_set_read_unread);
+        // If the package has been already read
+        if (isPackageRead) {
+            item.setTitle(R.string.set_read);
+        } else {
+            item.setTitle(R.string.set_unread);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             getActivity().onBackPressed();
+        } else if (id == R.id.action_delete) {
+
+        } else if (id == R.id.action_set_read_unread) {
+
+        } else if (id == R.id.action_copy_code) {
+
+        } else if (id == R.id.action_share) {
+
         }
         return true;
     }
@@ -158,4 +182,8 @@ public class PackageDetailsFragment extends Fragment
         toolbarLayout.setBackgroundResource(resId);
     }
 
+    @Override
+    public void setPackageReadUnread(boolean readUnread) {
+        isPackageRead = readUnread;
+    }
 }

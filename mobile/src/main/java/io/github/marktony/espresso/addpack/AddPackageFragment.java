@@ -2,17 +2,22 @@ package io.github.marktony.espresso.addpack;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +25,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -41,6 +48,7 @@ public class AddPackageFragment extends Fragment
     private AppCompatTextView textViewScanCode;
     private FloatingActionButton fab;
     private ProgressBar progressBar;
+    private NestedScrollView scrollView;
 
     private AddPackageContract.Presenter presenter;
 
@@ -62,9 +70,17 @@ public class AddPackageFragment extends Fragment
 
         initViews(view);
 
+        addLayoutListener(scrollView, editTextName);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive()) {
+                    imm.hideSoftInputFromWindow(fab.getWindowToken(), 0);
+                }
+
                 String name = editTextName.getText().toString();
                 String number = editTextNumber.getText().toString().replaceAll("\\s*", "");
 
@@ -105,6 +121,25 @@ public class AddPackageFragment extends Fragment
         return view;
     }
 
+    private void addLayoutListener(final View main, final View scroll) {
+        main.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect rect = new Rect();
+                main.getWindowVisibleDisplayFrame(rect);
+                int mainInvisibleHeight = main.getRootView().getHeight() - rect.bottom;
+                if (mainInvisibleHeight > 150) {
+                    int[] location = new int[2];
+                    scroll.getLocationInWindow(location);
+                    int scrollHeight = (location[1] + scroll.getHeight()) - rect.bottom;
+                    main.scrollTo(0, scrollHeight);
+                } else {
+                    main.scrollTo(0, 0);
+                }
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -120,11 +155,13 @@ public class AddPackageFragment extends Fragment
         AddPackageActivity activity = (AddPackageActivity) getActivity();
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         editTextName = (TextInputEditText) view.findViewById(R.id.editTextName);
         editTextNumber = (TextInputEditText) view.findViewById(R.id.editTextNumber);
         textViewScanCode = (AppCompatTextView) view.findViewById(R.id.textViewScanCode);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
 
     }
 
@@ -152,7 +189,6 @@ public class AddPackageFragment extends Fragment
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -175,6 +211,9 @@ public class AddPackageFragment extends Fragment
                     });
                     dialog.show();
                 }
+                break;
+            default:
+
         }
     }
 
@@ -189,19 +228,23 @@ public class AddPackageFragment extends Fragment
     }
 
     private void startScanningActivity() {
-        Intent intent = new Intent(getContext(), CaptureActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivityForResult(intent, SCANNING_REQUEST_CODE);
+        try {
+            Intent intent = new Intent(getContext(), CaptureActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, SCANNING_REQUEST_CODE);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void showNumberExistError() {
-
+        Snackbar.make(fab, R.string.package_exist, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void showNumberError() {
-        Toast.makeText(getContext(), R.string.wrong_number_and_check, Toast.LENGTH_SHORT).show();
+        Snackbar.make(fab, R.string.wrong_number_and_check, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -209,7 +252,7 @@ public class AddPackageFragment extends Fragment
         if (loading) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
-            progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -227,7 +270,7 @@ public class AddPackageFragment extends Fragment
 
     @Override
     public void showSuccess() {
-        Toast.makeText(getContext(), "添加成功", Toast.LENGTH_SHORT).show();
+        Snackbar.make(fab, R.string.add_to_list_successfully, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

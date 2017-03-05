@@ -18,4 +18,6 @@
 
     <color name="deep_orange">#FF5722</color>
 
+    <color name="layout_background">#fafafa</color>
+
 </resources>

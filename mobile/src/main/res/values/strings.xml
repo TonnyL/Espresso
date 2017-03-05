@@ -42,6 +42,10 @@
     <string name="package_number_copied">Package number has been copied successfully</string>
     <string name="latest_status">Latest status:&#160;</string>
     <string name="something_wrong">Something wrong…</string>
+    <string name="undo">UNDO</string>
+    <string name="package_removed_msg">has been removed</string>
+    <string name="add_to_list_successfully">Add to list successfully</string>
+    <string name="package_exist">The package is in your list</string>
 
     <string-array name="package_status">
         <item>Normal</item>

@@ -1,6 +1,7 @@
 package io.github.marktony.espresso.packages;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -34,7 +35,8 @@ public class PackagesPresenter implements PackagesContract.Presenter {
     @NonNull
     private PackageFilterType currentFiltering = PackageFilterType.ALL_PACKAGES;
 
-    private List<Package> packages;
+    @Nullable
+    private Package mayRemovePackage;
 
     public PackagesPresenter(@NonNull PackagesContract.View view,
                              @NonNull PackagesRepository packagesRepository) {
@@ -87,7 +89,6 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                 .subscribeWith(new DisposableObserver<List<Package>>() {
                     @Override
                     public void onNext(List<Package> value) {
-                        packages = value;
                         view.showPackages(value);
                     }
 
@@ -142,8 +143,32 @@ public class PackagesPresenter implements PackagesContract.Presenter {
     }
 
     @Override
-    public void deletePackage(@NonNull String packageId) {
+    public void deletePackage(final int position) {
+        Disposable disposable = packagesRepository
+                .getPackages()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<Package>>() {
+                    @Override
+                    public void onNext(List<Package> value) {
+                        mayRemovePackage = value.get(position);
+                        packagesRepository.deletePackage(mayRemovePackage.getNumber());
+                        view.showPackageRemovedMsg(mayRemovePackage.getName());
+                        value.remove(position);
+                        view.showPackages(value);
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+        compositeDisposable.add(disposable);
     }
 
     @Override
@@ -170,6 +195,14 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                 });
 
         compositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void recoverPackage() {
+        if (mayRemovePackage != null) {
+            packagesRepository.savePackage(mayRemovePackage);
+        }
+        loadPackages(false);
     }
 
 }
