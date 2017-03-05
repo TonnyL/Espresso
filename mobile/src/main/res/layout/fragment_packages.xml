@@ -10,8 +10,56 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="56dp">
 
-        <include layout="@layout/fragment_list"
-            android:id="@+id/frameLayout"/>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/refreshLayout">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/recyclerView"
+                    android:scrollbars="vertical"
+                    android:scrollbarFadeDuration="1"
+                    android:fadeScrollbars="true"
+                    android:clipToPadding="false"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/emptyView"
+                    android:visibility="invisible"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_favorite_border_cyan_48dp"
+                        android:importantForAccessibility="no"
+                        android:hapticFeedbackEnabled="true"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:text="Click the Add button to add packages"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textAlignment="center"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

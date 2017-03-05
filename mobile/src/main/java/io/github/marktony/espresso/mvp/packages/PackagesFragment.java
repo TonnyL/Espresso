@@ -1,10 +1,12 @@
-package io.github.marktony.espresso.packages;
+package io.github.marktony.espresso.mvp.packages;
 
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +15,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,10 +32,10 @@ import android.widget.LinearLayout;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.addpack.AddPackageActivity;
+import io.github.marktony.espresso.mvp.addpack.AddPackageActivity;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
-import io.github.marktony.espresso.packagedetails.PackageDetailsActivity;
+import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -42,15 +46,18 @@ public class PackagesFragment extends Fragment
 
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton fab;
-    private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
     private LinearLayout emptyView;
+    private SwipeRefreshLayout refreshLayout;
 
     private PackageAdapter adapter;
 
     private PackagesContract.Presenter presenter;
 
     private String selectedPackageNumber;
+
+    private LocalBroadcastManager manager;
+    private LocalReceiver receiver;
 
     public PackagesFragment() {}
 
@@ -61,6 +68,13 @@ public class PackagesFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(LocalReceiver.PACKAGES_RECEIVER_ACTION);
+        receiver = new LocalReceiver();
+        // Register the broadcast receiver
+        manager = LocalBroadcastManager.getInstance(getContext());
+        manager.registerReceiver(receiver, filter);
     }
 
     @Nullable
@@ -101,6 +115,13 @@ public class PackagesFragment extends Fragment
             }
         });
 
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.refreshPackages();
+            }
+        });
+
         setHasOptionsMenu(true);
 
         return view;
@@ -116,6 +137,14 @@ public class PackagesFragment extends Fragment
     public void onPause() {
         super.onPause();
         presenter.unsubscribe();
+        setLoadingIndicator(false);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // DO NOT forget to unregister the broadcast receiver
+        manager.unregisterReceiver(receiver);
     }
 
     @Override
@@ -170,10 +199,11 @@ public class PackagesFragment extends Fragment
 
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         bottomNavigationView = (BottomNavigationView) view.findViewById(R.id.bottomNavigationView);
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         emptyView = (LinearLayout) view.findViewById(R.id.emptyView);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        refreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -251,7 +281,7 @@ public class PackagesFragment extends Fragment
     public void showPackages(@NonNull final List<Package> list) {
         if (adapter == null) {
             adapter = new PackageAdapter(getContext(), list);
-            adapter.setOnRecyclerViewItemOnClickListener(new OnRecyclerViewItemClickListener() {
+            adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
                 @Override
                 public void OnItemClick(View v, int position) {
                     Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
@@ -315,4 +345,24 @@ public class PackagesFragment extends Fragment
     public String getSelectedPackageNumber() {
         return selectedPackageNumber;
     }
+
+    /**
+     * A local broadcast receiver. When receive the
+     * broadcast, update the ui.
+     */
+    public class LocalReceiver extends BroadcastReceiver {
+
+        public static final String PACKAGES_RECEIVER_ACTION
+                = "io.github.marktony.espresso.PACKAGES_RECEIVER_ACTION";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setLoadingIndicator(false);
+            if (intent.getBooleanExtra("result", false)) {
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
 }
+

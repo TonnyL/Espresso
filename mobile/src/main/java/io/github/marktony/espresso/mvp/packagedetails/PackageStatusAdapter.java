@@ -1,7 +1,8 @@
-package io.github.marktony.espresso.packagedetails;
+package io.github.marktony.espresso.mvp.packagedetails;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import java.util.List;
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.component.Timeline;
 import io.github.marktony.espresso.data.PackageStatus;
+import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 
 /**
  * Created by lizhaotailang on 2017/2/12.
@@ -23,8 +25,14 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
     @NonNull
     private final Context context;
 
+    @NonNull
     private final LayoutInflater inflater;
+
+    @NonNull
     private List<PackageStatus> list;
+
+    @Nullable
+    private OnRecyclerViewItemClickListener listener;
 
     public static final int TYPE_NORMAL = 0x00;
     public static final int TYPE_START = 0x01;
@@ -39,7 +47,7 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PackageStatusViewHolder(inflater.inflate(R.layout.package_status_item, parent, false));
+        return new PackageStatusViewHolder(inflater.inflate(R.layout.package_status_item, parent, false), listener);
     }
 
     @Override
@@ -76,17 +84,40 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
         return TYPE_NORMAL;
     }
 
-    public class PackageStatusViewHolder extends RecyclerView.ViewHolder {
+    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void updateData(@NonNull List<PackageStatus> list) {
+        this.list.clear();
+        this.list.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public class PackageStatusViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener{
 
         private AppCompatTextView textViewLocation;
         private AppCompatTextView textViewTime;
         private Timeline timeLine;
 
-        public PackageStatusViewHolder(View itemView) {
+        private OnRecyclerViewItemClickListener listener;
+
+        public PackageStatusViewHolder(View itemView, OnRecyclerViewItemClickListener listener) {
             super(itemView);
             textViewLocation = (AppCompatTextView) itemView.findViewById(R.id.textViewLocation);
             textViewTime = (AppCompatTextView) itemView.findViewById(R.id.textViewTime);
             timeLine = (Timeline) itemView.findViewById(R.id.timeLine);
+
+            this.listener = listener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (this.listener != null) {
+                listener.OnItemClick(v, getLayoutPosition());
+            }
         }
     }
 

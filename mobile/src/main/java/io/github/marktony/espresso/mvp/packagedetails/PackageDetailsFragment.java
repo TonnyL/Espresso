@@ -1,5 +1,8 @@
-package io.github.marktony.espresso.packagedetails;
+package io.github.marktony.espresso.mvp.packagedetails;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -7,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +27,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.PackageStatus;
+import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -44,7 +49,7 @@ public class PackageDetailsFragment extends Fragment
     private PackageDetailsContract.Presenter presenter;
 
     // Whether the package is read or unread
-    // Default is false
+    // Default value is false
     private boolean isPackageRead = false;
 
     public PackageDetailsFragment() {}
@@ -108,9 +113,9 @@ public class PackageDetailsFragment extends Fragment
         MenuItem item = menu.findItem(R.id.action_set_read_unread);
         // If the package has been already read
         if (isPackageRead) {
-            item.setTitle(R.string.set_read);
-        } else {
             item.setTitle(R.string.set_unread);
+        } else {
+            item.setTitle(R.string.set_read);
         }
     }
 
@@ -145,6 +150,7 @@ public class PackageDetailsFragment extends Fragment
         textViewName = (AppCompatTextView) view.findViewById(R.id.textViewName);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         toolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
 
     }
@@ -155,10 +161,23 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
-    public void showPackageStatus(List<PackageStatus> list) {
+    public void setLoadingIndicator(boolean loading) {
+        swipeRefreshLayout.setRefreshing(loading);
+    }
+
+    @Override
+    public void showPackageStatus(@NonNull List<PackageStatus> list) {
         if (adapter == null) {
             adapter = new PackageStatusAdapter(getContext(), list);
+            adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
+                @Override
+                public void OnItemClick(View v, int position) {
+
+                }
+            });
             recyclerView.setAdapter(adapter);
+        } else {
+            adapter.updateData(list);
         }
     }
 
@@ -186,4 +205,19 @@ public class PackageDetailsFragment extends Fragment
     public void setPackageReadUnread(boolean readUnread) {
         isPackageRead = readUnread;
     }
+
+    public class LocalReceiver extends BroadcastReceiver {
+
+        public static final String PACKAGE_DETAILS_RECEIVER_ACTION
+                = "io.github.marktony.espresso.PACKAGE_DETAILS_RECEIVER_ACTION";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setLoadingIndicator(false);
+            if (intent.getBooleanExtra("result", false)) {
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
 }

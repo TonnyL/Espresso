@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.companydetails;
+package io.github.marktony.espresso.mvp.companydetails;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.packagedetails.PackageDetailsActivity;
+import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.

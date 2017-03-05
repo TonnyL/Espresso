@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.packages;
+package io.github.marktony.espresso.mvp.packages;
 
 import android.support.annotation.NonNull;
 
@@ -47,6 +47,8 @@ public interface PackagesContract {
         void setShareData(@NonNull String packageId);
 
         void recoverPackage();
+
+        void refreshPackages();
 
     }
 

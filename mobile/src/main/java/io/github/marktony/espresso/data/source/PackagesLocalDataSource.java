@@ -87,6 +87,18 @@ public class PackagesLocalDataSource implements PackagesDataSource {
     }
 
     @Override
+    public void refreshPackage(@NonNull String packageId) {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
+    }
+
+    @Override
+    public void cancelAllRequests() {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
+    }
+
+    @Override
     public void setPackageReadUnread(@NonNull String packageId) {
         realm.beginTransaction();
         Package p = realm.where(Package.class)
@@ -99,6 +111,11 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         realm.commitTransaction();
     }
 
+    /**
+     * Query the existence of a specific number.
+     * @param packageId the package number to query
+     * @return whether the number is in the database
+     */
     @Override
     public boolean isPackageExist(@NonNull String packageId) {
         RealmResults<Package> results = realm.where(Package.class)

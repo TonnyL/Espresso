@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.companies;
+package io.github.marktony.espresso.mvp.companies;
 
 import java.util.ArrayList;
 

@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".packages.MainActivity"
+            android:name=".mvp.packages.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,11 +26,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".addpack.AddPackageActivity"
+        <activity android:name=".mvp.addpack.AddPackageActivity"
             android:label="@string/activity_add_package"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".packagedetails.PackageDetailsActivity"
+        <activity android:name=".mvp.packagedetails.PackageDetailsActivity"
             android:label="@string/activity_package_details"
             android:theme="@style/AppTheme.NoActionBar" />
 

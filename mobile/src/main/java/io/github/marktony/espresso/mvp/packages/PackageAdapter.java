@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.packages;
+package io.github.marktony.espresso.mvp.packages;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -88,7 +88,7 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return list.size();
     }
 
-    public void setOnRecyclerViewItemOnClickListener(OnRecyclerViewItemClickListener listener) {
+    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.listener = listener;
     }
 

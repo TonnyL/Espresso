@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.packages;
+package io.github.marktony.espresso.mvp.packages;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -54,6 +54,7 @@ public class PackagesPresenter implements PackagesContract.Presenter {
     @Override
     public void unsubscribe() {
         compositeDisposable.clear();
+        packagesRepository.cancelAllRequests();
     }
 
     @Override
@@ -203,6 +204,11 @@ public class PackagesPresenter implements PackagesContract.Presenter {
             packagesRepository.savePackage(mayRemovePackage);
         }
         loadPackages(false);
+    }
+
+    @Override
+    public void refreshPackages() {
+        packagesRepository.refreshPackages();
     }
 
 }

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:rectLayout="@layout/rect_activity_main"
     app:roundLayout="@layout/round_activity_main"
-    tools:context="io.github.marktony.espresso.packages.MainActivity"
+    tools:context="MainActivity"
     tools:deviceIds="wear">
 
 </android.support.wearable.view.WatchViewStub>

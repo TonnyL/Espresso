@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.addpack;
+package io.github.marktony.espresso.mvp.addpack;
 
 import android.Manifest;
 import android.app.Activity;
@@ -8,13 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -28,7 +29,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.zxing.CaptureActivity;
@@ -43,6 +43,7 @@ public class AddPackageFragment extends Fragment
         implements AddPackageContract.View {
 
     public final static int SCANNING_REQUEST_CODE = 1;
+    public final static int REQUEST_CAMERA_PERMISSION_CODE = 0;
 
     private TextInputEditText editTextNumber, editTextName;
     private AppCompatTextView textViewScanCode;
@@ -76,22 +77,18 @@ public class AddPackageFragment extends Fragment
             @Override
             public void onClick(View v) {
 
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm.isActive()) {
-                    imm.hideSoftInputFromWindow(fab.getWindowToken(), 0);
-                }
+                hideImm();
 
                 String name = editTextName.getText().toString();
                 String number = editTextNumber.getText().toString().replaceAll("\\s*", "");
 
-                // 对运单号长度进行验证
-                // check the length of the input number
+                // Check the length of the input number
                 if (number.length() < 5) {
                     showNumberError();
                     return;
                 }
-                // 检查用户输入运单号是否只包含了数字和字母
-                // check the number if only contains numbers and characters
+
+                // Check the number if only contains numbers and characters.
                 for (char c : number.toCharArray()) {
                     if (!Character.isLetterOrDigit(c)) {
                         showNumberError();
@@ -99,7 +96,9 @@ public class AddPackageFragment extends Fragment
                     }
                 }
 
-                // 如果用户未输入快递名称，则使用默认名称：快递(Package) + 运单号前4位
+                // If the user has not input anything, just use the default name:
+                // (Package(In default language environment) / 快递(In Chinese environment))
+                // + the beginning 4 chars of the package number
                 if (name.isEmpty()) {
                     name = getString(R.string.package_name_default_pre) + number.substring(0, 4);
                 }
@@ -121,6 +120,11 @@ public class AddPackageFragment extends Fragment
         return view;
     }
 
+    // Scroll the screen to avoid edit text being covered by imm such as the soft keyboard.
+    // It is better to set the height as 150 because some devices
+    // has the navigation bar. The height 100 might not trigger the scrolling action.
+    // main --> the scroll view
+    // scroll --> to view to show
     private void addLayoutListener(final View main, final View scroll) {
         main.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -187,28 +191,42 @@ public class AddPackageFragment extends Fragment
         }
     }
 
+    // To handle the permission grant result.
+    // If the user denied the permission, show a dialog to explain
+    // the reason why the app need such permission and lead he/her
+    // to the system settings to grant permission.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case 1:
+            case REQUEST_CAMERA_PERMISSION_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startScanningActivity();
                 } else {
-                    AlertDialog dialog = new  AlertDialog.Builder(getContext())
+                    hideImm();
+                    AlertDialog dialog = new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.permission_denied)
+                            .setMessage(R.string.require_permission)
+                            .setPositiveButton(R.string.go_to_settings, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    // Go to the detail settings of our application
+                                    Intent intent = new Intent();
+                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                    intent.setData(uri);
+                                    startActivity(intent);
+
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
                             .create();
-                    dialog.setMessage(getString(R.string.require_permission));
-                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.go_to_settings), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
                     dialog.show();
                 }
                 break;
@@ -217,16 +235,25 @@ public class AddPackageFragment extends Fragment
         }
     }
 
+    // Check whether the camera permission has been granted.
+    // If not, request it. Or just launch the camera to scan barcode or QR code.
     private void checkPermissionOrToScan() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[] {Manifest.permission.CAMERA}, 1);
+            // Notice: Do not use the below code.
+            // ActivityCompat.requestPermissions(getActivity(),
+            // new String[] {Manifest.permission.CAMERA}, 1);
+            // Such code may still active the request permission dialog
+            // but even the user has granted the permission,
+            // app will response nothing.
+            // The below code works perfect.
+            requestPermissions(new String[] { Manifest.permission.CAMERA }, REQUEST_CAMERA_PERMISSION_CODE);
         } else {
             startScanningActivity();
         }
     }
 
+    // Launch the camera
     private void startScanningActivity() {
         try {
             Intent intent = new Intent(getContext(), CaptureActivity.class);
@@ -277,6 +304,14 @@ public class AddPackageFragment extends Fragment
     public void showPackagesList() {
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
+    }
+
+    // Hide the input method like soft keyboard, etc... when they are active.
+    private void hideImm() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow(fab.getWindowToken(), 0);
+        }
     }
 
 }

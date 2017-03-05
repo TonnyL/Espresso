@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.packages;
+package io.github.marktony.espresso.mvp.packages;
 
 /**
  * Created by lizhaotailang on 2017/2/25.

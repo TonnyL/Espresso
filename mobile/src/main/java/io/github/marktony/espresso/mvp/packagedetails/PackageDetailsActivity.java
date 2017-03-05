@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.packagedetails;
+package io.github.marktony.espresso.mvp.packagedetails;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

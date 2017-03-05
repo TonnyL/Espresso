@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.companies;
+package io.github.marktony.espresso.mvp.companies;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -87,12 +87,10 @@ public class CompaniesFragment extends Fragment
 
     @Override
     public void initViews(View view) {
-
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         refreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-
     }
 
     @Override

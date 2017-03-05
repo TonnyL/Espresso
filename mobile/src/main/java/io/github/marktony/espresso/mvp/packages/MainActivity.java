@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.packages;
+package io.github.marktony.espresso.mvp.packages;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,8 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.companies.CompaniesFragment;
-import io.github.marktony.espresso.companies.CompaniesPresenter;
+import io.github.marktony.espresso.mvp.companies.CompaniesFragment;
+import io.github.marktony.espresso.mvp.companies.CompaniesPresenter;
 import io.github.marktony.espresso.data.source.PackagesLocalDataSource;
 import io.github.marktony.espresso.data.source.PackagesRepository;
 

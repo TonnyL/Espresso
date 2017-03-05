@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.addpack;
+package io.github.marktony.espresso.mvp.addpack;
 
 import android.support.annotation.NonNull;
 
@@ -55,11 +55,8 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
     @Override
     public void savePackage(String number, String name) {
-
         compositeDisposable.clear();
-
         checkNumber(number, name);
-
     }
 
     private void checkNumber(final String number, final String name) {
