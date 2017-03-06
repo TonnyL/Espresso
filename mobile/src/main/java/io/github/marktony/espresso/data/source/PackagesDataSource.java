@@ -27,6 +27,8 @@ public interface PackagesDataSource {
 
     void cancelAllRequests();
 
+    void setAllPackagesRead();
+
     void setPackageReadUnread(@NonNull String packageId);
 
     boolean isPackageExist(@NonNull String packageId);

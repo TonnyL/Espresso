@@ -17,6 +17,7 @@ public class PackageDetailsActivity extends AppCompatActivity{
     private PackageDetailsFragment fragment;
 
     public static final String PACKAGE_ID = "PACKAGE_ID";
+    public static final String PACKAGE_POSITION = "PACKAGE_POSITION";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class PackageDetailsActivity extends AppCompatActivity{
 
         new PackageDetailsPresenter(
                 getIntent().getStringExtra(PACKAGE_ID),
+                getIntent().getIntExtra(PACKAGE_POSITION, -1),
                 PackagesRepository.getInstance(PackagesLocalDataSource.getInstance()),
                 fragment);
 

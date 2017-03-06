@@ -255,7 +255,7 @@ public class CaptureActivity extends AppCompatActivity
         int cameraWidth = cameraManager.getCameraResolution().y;
         int cameraHeight = cameraManager.getCameraResolution().x;
 
-        /** 获取布局中扫描框的位置信息 */
+        // 获取布局中扫描框的位置信息
         int[] location = new int[2];
         scanCropView.getLocationInWindow(location);
 
@@ -265,21 +265,21 @@ public class CaptureActivity extends AppCompatActivity
         int cropWidth = scanCropView.getWidth();
         int cropHeight = scanCropView.getHeight();
 
-        /** 获取布局容器的宽高 */
+        // 获取布局容器的宽高
         int containerWidth = scanContainer.getWidth();
         int containerHeight = scanContainer.getHeight();
 
-        /** 计算最终截取的矩形的左上角顶点x坐标 */
+        // 计算最终截取的矩形的左上角顶点x坐标
         int x = cropLeft * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的左上角顶点y坐标 */
+        // 计算最终截取的矩形的左上角顶点y坐标
         int y = cropTop * cameraHeight / containerHeight;
 
-        /** 计算最终截取的矩形的宽度 */
+        // 计算最终截取的矩形的宽度
         int width = cropWidth * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的高度 */
+        // 计算最终截取的矩形的高度
         int height = cropHeight * cameraHeight / containerHeight;
 
-        /** 生成最终的截取的矩形 */
+        // 生成最终的截取的矩形 */
         mCropRect = new Rect(x, y, width + x, height + y);
     }
 

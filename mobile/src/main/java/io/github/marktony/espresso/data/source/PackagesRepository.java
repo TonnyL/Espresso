@@ -57,7 +57,6 @@ public class PackagesRepository implements PackagesDataSource {
         return INSTANCE;
     }
 
-
     public static void destroyInstance() {
         INSTANCE = null;
     }
@@ -190,6 +189,33 @@ public class PackagesRepository implements PackagesDataSource {
     @Override
     public void cancelAllRequests() {
         compositeDisposable.clear();
+    }
+
+    @Override
+    public void setAllPackagesRead() {
+        Disposable disposable = getPackages()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<Package>>() {
+                    @Override
+                    public void onNext(List<Package> value) {
+                        for (Package p : value) {
+                            p.setUnread(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+        compositeDisposable.add(disposable);
+        packagesLocalDataSource.setAllPackagesRead();
     }
 
     @Override

@@ -3,7 +3,7 @@
 
     <item android:id="@+id/action_set_read_unread"
         android:orderInCategory="97"
-        android:title="@string/set_read" />
+        android:title="@string/set_unread" />
 
     <item android:id="@+id/action_share"
         android:orderInCategory="99"

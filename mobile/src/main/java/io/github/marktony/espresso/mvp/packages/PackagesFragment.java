@@ -36,6 +36,7 @@ import io.github.marktony.espresso.mvp.addpack.AddPackageActivity;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
+import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsFragment;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -61,6 +62,8 @@ public class PackagesFragment extends Fragment
 
     public PackagesFragment() {}
 
+    public static final int REQUEST_OPEN_DETAILS = 0;
+
     public static PackagesFragment newInstance() {
         return new PackagesFragment();
     }
@@ -68,13 +71,6 @@ public class PackagesFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(LocalReceiver.PACKAGES_RECEIVER_ACTION);
-        receiver = new LocalReceiver();
-        // Register the broadcast receiver
-        manager = LocalBroadcastManager.getInstance(getContext());
-        manager.registerReceiver(receiver, filter);
     }
 
     @Nullable
@@ -118,9 +114,16 @@ public class PackagesFragment extends Fragment
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.refreshPackages();
+                presenter.loadPackages(true);
             }
         });
+
+        // Register the local broadcast receiver
+        receiver = new LocalReceiver();
+        manager = LocalBroadcastManager.getInstance(getContext());
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(LocalReceiver.PACKAGES_RECEIVER_ACTION);
+        manager.registerReceiver(receiver, filter);
 
         setHasOptionsMenu(true);
 
@@ -141,11 +144,12 @@ public class PackagesFragment extends Fragment
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         // DO NOT forget to unregister the broadcast receiver
         manager.unregisterReceiver(receiver);
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -159,7 +163,7 @@ public class PackagesFragment extends Fragment
         if (id == R.id.action_search) {
 
         } else if (id == R.id.action_mark_all_read) {
-
+            presenter.markAllPacksRead();
         }
         return true;
     }
@@ -175,10 +179,7 @@ public class PackagesFragment extends Fragment
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.action_copy_code:
-                ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData data = ClipData.newPlainText("text", getSelectedPackageNumber());
-                manager.setPrimaryClip(data);
-                Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
+                copyPackageNumber();
                 break;
             case R.id.action_share:
                 presenter.setShareData(getSelectedPackageNumber());
@@ -192,6 +193,32 @@ public class PackagesFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_OPEN_DETAILS:
+                Bundle bundle = data.getExtras();
+                if (null != bundle) {
+                    int position = bundle.getInt(PackageDetailsActivity.PACKAGE_POSITION, -1);
+                    String number = bundle.getString(PackageDetailsActivity.PACKAGE_ID);
+                    if (position != -1 && number != null) {
+                        if (resultCode == PackageDetailsFragment.RESULT_DELETE) {
+                            presenter.deletePackage(position);
+                        }
+
+                        if (resultCode == PackageDetailsFragment.RESULT_SET_UNREAD) {
+                            presenter.setPackageReadUnread(number);
+                        }
+                    }
+
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -286,7 +313,8 @@ public class PackagesFragment extends Fragment
                 public void OnItemClick(View v, int position) {
                     Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
                     intent.putExtra(PackageDetailsActivity.PACKAGE_ID, list.get(position).getNumber());
-                    startActivity(intent);
+                    intent.putExtra(PackageDetailsActivity.PACKAGE_POSITION, position);
+                    startActivityForResult(intent, REQUEST_OPEN_DETAILS);
                 }
 
             });
@@ -328,7 +356,7 @@ public class PackagesFragment extends Fragment
         String msg = packageName
                 + " "
                 + getString(R.string.package_removed_msg);
-        Snackbar.make(fab, msg, Snackbar.LENGTH_SHORT)
+        Snackbar.make(fab, msg, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -336,6 +364,14 @@ public class PackagesFragment extends Fragment
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void copyPackageNumber() {
+        ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData data = ClipData.newPlainText("text", getSelectedPackageNumber());
+        manager.setPrimaryClip(data);
+        Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
     }
 
     public void setSelectedPackage(@NonNull String packId) {

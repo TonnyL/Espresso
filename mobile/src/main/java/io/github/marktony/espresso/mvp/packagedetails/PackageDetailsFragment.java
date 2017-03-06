@@ -1,16 +1,22 @@
 package io.github.marktony.espresso.mvp.packagedetails;
 
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +32,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.PackageStatus;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 
@@ -48,9 +55,11 @@ public class PackageDetailsFragment extends Fragment
 
     private PackageDetailsContract.Presenter presenter;
 
-    // Whether the package is read or unread
-    // Default value is false
-    private boolean isPackageRead = false;
+    private LocalBroadcastManager manager;
+    private LocalReceiver receiver;
+
+    public static final int RESULT_DELETE = 0;
+    public static final int RESULT_SET_UNREAD = 1;
 
     public PackageDetailsFragment() {}
 
@@ -84,6 +93,13 @@ public class PackageDetailsFragment extends Fragment
             }
         });
 
+        // Register the local broadcast receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(LocalReceiver.PACKAGE_DETAILS_RECEIVER_ACTION);
+        receiver = new LocalReceiver();
+        manager = LocalBroadcastManager.getInstance(getContext());
+        manager.registerReceiver(receiver, filter);
+
         setHasOptionsMenu(true);
 
         return view;
@@ -102,35 +118,40 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // DO NOT forget to unregister the broadcast receiver
+        manager.unregisterReceiver(receiver);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.package_details, menu);
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        MenuItem item = menu.findItem(R.id.action_set_read_unread);
-        // If the package has been already read
-        if (isPackageRead) {
-            item.setTitle(R.string.set_unread);
-        } else {
-            item.setTitle(R.string.set_read);
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
+
             getActivity().onBackPressed();
+
         } else if (id == R.id.action_delete) {
+
+            presenter.deletePackage();
 
         } else if (id == R.id.action_set_read_unread) {
 
+            presenter.setPackageReadUnread();
+
         } else if (id == R.id.action_copy_code) {
 
+            presenter.copyPackageNumber();
+
         } else if (id == R.id.action_share) {
+
+            presenter.shareTo();
 
         }
         return true;
@@ -202,8 +223,64 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
-    public void setPackageReadUnread(boolean readUnread) {
-        isPackageRead = readUnread;
+    public void setPackageUnread(@NonNull String packageId, int position) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString(PackageDetailsActivity.PACKAGE_ID, packageId);
+        bundle.putInt(PackageDetailsActivity.PACKAGE_POSITION, position);
+        intent.putExtras(bundle);
+        getActivity().setResult(RESULT_SET_UNREAD, intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void shareTo(@NonNull Package pack) {
+        String shareData = pack.getName()
+                + "\n( "
+                + pack.getNumber()
+                + " "
+                + pack.getCompanyChineseName()
+                + " )\n"
+                + getString(R.string.latest_status);
+        if (pack.getData() != null && !pack.getData().isEmpty()) {
+            for (PackageStatus ps : pack.getData()) {
+                shareData = new StringBuilder().append(shareData)
+                        .append(ps.getContext())
+                        .append(" - ")
+                        .append(ps.getFtime())
+                        .append("\n").toString();
+            }
+        } else {
+            shareData = shareData + getString(R.string.get_status_error);
+        }
+
+        try {
+            Intent intent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, shareData);
+            startActivity(Intent.createChooser(intent, getString(R.string.share)));
+
+        } catch (ActivityNotFoundException e) {
+            Snackbar.make(fab, R.string.something_wrong, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void deletePackage(@NonNull String packageId, int position) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString(PackageDetailsActivity.PACKAGE_ID, packageId);
+        bundle.putInt(PackageDetailsActivity.PACKAGE_POSITION, position);
+        intent.putExtras(bundle);
+        getActivity().setResult(RESULT_DELETE, intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void copyPackageNumber(@NonNull String packageId) {
+        ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData data = ClipData.newPlainText("text", packageId);
+        manager.setPrimaryClip(data);
+        Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
     }
 
     public class LocalReceiver extends BroadcastReceiver {

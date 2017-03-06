@@ -58,7 +58,10 @@ public class PackagesLocalDataSource implements PackagesDataSource {
                 .findFirst();
         // Can not send the Realm stuff, it is a deep copy that will
         // copy all referenced objects
-        Package packCopy = realm.copyFromRealm(pack);
+        Package packCopy = null;
+        if (pack != null) {
+            packCopy = realm.copyFromRealm(pack);
+        }
         return Observable.just(packCopy);
     }
 
@@ -96,6 +99,18 @@ public class PackagesLocalDataSource implements PackagesDataSource {
     public void cancelAllRequests() {
         // Not required because the {@link PackagesRepository} handles the logic
         // of refreshing the packages from all available data source
+    }
+
+    @Override
+    public void setAllPackagesRead() {
+        RealmResults<Package> results = realm.where(Package.class)
+                .notEqualTo("unread", true).findAll();
+        for (Package p : results) {
+            realm.beginTransaction();
+            p.setUnread(false);
+            realm.copyFromRealm(p);
+            realm.commitTransaction();
+        }
     }
 
     @Override

@@ -26,13 +26,13 @@ public interface PackagesContract {
 
         void showPackageRemovedMsg(String packageName);
 
+        void copyPackageNumber();
+
     }
 
     interface Presenter extends BasePresenter {
 
         void loadPackages(boolean forceUpdate);
-
-        void openPackageDetails(@NonNull Package pack);
 
         void markAllPacksRead();
 
@@ -47,8 +47,6 @@ public interface PackagesContract {
         void setShareData(@NonNull String packageId);
 
         void recoverPackage();
-
-        void refreshPackages();
 
     }
 

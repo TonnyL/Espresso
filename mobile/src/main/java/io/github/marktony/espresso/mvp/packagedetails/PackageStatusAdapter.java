@@ -52,19 +52,20 @@ public class PackageStatusAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         PackageStatus item = list.get(position);
+        PackageStatusViewHolder viewHolder = (PackageStatusViewHolder) holder;
+
         if (getItemViewType(position) == TYPE_SINGLE) {
-            ((PackageStatusViewHolder)holder).timeLine.setStartLine(null);
-            ((PackageStatusViewHolder)holder).timeLine.setFinishLine(null);
+            viewHolder.timeLine.setStartLine(null);
+            viewHolder.timeLine.setFinishLine(null);
         } else if (getItemViewType(position) == TYPE_START) {
-            ((PackageStatusViewHolder)holder).timeLine.setStartLine(null);
+            viewHolder.timeLine.setStartLine(null);
         } else if (getItemViewType(position) == TYPE_FINISH) {
-            ((PackageStatusViewHolder)holder).timeLine.setFinishLine(null);
+            viewHolder.timeLine.setFinishLine(null);
         }
 
-        ((PackageStatusViewHolder)holder).textViewTime.setText(item.getTime());
-        ((PackageStatusViewHolder)holder).textViewLocation.setText(item.getContext());
+        viewHolder.textViewTime.setText(item.getTime());
+        viewHolder.textViewLocation.setText(item.getContext());
     }
 
     @Override
