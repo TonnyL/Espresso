@@ -5,8 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.data.source.PackagesLocalDataSource;
+import io.github.marktony.espresso.data.source.local.PackagesLocalDataSource;
 import io.github.marktony.espresso.data.source.PackagesRepository;
+import io.github.marktony.espresso.data.source.remote.PackagesRemoteDataSource;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -37,7 +38,9 @@ public class AddPackageActivity extends AppCompatActivity {
                     .commit();
         }
 
-        new AddPackagePresenter(PackagesRepository.getInstance(PackagesLocalDataSource.getInstance()),
+        new AddPackagePresenter(PackagesRepository.getInstance(
+                PackagesRemoteDataSource.getInstance(),
+                PackagesLocalDataSource.getInstance()),
                 fragment);
 
     }

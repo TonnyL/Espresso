@@ -54,7 +54,6 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
     @Override
     public void unsubscribe() {
         compositeDisposable.clear();
-        packagesRepository.cancelAllRequests();
     }
 
     private void openDetail() {
@@ -93,6 +92,8 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                             view.setToolbarBackground(R.drawable.banner_background_on_the_way);
                         }
 
+                        packagesRepository.setPackageReadable(packageId, false);
+
                     }
 
                     @Override
@@ -110,12 +111,40 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
     }
 
     @Override
-    public void setPackageReadUnread() {
-        packagesRepository.setPackageReadUnread(packageId);
+    public void setPackageReadable() {
+        packagesRepository.setPackageReadable(packageId, true);
+        view.setPackageUnread(packageId, position);
     }
 
     @Override
     public void refreshPackage() {
+        Disposable disposable = packagesRepository
+                .refreshPackage(packageId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<Package>() {
+                    @Override
+                    public void onNext(Package value) {
+
+                        List<PackageStatus> list = new ArrayList<>();
+                        for (PackageStatus status : value.getData()) {
+                            list.add(status);
+                        }
+
+                        view.showPackageStatus(list);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.setLoadingIndicator(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        view.setLoadingIndicator(false);
+                    }
+                });
+        compositeDisposable.add(disposable);
 
     }
 

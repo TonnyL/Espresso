@@ -145,9 +145,9 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Package pack = list.get(getLayoutPosition());
                 menu.setHeaderTitle(pack.getName());
                 if (pack.isUnread()) {
-                    menu.add(Menu.NONE, R.id.action_set_read_unread, 0, R.string.set_read);
+                    menu.add(Menu.NONE, R.id.action_set_readable, 0, R.string.set_read);
                 } else {
-                    menu.add(Menu.NONE, R.id.action_set_read_unread, 0, R.string.set_unread);
+                    menu.add(Menu.NONE, R.id.action_set_readable, 0, R.string.set_unread);
                 }
                 menu.add(Menu.NONE, R.id.action_copy_code, 0, R.string.copy_code);
                 menu.add(Menu.NONE, R.id.action_share, 0, R.string.share);

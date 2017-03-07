@@ -2,6 +2,7 @@ package io.github.marktony.espresso.mvp.packages;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.List;
 
@@ -48,74 +49,94 @@ public class PackagesPresenter implements PackagesContract.Presenter {
 
     @Override
     public void subscribe() {
-        loadPackages(false);
+        loadPackages();
     }
 
     @Override
     public void unsubscribe() {
         compositeDisposable.clear();
-        packagesRepository.cancelAllRequests();
     }
 
     @Override
-    public void loadPackages(boolean forceUpdate) {
-        if (forceUpdate) {
-            packagesRepository.refreshPackages();
-        } else {
-            Disposable disposable = packagesRepository
-                    .getPackages()
-                    .flatMap(new Function<List<Package>, ObservableSource<Package>>() {
-                        @Override
-                        public ObservableSource<Package> apply(List<Package> list) throws Exception {
-                            return Observable.fromIterable(list);
+    public void loadPackages() {
+        Disposable disposable = packagesRepository
+                .getPackages()
+                .flatMap(new Function<List<Package>, ObservableSource<Package>>() {
+                    @Override
+                    public ObservableSource<Package> apply(List<Package> list) throws Exception {
+                        return Observable.fromIterable(list);
+                    }
+                })
+                .filter(new Predicate<Package>() {
+                    @Override
+                    public boolean test(Package aPackage) throws Exception {
+                        int state = Integer.parseInt(aPackage.getState());
+                        switch (currentFiltering) {
+                            case ON_THE_WAY_PACKAGES:
+                                return state != Package.STATUS_DELIVERED;
+                            case DELIVERED_PACKAGES:
+                                return state == Package.STATUS_DELIVERED;
+                            case ALL_PACKAGES:
+                                return true;
+                            default:
+                                return true;
                         }
-                    })
-                    .filter(new Predicate<Package>() {
-                        @Override
-                        public boolean test(Package aPackage) throws Exception {
-                            int state = Integer.parseInt(aPackage.getState());
-                            switch (currentFiltering) {
-                                case ON_THE_WAY_PACKAGES:
-                                    return state != Package.STATUS_DELIVERED;
-                                case DELIVERED_PACKAGES:
-                                    return state == Package.STATUS_DELIVERED;
-                                case ALL_PACKAGES:
-                                    return true;
-                                default:
-                                    return true;
-                            }
-                        }
-                    })
-                    .toList()
-                    .toObservable()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableObserver<List<Package>>() {
-                        @Override
-                        public void onNext(List<Package> value) {
-                            view.showPackages(value);
-                        }
+                    }
+                })
+                .toList()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<Package>>() {
+                    @Override
+                    public void onNext(List<Package> value) {
+                        view.showPackages(value);
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            view.showEmptyView(true);
-                        }
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showEmptyView(true);
+                        view.setLoadingIndicator(false);
+                    }
 
-                        @Override
-                        public void onComplete() {
+                    @Override
+                    public void onComplete() {
+                        view.setLoadingIndicator(false);
+                    }
+                });
 
-                        }
-                    });
+        compositeDisposable.add(disposable);
+    }
 
-            compositeDisposable.add(disposable);
-        }
+    @Override
+    public void refreshPackages() {
+        Disposable disposable = packagesRepository
+                .refreshPackages()
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<Package>>() {
+                    @Override
+                    public void onNext(List<Package> value) {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        loadPackages();
+                    }
+                });
+        compositeDisposable.add(disposable);
     }
 
     @Override
     public void markAllPacksRead() {
         packagesRepository.setAllPackagesRead();
-        loadPackages(false);
+        loadPackages();
     }
 
     /**
@@ -140,8 +161,35 @@ public class PackagesPresenter implements PackagesContract.Presenter {
     }
 
     @Override
-    public void setPackageReadUnread(@NonNull String packageId) {
-        packagesRepository.setPackageReadUnread(packageId);
+    public void setPackageReadable(@NonNull final String packageId, boolean readable) {
+        Disposable disposable = packagesRepository
+                .getPackages()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<Package>>() {
+                    @Override
+                    public void onNext(List<Package> value) {
+                        for (Package p : value) {
+                            if (p.getNumber().equals(packageId)) {
+                                packagesRepository.setPackageReadable(packageId, p.isUnread());
+                                view.showPackages(value);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+        compositeDisposable.add(disposable);
+
     }
 
     @Override
@@ -158,9 +206,9 @@ public class PackagesPresenter implements PackagesContract.Presenter {
                     public void onNext(List<Package> value) {
                         mayRemovePackage = value.get(position);
                         packagesRepository.deletePackage(mayRemovePackage.getNumber());
-                        view.showPackageRemovedMsg(mayRemovePackage.getName());
                         value.remove(position);
                         view.showPackages(value);
+                        view.showPackageRemovedMsg(mayRemovePackage.getName());
                     }
 
                     @Override
@@ -207,7 +255,7 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         if (mayRemovePackage != null) {
             packagesRepository.savePackage(mayRemovePackage);
         }
-        loadPackages(false);
+        loadPackages();
     }
 
 }

@@ -12,9 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.data.source.remote.PackagesRemoteDataSource;
 import io.github.marktony.espresso.mvp.companies.CompaniesFragment;
 import io.github.marktony.espresso.mvp.companies.CompaniesPresenter;
-import io.github.marktony.espresso.data.source.PackagesLocalDataSource;
+import io.github.marktony.espresso.data.source.local.PackagesLocalDataSource;
 import io.github.marktony.espresso.data.source.PackagesRepository;
 
 /**
@@ -69,7 +70,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         packagesPresenter = new PackagesPresenter(packagesFragment,
-                PackagesRepository.getInstance(PackagesLocalDataSource.getInstance()));
+                PackagesRepository.getInstance(
+                        PackagesRemoteDataSource.getInstance(),
+                        PackagesLocalDataSource.getInstance()));
 
         new CompaniesPresenter(companiesFragment);
 

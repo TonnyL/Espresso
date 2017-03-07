@@ -1,12 +1,10 @@
 package io.github.marktony.espresso.mvp.packagedetails;
 
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -16,7 +14,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,11 +52,11 @@ public class PackageDetailsFragment extends Fragment
 
     private PackageDetailsContract.Presenter presenter;
 
-    private LocalBroadcastManager manager;
-    private LocalReceiver receiver;
-
-    public static final int RESULT_DELETE = 0;
-    public static final int RESULT_SET_UNREAD = 1;
+    // The values must be different to the existing
+    // Result numbers of the {@link Activity}
+    // like RESULT_OK = -1, RESULT_CANCEL = 0.
+    public static final int RESULT_DELETE = 99;
+    public static final int RESULT_SET_UNREAD = 100;
 
     public PackageDetailsFragment() {}
 
@@ -89,16 +86,9 @@ public class PackageDetailsFragment extends Fragment
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                presenter.refreshPackage();
             }
         });
-
-        // Register the local broadcast receiver
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(LocalReceiver.PACKAGE_DETAILS_RECEIVER_ACTION);
-        receiver = new LocalReceiver();
-        manager = LocalBroadcastManager.getInstance(getContext());
-        manager.registerReceiver(receiver, filter);
 
         setHasOptionsMenu(true);
 
@@ -118,13 +108,6 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // DO NOT forget to unregister the broadcast receiver
-        manager.unregisterReceiver(receiver);
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.package_details, menu);
@@ -141,9 +124,9 @@ public class PackageDetailsFragment extends Fragment
 
             presenter.deletePackage();
 
-        } else if (id == R.id.action_set_read_unread) {
+        } else if (id == R.id.action_set_readable) {
 
-            presenter.setPackageReadUnread();
+            presenter.setPackageReadable();
 
         } else if (id == R.id.action_copy_code) {
 
@@ -281,20 +264,6 @@ public class PackageDetailsFragment extends Fragment
         ClipData data = ClipData.newPlainText("text", packageId);
         manager.setPrimaryClip(data);
         Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
-    }
-
-    public class LocalReceiver extends BroadcastReceiver {
-
-        public static final String PACKAGE_DETAILS_RECEIVER_ACTION
-                = "io.github.marktony.espresso.PACKAGE_DETAILS_RECEIVER_ACTION";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            setLoadingIndicator(false);
-            if (intent.getBooleanExtra("result", false)) {
-                adapter.notifyDataSetChanged();
-            }
-        }
     }
 
 }

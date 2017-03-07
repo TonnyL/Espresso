@@ -128,14 +128,6 @@ public class Package extends RealmObject {
         this.condition = condition;
     }
 
-    public String getCom() {
-        return company;
-    }
-
-    public void setCom(String company) {
-        this.company = company;
-    }
-
     public String getStatus() {
         return status;
     }

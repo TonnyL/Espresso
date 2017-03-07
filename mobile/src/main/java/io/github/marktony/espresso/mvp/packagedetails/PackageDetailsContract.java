@@ -2,12 +2,11 @@ package io.github.marktony.espresso.mvp.packagedetails;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.List;
 
-import io.github.marktony.espresso.BasePresenter;
-import io.github.marktony.espresso.BaseView;
+import io.github.marktony.espresso.mvp.BasePresenter;
+import io.github.marktony.espresso.mvp.BaseView;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.PackageStatus;
 
@@ -42,7 +41,7 @@ public interface PackageDetailsContract {
 
     interface Presenter extends BasePresenter {
 
-        void setPackageReadUnread();
+        void setPackageReadable();
 
         void refreshPackage();
 

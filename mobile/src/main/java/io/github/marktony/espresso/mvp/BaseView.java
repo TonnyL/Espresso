@@ -1,4 +1,4 @@
-package io.github.marktony.espresso;
+package io.github.marktony.espresso.mvp;
 
 import android.view.View;
 

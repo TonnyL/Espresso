@@ -21,15 +21,13 @@ public interface PackagesDataSource {
 
     void deletePackage(@NonNull String packageId);
 
-    void refreshPackages();
+    Observable<List<Package>> refreshPackages();
 
-    void refreshPackage(@NonNull String packageId);
-
-    void cancelAllRequests();
+    Observable<Package> refreshPackage(@NonNull String packageId);
 
     void setAllPackagesRead();
 
-    void setPackageReadUnread(@NonNull String packageId);
+    void setPackageReadable(@NonNull String packageId, boolean readable);
 
     boolean isPackageExist(@NonNull String packageId);
 

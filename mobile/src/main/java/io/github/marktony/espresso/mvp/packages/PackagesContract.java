@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import io.github.marktony.espresso.BasePresenter;
-import io.github.marktony.espresso.BaseView;
+import io.github.marktony.espresso.mvp.BasePresenter;
+import io.github.marktony.espresso.mvp.BaseView;
 import io.github.marktony.espresso.data.Package;
 
 /**
@@ -32,7 +32,9 @@ public interface PackagesContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadPackages(boolean forceUpdate);
+        void loadPackages();
+
+        void refreshPackages();
 
         void markAllPacksRead();
 
@@ -40,7 +42,7 @@ public interface PackagesContract {
 
         PackageFilterType getFiltering();
 
-        void setPackageReadUnread(@NonNull String packageId);
+        void setPackageReadable(@NonNull String packageId, boolean readable);
 
         void deletePackage(int position);
 

@@ -1,7 +1,7 @@
 package io.github.marktony.espresso.mvp.addpack;
 
-import io.github.marktony.espresso.BasePresenter;
-import io.github.marktony.espresso.BaseView;
+import io.github.marktony.espresso.mvp.BasePresenter;
+import io.github.marktony.espresso.mvp.BaseView;
 
 /**
  * Created by lizhaotailang on 2017/2/10.

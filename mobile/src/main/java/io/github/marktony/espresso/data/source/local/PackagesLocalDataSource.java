@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.data.source;
+package io.github.marktony.espresso.data.source.local;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.util.List;
 
 import io.github.marktony.espresso.data.Package;
+import io.github.marktony.espresso.data.source.PackagesDataSource;
 import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -56,13 +57,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         Package pack = realm.where(Package.class)
                 .equalTo("number", packNumber)
                 .findFirst();
-        // Can not send the Realm stuff, it is a deep copy that will
-        // copy all referenced objects
-        Package packCopy = null;
-        if (pack != null) {
-            packCopy = realm.copyFromRealm(pack);
-        }
-        return Observable.just(packCopy);
+        return Observable.just(realm.copyFromRealm(pack));
     }
 
     @Override
@@ -84,21 +79,13 @@ public class PackagesLocalDataSource implements PackagesDataSource {
     }
 
     @Override
-    public void refreshPackages() {
-        // Not required because the {@link PackagesRepository} handles the logic
-        // of refreshing the packages from all available data source
+    public Observable<List<Package>> refreshPackages() {
+        return null;
     }
 
     @Override
-    public void refreshPackage(@NonNull String packageId) {
-        // Not required because the {@link PackagesRepository} handles the logic
-        // of refreshing the packages from all available data source
-    }
-
-    @Override
-    public void cancelAllRequests() {
-        // Not required because the {@link PackagesRepository} handles the logic
-        // of refreshing the packages from all available data source
+    public Observable<Package> refreshPackage(@NonNull String packageId) {
+        return null;
     }
 
     @Override
@@ -114,13 +101,13 @@ public class PackagesLocalDataSource implements PackagesDataSource {
     }
 
     @Override
-    public void setPackageReadUnread(@NonNull String packageId) {
+    public void setPackageReadable(@NonNull String packageId, boolean readable) {
         realm.beginTransaction();
         Package p = realm.where(Package.class)
                 .equalTo("number", packageId)
                 .findFirst();
         if (p != null) {
-            p.setUnread(!p.isUnread());
+            p.setUnread(readable);
             realm.copyToRealmOrUpdate(p);
         }
         realm.commitTransaction();
