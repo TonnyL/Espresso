@@ -67,7 +67,7 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             pvh.textViewStatus.setText(R.string.get_status_error);
         }
 
-        if (item.isUnread()) {
+        if (item.isReadable()) {
             pvh.textViewPackageName.setTypeface(null, Typeface.BOLD);
             pvh.textViewTime.setTypeface(null, Typeface.BOLD);
             pvh.textViewStatus.setTypeface(null, Typeface.BOLD);
@@ -144,7 +144,7 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((MainActivity)context).setSelectedPackageId(list.get(getLayoutPosition()).getNumber());
                 Package pack = list.get(getLayoutPosition());
                 menu.setHeaderTitle(pack.getName());
-                if (pack.isUnread()) {
+                if (pack.isReadable()) {
                     menu.add(Menu.NONE, R.id.action_set_readable, 0, R.string.set_read);
                 } else {
                     menu.add(Menu.NONE, R.id.action_set_readable, 0, R.string.set_unread);

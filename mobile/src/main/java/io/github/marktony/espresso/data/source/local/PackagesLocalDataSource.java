@@ -91,10 +91,10 @@ public class PackagesLocalDataSource implements PackagesDataSource {
     @Override
     public void setAllPackagesRead() {
         RealmResults<Package> results = realm.where(Package.class)
-                .notEqualTo("unread", true).findAll();
+                .notEqualTo("readable", true).findAll();
         for (Package p : results) {
             realm.beginTransaction();
-            p.setUnread(false);
+            p.setReadable(false);
             realm.copyFromRealm(p);
             realm.commitTransaction();
         }
@@ -107,7 +107,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
                 .equalTo("number", packageId)
                 .findFirst();
         if (p != null) {
-            p.setUnread(readable);
+            p.setReadable(readable);
             realm.copyToRealmOrUpdate(p);
         }
         realm.commitTransaction();

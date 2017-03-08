@@ -21,6 +21,7 @@ public class App extends Application {
         context = getApplicationContext();
     }
 
+    // Access to the global context.
     public static Context getInstance() {
         return context;
     }

@@ -1,13 +1,11 @@
 package io.github.marktony.espresso.zxing;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,6 +26,9 @@ import io.github.marktony.espresso.zxing.decode.DecodeThread;
 import io.github.marktony.espresso.zxing.utils.BeepManager;
 import io.github.marktony.espresso.zxing.utils.CaptureActivityHandler;
 import io.github.marktony.espresso.zxing.utils.InactivityTimer;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
 
 /**
  * Created by lizhaotailang on 2017/2/13.
@@ -183,10 +184,15 @@ public class CaptureActivity extends AppCompatActivity
         bundle.putInt("height", mCropRect.height());
         bundle.putString("result", rawResult.getText());
         resultIntent.putExtras(bundle);
+
         this.setResult(RESULT_OK,resultIntent);
         this.finish();
     }
 
+    /**
+     * Init the camera.
+     * @param surfaceHolder The surface holder.
+     */
     private void initCamera(SurfaceHolder surfaceHolder) {
         if (surfaceHolder == null) {
             throw new IllegalStateException("No SurfaceHolder provided");
@@ -217,25 +223,24 @@ public class CaptureActivity extends AppCompatActivity
 
     private void displayFrameworkBugMessageAndExit() {
         // camera error
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.app_name));
-        builder.setMessage("相机打开出错，请稍后重试");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setMessage(getString(R.string.unable_to_open_camera));
+        dialog.setTitle(getString(R.string.error));
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                dialog.dismiss();
             }
-
         });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
         });
-        builder.show();
+
+        dialog.show();
     }
 
     public void restartPreviewAfterDelay(long delayMS) {
@@ -249,13 +254,13 @@ public class CaptureActivity extends AppCompatActivity
     }
 
     /**
-     * 初始化截取的矩形区域
+     * Init the interception rectangle area
      */
     private void initCrop() {
         int cameraWidth = cameraManager.getCameraResolution().y;
         int cameraHeight = cameraManager.getCameraResolution().x;
 
-        // 获取布局中扫描框的位置信息
+        // Obtain the location information of the scanning frame in layout
         int[] location = new int[2];
         scanCropView.getLocationInWindow(location);
 
@@ -265,21 +270,23 @@ public class CaptureActivity extends AppCompatActivity
         int cropWidth = scanCropView.getWidth();
         int cropHeight = scanCropView.getHeight();
 
-        // 获取布局容器的宽高
+        // Obtain the height and width of layout container.
         int containerWidth = scanContainer.getWidth();
         int containerHeight = scanContainer.getHeight();
 
-        // 计算最终截取的矩形的左上角顶点x坐标
+        // Compute the coordinate of the top-left vertex x
+        // of the final interception rectangle.
         int x = cropLeft * cameraWidth / containerWidth;
-        // 计算最终截取的矩形的左上角顶点y坐标
+        // Compute the coordinate of the top-left vertex y
+        // of the final interception rectangle.
         int y = cropTop * cameraHeight / containerHeight;
 
-        // 计算最终截取的矩形的宽度
+        // Compute the width of the final interception rectangle.
         int width = cropWidth * cameraWidth / containerWidth;
-        // 计算最终截取的矩形的高度
+        // Compute the height of the final interception rectangle.
         int height = cropHeight * cameraHeight / containerHeight;
 
-        // 生成最终的截取的矩形 */
+        // Generate the final interception rectangle.
         mCropRect = new Rect(x, y, width + x, height + y);
     }
 

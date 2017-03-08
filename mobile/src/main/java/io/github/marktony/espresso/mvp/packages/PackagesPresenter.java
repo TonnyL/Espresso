@@ -2,7 +2,6 @@ package io.github.marktony.espresso.mvp.packages;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.List;
 
@@ -57,8 +56,12 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         compositeDisposable.clear();
     }
 
+    /**
+     * Get all the packages from repository and show on view.
+     */
     @Override
     public void loadPackages() {
+        compositeDisposable.clear();
         Disposable disposable = packagesRepository
                 .getPackages()
                 .flatMap(new Function<List<Package>, ObservableSource<Package>>() {
@@ -108,6 +111,9 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         compositeDisposable.add(disposable);
     }
 
+    /**
+     * Force update the packages data by accessing network.
+     */
     @Override
     public void refreshPackages() {
         Disposable disposable = packagesRepository
@@ -133,6 +139,9 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         compositeDisposable.add(disposable);
     }
 
+    /**
+     * Set all the packages unreadable which means data is NOT brand new.
+     */
     @Override
     public void markAllPacksRead() {
         packagesRepository.setAllPackagesRead();
@@ -160,38 +169,26 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         return currentFiltering;
     }
 
+    /**
+     * Set a specific package's read-status, readable or unreadable,
+     * which means the data is or not brand new.
+     * @param packageId The package number.
+     * @param readable Readable or unreadable(New or dated).
+     */
     @Override
     public void setPackageReadable(@NonNull final String packageId, boolean readable) {
-        Disposable disposable = packagesRepository
-                .getPackages()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Package>>() {
-                    @Override
-                    public void onNext(List<Package> value) {
-                        for (Package p : value) {
-                            if (p.getNumber().equals(packageId)) {
-                                packagesRepository.setPackageReadable(packageId, p.isUnread());
-                                view.showPackages(value);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
-        compositeDisposable.add(disposable);
-
+        packagesRepository.setPackageReadable(packageId, readable);
+        loadPackages();
     }
 
+    /**
+     * Delete a package from the repository.
+     * But this action could revoked.
+     * See {@link PackagesPresenter#recoverPackage()} for more
+     * recovering details
+     * @param position The position of the package which may
+     *                 be delete completely.
+     */
     @Override
     public void deletePackage(final int position) {
         if (position < 0) {
@@ -224,6 +221,11 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         compositeDisposable.add(disposable);
     }
 
+    /**
+     * Share a package's data.
+     * Just get the wanted package and pass it to view.
+     * @param packageId The package number.
+     */
     @Override
     public void setShareData(@NonNull String packageId) {
         Disposable disposable = packagesRepository
@@ -250,6 +252,9 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         compositeDisposable.add(disposable);
     }
 
+    /**
+     * Revoke package which may be removed from repository.
+     */
     @Override
     public void recoverPackage() {
         if (mayRemovePackage != null) {

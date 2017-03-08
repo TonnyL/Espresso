@@ -15,7 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,12 +25,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.PackageStatus;
-import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -41,14 +37,12 @@ public class PackageDetailsFragment extends Fragment
         implements PackageDetailsContract.View {
 
     private RecyclerView recyclerView;
-    private AppCompatTextView textViewCompany;
-    private AppCompatTextView textViewNumber;
-    private AppCompatTextView textViewName;
+
     private FloatingActionButton fab;
     private SwipeRefreshLayout swipeRefreshLayout;
     private CollapsingToolbarLayout toolbarLayout;
 
-    private PackageStatusAdapter adapter;
+    private PackageDetailsAdapter adapter;
 
     private PackageDetailsContract.Presenter presenter;
 
@@ -126,7 +120,7 @@ public class PackageDetailsFragment extends Fragment
 
         } else if (id == R.id.action_set_readable) {
 
-            presenter.setPackageReadable();
+            presenter.setPackageUnread();
 
         } else if (id == R.id.action_copy_code) {
 
@@ -149,9 +143,6 @@ public class PackageDetailsFragment extends Fragment
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        textViewCompany = (AppCompatTextView) view.findViewById(R.id.textViewCompany);
-        textViewNumber = (AppCompatTextView) view.findViewById(R.id.textViewPackageNumber);
-        textViewName = (AppCompatTextView) view.findViewById(R.id.textViewName);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
@@ -170,34 +161,13 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
-    public void showPackageStatus(@NonNull List<PackageStatus> list) {
+    public void showPackageStatus(@NonNull Package p) {
         if (adapter == null) {
-            adapter = new PackageStatusAdapter(getContext(), list);
-            adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
-                @Override
-                public void OnItemClick(View v, int position) {
-
-                }
-            });
+            adapter = new PackageDetailsAdapter(getContext(), p);
             recyclerView.setAdapter(adapter);
         } else {
-            adapter.updateData(list);
+            adapter.updateData(p.getData());
         }
-    }
-
-    @Override
-    public void setCompanyName(@NonNull String companyName) {
-        textViewCompany.setText(companyName);
-    }
-
-    @Override
-    public void setPackageNumber(@NonNull String packageNumber) {
-        textViewNumber.setText(packageNumber);
-    }
-
-    @Override
-    public void setPackageName(@NonNull String name) {
-        textViewName.setText(name);
     }
 
     @Override

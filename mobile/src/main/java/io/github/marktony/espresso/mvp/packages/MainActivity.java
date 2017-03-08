@@ -25,15 +25,16 @@ import io.github.marktony.espresso.data.source.PackagesRepository;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
-
     private Toolbar toolbar;
+
     private NavigationView navigationView;
-
+    private DrawerLayout drawer;
     private PackagesFragment packagesFragment;
-    private CompaniesFragment companiesFragment;
 
+    private CompaniesFragment companiesFragment;
     private PackagesPresenter packagesPresenter;
+
+    private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
 
         initViews();
 
+        // Init the fragments.
         if (savedInstanceState != null) {
             packagesFragment = (PackagesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "PackagesFragment");
             companiesFragment = (CompaniesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "CompaniesFragment");
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+
+        // Add the fragments.
         if (!packagesFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content_main, packagesFragment, "PackagesFragment")
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
 
+        // Init the presenters.
         packagesPresenter = new PackagesPresenter(packagesFragment,
                 PackagesRepository.getInstance(
                         PackagesRemoteDataSource.getInstance(),
@@ -76,18 +81,22 @@ public class MainActivity extends AppCompatActivity
 
         new CompaniesPresenter(companiesFragment);
 
+        // Get data from Bundle.
         if (savedInstanceState != null) {
             PackageFilterType currentFiltering = (PackageFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
             packagesPresenter.setFiltering(currentFiltering);
         }
 
+        // Show the default fragment.
         showPackagesFragment();
 
     }
 
+    /**
+     * Close the drawer when a back click is called.
+     */
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -95,6 +104,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Handle different items of the navigation drawer
+     * @param item The selected item.
+     * @return Selected or not.
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -117,16 +131,21 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /**
+     * Store the state when the activity may be recycled.
+     * @param outState The state data.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(CURRENT_FILTERING_KEY, packagesPresenter.getFiltering());
         super.onSaveInstanceState(outState);
 
+        // Store the fragments' states.
         if (packagesFragment.isAdded()) {
             getSupportFragmentManager().putFragment(outState, "PackagesFragment", packagesFragment);
         }
@@ -135,12 +154,15 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Init views by calling findViewById.
+     */
     private void initViews() {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
                 R.string.navigation_drawer_open,
@@ -154,6 +176,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Show the packages list fragment.
+     */
     private void showPackagesFragment() {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -166,6 +191,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Show the companies list fragment.
+     */
     private void showCompaniesFragment() {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -178,6 +206,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Pass the selected package number to fragment.
+     * @param id The selected package number.
+     */
     public void setSelectedPackageId(@NonNull String id) {
         packagesFragment.setSelectedPackage(id);
     }

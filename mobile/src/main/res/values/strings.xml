@@ -47,6 +47,9 @@
     <string name="add_to_list_successfully">Add to list successfully</string>
     <string name="package_exist">The package is in your list</string>
     <string name="permission_denied">Permission Denied</string>
+    <string name="deliver_man">Deliver man</string>
+    <string name="error">Error</string>
+    <string name="unable_to_open_camera">Unable to open camera, please check it and try again later.</string>
 
     <string-array name="package_status">
         <item>Normal</item>

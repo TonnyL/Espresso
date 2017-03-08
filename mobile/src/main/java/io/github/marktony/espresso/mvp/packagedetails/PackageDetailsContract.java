@@ -20,13 +20,7 @@ public interface PackageDetailsContract {
 
         void setLoadingIndicator(boolean loading);
 
-        void showPackageStatus(@NonNull List<PackageStatus> list);
-
-        void setCompanyName(@NonNull String companyName);
-
-        void setPackageNumber(@NonNull String packageNumber);
-
-        void setPackageName(@NonNull String name);
+        void showPackageStatus(@NonNull Package p);
 
         void setToolbarBackground(@DrawableRes int resId);
 
@@ -37,11 +31,12 @@ public interface PackageDetailsContract {
         void deletePackage(@NonNull String packageId, int position);
 
         void copyPackageNumber(@NonNull String packageId);
+
     }
 
     interface Presenter extends BasePresenter {
 
-        void setPackageReadable();
+        void setPackageUnread();
 
         void refreshPackage();
 
@@ -50,8 +45,6 @@ public interface PackageDetailsContract {
         void copyPackageNumber();
 
         void shareTo();
-
-
 
     }
 

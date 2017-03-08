@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,20 +138,23 @@ public class PackagesRepository implements PackagesDataSource {
 
     @Override
     public void setAllPackagesRead() {
-        getPackages().flatMap(new Function<List<Package>, ObservableSource<?>>() {
-            @Override
-            public ObservableSource<?> apply(List<Package> packages) throws Exception {
-                return null;
-            }
-        });
 
         packagesLocalDataSource.setAllPackagesRead();
+
+        if (cachedPackages == null) {
+            cachedPackages = new HashMap<>();
+        }
+        for (Package p : cachedPackages.values()) {
+            if (p.isReadable()) {
+                p.setReadable(false);
+            }
+        }
     }
 
     @Override
     public void setPackageReadable(@NonNull String packageId, boolean readable) {
         Package p = cachedPackages.get(packageId);
-        p.setUnread(readable);
+        p.setReadable(readable);
         packagesLocalDataSource.setPackageReadable(packageId, readable);
     }
 

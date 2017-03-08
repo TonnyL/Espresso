@@ -45,7 +45,10 @@
     <string name="package_removed_msg">删除成功</string>
     <string name="add_to_list_successfully">添加成功</string>
     <string name="package_exist">运单已存在</string>
-    <string name="permission_denied">Permission Denied</string>
+    <string name="permission_denied">权限被拒绝</string>
+    <string name="deliver_man">快递员</string>
+    <string name="error">出错了</string>
+    <string name="unable_to_open_camera">相机打开出错，请稍后重试</string>
 
     <string-array name="package_status">
         <item>运输中</item>

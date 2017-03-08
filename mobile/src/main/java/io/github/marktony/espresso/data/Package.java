@@ -1,6 +1,5 @@
 package io.github.marktony.espresso.data;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -86,7 +85,7 @@ public class Package extends RealmObject {
     @Expose
     private boolean pushable = false;
     @Expose
-    private boolean unread = false;
+    private boolean readable = false;
     @Expose
     private String name;
     @Expose
@@ -152,12 +151,12 @@ public class Package extends RealmObject {
         this.data = data;
     }
 
-    public boolean isUnread() {
-        return unread;
+    public boolean isReadable() {
+        return readable;
     }
 
-    public void setUnread(boolean unread) {
-        this.unread = unread;
+    public void setReadable(boolean readable) {
+        this.readable = readable;
     }
 
     public String getCompany() {
@@ -206,11 +205,6 @@ public class Package extends RealmObject {
 
     public long getTimestamp() {
         return timestamp;
-    }
-
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
     }
 
 }

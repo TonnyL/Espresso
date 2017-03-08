@@ -54,12 +54,12 @@ public class PackagesFragment extends Fragment
 
     private String selectedPackageNumber;
 
+    public static final int REQUEST_OPEN_DETAILS = 0;
+
     // As a fragment, default constructor is needed.
     public PackagesFragment() {
 
     }
-
-    public static final int REQUEST_OPEN_DETAILS = 0;
 
     public static PackagesFragment newInstance() {
         return new PackagesFragment();
@@ -84,6 +84,9 @@ public class PackagesFragment extends Fragment
             }
         });
 
+        // The function of BottomNavigationView is just as a filter.
+        // We need not to build a fragment for each option.
+        // Filter the data in presenter and then show it.
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -115,6 +118,7 @@ public class PackagesFragment extends Fragment
             }
         });
 
+        // Set true to inflater the options menu.
         setHasOptionsMenu(true);
 
         return view;
@@ -157,7 +161,9 @@ public class PackagesFragment extends Fragment
         }
         switch (item.getItemId()) {
             case R.id.action_set_readable:
-                presenter.setPackageReadable(getSelectedPackageNumber(), false);
+                presenter.setPackageReadable(
+                        getSelectedPackageNumber(),
+                        !item.getTitle().equals(getString(R.string.set_read)));
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.action_copy_code:
@@ -172,11 +178,18 @@ public class PackagesFragment extends Fragment
         return true;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
+    /**
+     * To handle different result after another activity finished.
+     * @param requestCode Defined in {@link PackagesFragment}.
+     * @param resultCode Defined in different fragments. One point that should
+     *                   be noticed is that the result code value should be different
+     *                   with the values which is already defined in {@link android.app.Activity}
+     *                   such {@link android.app.Activity#RESULT_OK}, whose value is -1
+     *                   and {@link android.app.Activity#RESULT_CANCELED}, whose value is 0, etc.
+     *                   See {@link PackageDetailsFragment#RESULT_SET_UNREAD}
+     *                   {@link PackageDetailsFragment#RESULT_DELETE}
+     * @param data The extra data.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -195,7 +208,7 @@ public class PackagesFragment extends Fragment
                     if (null != bundle) {
                         String number = bundle.getString(PackageDetailsActivity.PACKAGE_ID);
                         if (number != null) {
-                            presenter.setPackageReadable(number, false);
+                            presenter.setPackageReadable(number, true);
                         }
                     }
                 }
@@ -205,6 +218,10 @@ public class PackagesFragment extends Fragment
         }
     }
 
+    /**
+     * Init the views by findViewById.
+     * @param view The container view.
+     */
     @Override
     public void initViews(View view) {
 
@@ -216,6 +233,9 @@ public class PackagesFragment extends Fragment
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         refreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
+        // ItemTouchHelper helps to handle the drag or swipe action.
+        // In our app, we do nothing but return a false value
+        // means the item does not support drag action.
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -223,13 +243,19 @@ public class PackagesFragment extends Fragment
                 return false;
             }
 
+            //
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // Make different reactions with different directions here.
                 presenter.deletePackage(viewHolder.getLayoutPosition());
             }
 
             @Override
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                // The callback when releasing the view, hide the icons.
+                // ViewHolder's ItemView is the default view to be operated.
+                // Here we call getDefaultUIUtil's function clearView to pass
+                // specified view.
                 getDefaultUIUtil().clearView(((PackageAdapter.PackageViewHolder) viewHolder).layoutMain);
                 ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.GONE);
                 ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.GONE);
@@ -237,7 +263,9 @@ public class PackagesFragment extends Fragment
 
             @Override
             public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                // The callback when ViewHolder's status of drag or swipe action changed.
                 if (viewHolder != null) {
+                    // ViewHolder's ItemView is the default view to be operated.
                     getDefaultUIUtil().onSelected(((PackageAdapter.PackageViewHolder) viewHolder).layoutMain);
                 }
             }
@@ -246,12 +274,14 @@ public class PackagesFragment extends Fragment
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 getDefaultUIUtil().onDraw(c, recyclerView, ((PackageAdapter.PackageViewHolder) viewHolder).layoutMain, dX, dY, actionState, isCurrentlyActive);
                 if (dX > 0) {
+                    // Left swipe
                     ((PackageAdapter.PackageViewHolder) viewHolder).wrapperView.setBackgroundResource(R.color.deep_orange);
                     ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.VISIBLE);
                     ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.GONE);
                 }
 
                 if (dX < 0) {
+                    // Right swipe
                     ((PackageAdapter.PackageViewHolder) viewHolder).wrapperView.setBackgroundResource(R.color.deep_orange);
                     ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.GONE);
                     ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.VISIBLE);
@@ -261,22 +291,39 @@ public class PackagesFragment extends Fragment
 
             @Override
             public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                // Be called by ItemTouchHelper's onDrawOver function.
+                // Draw with a canvas object.
+                // The pattern will be above the RecyclerView
                 getDefaultUIUtil().onDrawOver(c, recyclerView, ((PackageAdapter.PackageViewHolder) viewHolder).layoutMain, dX, dY, actionState, isCurrentlyActive);
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    /**
+     * Set a presenter for this fragment(View),
+     * @param presenter The presenter.
+     */
     @Override
     public void setPresenter(@NonNull PackagesContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
+    /**
+     * Set the SwipeRefreshLayout as a indicator.
+     * And the SwipeRefreshLayout is refreshing means our app is loading.
+     * @param active Loading or not.
+     */
     @Override
     public void setLoadingIndicator(boolean active) {
         refreshLayout.setRefreshing(active);
     }
 
+    /**
+     * Hide a RecyclerView when it is empty and show a empty view
+     * to tell the uses that there is no data currently.
+     * @param toShow Hide or show.
+     */
     @Override
     public void showEmptyView(boolean toShow) {
         if (toShow) {
@@ -288,6 +335,10 @@ public class PackagesFragment extends Fragment
         }
     }
 
+    /**
+     * Show packages data.
+     * @param list The data.
+     */
     @Override
     public void showPackages(@NonNull final List<Package> list) {
         if (adapter == null) {
@@ -304,11 +355,17 @@ public class PackagesFragment extends Fragment
             });
             recyclerView.setAdapter(adapter);
         } else {
+            // The reason why not just call adapter.notifyDataSetChanged
+            // at {@link PackagesAdapter}
             adapter.updateData(list);
         }
         showEmptyView(list.isEmpty());
     }
 
+    /**
+     * Build up the share info and create a chooser to share the data.
+     * @param pack The share info comes from.
+     */
     @Override
     public void shareTo(@NonNull Package pack) {
         String shareData = pack.getName()
@@ -325,6 +382,8 @@ public class PackagesFragment extends Fragment
         } else {
             shareData = shareData + getString(R.string.get_status_error);
         }
+        // DO NOT forget surround with try catch statement.
+        // There may be no activity on users' device to handle this intent.
         try {
             Intent intent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, shareData);
@@ -335,6 +394,11 @@ public class PackagesFragment extends Fragment
         }
     }
 
+    /**
+     * Called when the package is removed and
+     * give the user a change to undo the remove action.
+     * @param packageName To build up the message.
+     */
     @Override
     public void showPackageRemovedMsg(String packageName) {
         String msg = packageName
@@ -350,6 +414,9 @@ public class PackagesFragment extends Fragment
                 .show();
     }
 
+    /**
+     * Copy the package number to clipboard.
+     */
     @Override
     public void copyPackageNumber() {
         ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -358,10 +425,20 @@ public class PackagesFragment extends Fragment
         Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
     }
 
+    /**
+     * Work with the activity which fragment attached to.
+     * Store the number which is selected.
+     * @param packId The selected package number.
+     */
     public void setSelectedPackage(@NonNull String packId) {
         this.selectedPackageNumber = packId;
     }
 
+    /**
+     * Work with the activity which fragment attached to.
+     * Get the number which is selected.
+     * @return The selected package number.
+     */
     public String getSelectedPackageNumber() {
         return selectedPackageNumber;
     }

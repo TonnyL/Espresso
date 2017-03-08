@@ -65,23 +65,7 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                     @Override
                     public void onNext(Package value) {
 
-                        view.setPackageNumber(packageId);
-                        view.setPackageName(value.getName());
-
-                        // Convert the RealmList to a normal List.
-                        // Pass a RealmList as parameter directly where List is required
-                        // is NOT a good idea.
-                        // The code below will make some terrible bugs.
-                        // view.showPackageStatus(list);
-                        // One the them is that the first load works perfectly.
-                        // But when the screen call onPause and back to user again,
-                        // the list (RecyclerView) is lost and all the data is removed from DB.
-                        List<PackageStatus> list = new ArrayList<>();
-                        for (PackageStatus status : value.getData()) {
-                            list.add(status);
-                        }
-
-                        view.showPackageStatus(list);
+                        view.showPackageStatus(value);
 
                         int state = Integer.parseInt(value.getState());
                         if (state == Package.STATUS_FAILED) {
@@ -111,7 +95,7 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
     }
 
     @Override
-    public void setPackageReadable() {
+    public void setPackageUnread() {
         packagesRepository.setPackageReadable(packageId, true);
         view.setPackageUnread(packageId, position);
     }
@@ -131,7 +115,7 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                             list.add(status);
                         }
 
-                        view.showPackageStatus(list);
+                        view.showPackageStatus(value);
                     }
 
                     @Override
