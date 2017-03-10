@@ -1,5 +1,6 @@
 package io.github.marktony.espresso.data;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

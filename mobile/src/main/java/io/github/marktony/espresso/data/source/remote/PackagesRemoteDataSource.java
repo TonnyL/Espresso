@@ -2,7 +2,6 @@ package io.github.marktony.espresso.data.source.remote;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.List;
 
@@ -15,6 +14,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by lizhaotailang on 2017/3/7.
@@ -49,6 +49,7 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                 .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
                     @Override
                     public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
+
                         return Observable.fromIterable(packages)
                                 .doOnNext(new Consumer<Package>() {
                                     @Override
@@ -71,6 +72,7 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                         return RetrofitClient.getInstance()
                                 .create(RetrofitService.class)
                                 .getPackageState(pack.getCompany(), pack.getNumber())
+                                .observeOn(Schedulers.io())
                                 .doOnNext(new Consumer<Package>() {
                                     @Override
                                     public void accept(Package aPackage) throws Exception {

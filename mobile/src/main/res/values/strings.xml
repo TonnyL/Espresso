@@ -50,6 +50,8 @@
     <string name="deliver_man">Deliver man</string>
     <string name="error">Error</string>
     <string name="unable_to_open_camera">Unable to open camera, please check it and try again later.</string>
+    <string name="all_packages_are_delivered">All packages are delivered.</string>
+    <string name="to_add_packages">Click the Add button to add packages.</string>
 
     <string-array name="package_status">
         <item>Normal</item>

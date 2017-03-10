@@ -20,4 +20,6 @@
 
     <color name="layout_background">#fafafa</color>
 
+    <color name="gray_200">#EEEEEE</color>
+
 </resources>

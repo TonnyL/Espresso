@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="320dp"
+    android:minHeight="100dp"
+    android:updatePeriodMillis="60000"
+    android:initialLayout="@layout/launcher_list_widget"
+    android:widgetCategory="home_screen|keyguard"
+    android:resizeMode="horizontal|vertical"
+    android:previewImage="@drawable/nav_header"/>

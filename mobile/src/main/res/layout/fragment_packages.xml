@@ -51,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:text="Click the Add button to add packages"
+                        android:text="@string/to_add_packages"
                         android:textColor="@color/colorPrimaryText"
                         android:textAlignment="center"/>
 
