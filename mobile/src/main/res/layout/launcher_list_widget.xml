@@ -5,17 +5,17 @@
     android:layout_height="match_parent"
     android:background="@color/gray_200">
 
-    <android.support.v7.widget.RecyclerView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerViewWidget"/>
+        android:id="@+id/listViewWidget"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/emptyView"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:gravity="center"
         android:clickable="true"
         android:focusable="true">
@@ -27,7 +27,7 @@
             android:importantForAccessibility="no"
             android:hapticFeedbackEnabled="true"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

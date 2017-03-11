@@ -10,13 +10,8 @@ import android.support.annotation.Nullable;
 
 public class ReminderService extends IntentService {
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
-    public ReminderService(String name) {
-        super(name);
+    public ReminderService() {
+        super(ReminderService.class.getSimpleName());
     }
 
     @Override

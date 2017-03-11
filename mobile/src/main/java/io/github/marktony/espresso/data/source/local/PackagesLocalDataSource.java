@@ -19,19 +19,21 @@ import io.realm.Sort;
 
 public class PackagesLocalDataSource implements PackagesDataSource {
 
-    private static final String DATABASE_NAME = "Espresso.realm";
-
     @Nullable
     private static PackagesLocalDataSource INSTANCE;
 
     private Realm realm;
 
+    public static final String DATABASE_NAME = "Espresso.realm";
+
     // Prevent direct instantiation
     private PackagesLocalDataSource() {
-        realm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(DATABASE_NAME)
-                .build());
+        if ( realm == null) {
+            realm = Realm.getInstance(new RealmConfiguration.Builder()
+                    .deleteRealmIfMigrationNeeded()
+                    .name(DATABASE_NAME)
+                    .build());
+        }
     }
 
     public static PackagesLocalDataSource getInstance() {
@@ -57,7 +59,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         Package pack = realm.where(Package.class)
                 .equalTo("number", packNumber)
                 .findFirst();
-        return Observable.just(realm.copyFromRealm(pack));
+        return pack != null ? Observable.just(realm.copyFromRealm(pack)) : null;
     }
 
     @Override
