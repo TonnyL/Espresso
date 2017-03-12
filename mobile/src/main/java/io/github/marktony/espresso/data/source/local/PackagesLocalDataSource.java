@@ -15,6 +15,7 @@ import io.realm.Sort;
 
 /**
  * Created by lizhaotailang on 2017/2/25.
+ * Concrete implementation of a data source as a db.
  */
 
 public class PackagesLocalDataSource implements PackagesDataSource {
@@ -36,6 +37,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         }
     }
 
+    // Access this instance for other classes.
     public static PackagesLocalDataSource getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new PackagesLocalDataSource();
@@ -43,10 +45,15 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         return INSTANCE;
     }
 
+    // Destroy the instance.
     public static void destroyInstance() {
         INSTANCE = null;
     }
 
+    /**
+     * Get the packages in database and sort them in timestamp descending.
+     * @return The observable packages from database.
+     */
     @Override
     public Observable<List<Package>> getPackages() {
         RealmResults<Package> results = realm.where(Package.class)
@@ -54,6 +61,13 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         return Observable.just(realm.copyFromRealm(results));
     }
 
+    /**
+     * Get a package in database of specific number.
+     * @param packNumber The primary key
+     *                   or in another words, the package id.
+     *                   See {@link Package#number}
+     * @return The observable package from database.
+     */
     @Override
     public Observable<Package> getPackage(@NonNull String packNumber) {
         Package pack = realm.where(Package.class)
@@ -62,16 +76,28 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         return pack != null ? Observable.just(realm.copyFromRealm(pack)) : null;
     }
 
+    /**
+     * Save a package to database.
+     * @param pack The package to save. See {@link Package}
+     */
     @Override
     public void savePackage(@NonNull Package pack) {
+        // DO NOT forget begin and commit the transaction.
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(pack);
         realm.commitTransaction();
     }
 
+    /**
+     * Delete a package with specific id from database.
+     * @param packageId The primary key of a package
+     *                  or in another words, the package id.
+     *                  See {@link Package#number}
+     */
     @Override
     public void deletePackage(@NonNull String packageId) {
-        Package p = realm.where(Package.class).equalTo("number", packageId)
+        Package p = realm.where(Package.class)
+                .equalTo("number", packageId)
                 .findFirst();
         realm.beginTransaction();
         if (p != null) {
@@ -82,14 +108,21 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     @Override
     public Observable<List<Package>> refreshPackages() {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
         return null;
     }
 
     @Override
     public Observable<Package> refreshPackage(@NonNull String packageId) {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
         return null;
     }
 
+    /**
+     * Set all the packages which are the unread new read.
+     */
     @Override
     public void setAllPackagesRead() {
         RealmResults<Package> results = realm.where(Package.class)
@@ -102,6 +135,13 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         }
     }
 
+    /**
+     * Set a package of specific number read or unread new.
+     * @param packageId The primary key or the package id.
+     *                  See {@link Package#number}
+     * @param readable Read or unread new.
+     *                 See {@link Package#readable}
+     */
     @Override
     public void setPackageReadable(@NonNull String packageId, boolean readable) {
         realm.beginTransaction();
@@ -117,8 +157,9 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     /**
      * Query the existence of a specific number.
-     * @param packageId the package number to query
-     * @return whether the number is in the database
+     * @param packageId the package number to query.
+     *                  See {@link Package#number}
+     * @return whether the number is in the database.
      */
     @Override
     public boolean isPackageExist(@NonNull String packageId) {

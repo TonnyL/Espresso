@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.Random;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.data.CompanyAuto;
+import io.github.marktony.espresso.data.CompanyRecognition;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesDataSource;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
@@ -73,9 +73,9 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                 .query(number)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<CompanyAuto>() {
+                .subscribeWith(new DisposableObserver<CompanyRecognition>() {
                     @Override
-                    public void onNext(CompanyAuto value) {
+                    public void onNext(CompanyRecognition value) {
                         if (value.getAuto().size() > 0) {
                             checkPackageLatestStatus(value.getAuto().get(0).getCompanyCode(), number, name);
                         } else {

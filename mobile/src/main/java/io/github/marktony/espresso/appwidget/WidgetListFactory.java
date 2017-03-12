@@ -2,10 +2,10 @@ package io.github.marktony.espresso.appwidget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
@@ -28,18 +28,19 @@ public class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory 
     private String statusError;
 
     private String[] packageStatus;
+
+    private Realm realm;
+
     private List<Package> results;
 
     public WidgetListFactory(Context context) {
         this.context = context;
-        Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
+        statusError = context.getString(R.string.get_status_error);
+        packageStatus = context.getResources().getStringArray(R.array.package_status);
+        realm = Realm.getInstance(new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .name(DATABASE_NAME)
                 .build());
-        results = new ArrayList<>();
-        statusError = context.getString(R.string.get_status_error);
-        packageStatus = context.getResources().getStringArray(R.array.package_status);
-
         results = realm.copyFromRealm(realm.where(Package.class)
                 .notEqualTo("state", String.valueOf(Package.STATUS_DELIVERED))
                 .findAllSorted("timestamp", Sort.DESCENDING));
@@ -62,7 +63,14 @@ public class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public int getCount() {
-        return results != null ? results.size() : 0;
+        return Realm.getInstance(new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .name(DATABASE_NAME)
+                .build())
+                .where(Package.class)
+                .notEqualTo("state", String.valueOf(Package.STATUS_DELIVERED))
+                .findAllSorted("timestamp", Sort.DESCENDING)
+                .size();
     }
 
     @Override

@@ -2,12 +2,8 @@ package io.github.marktony.espresso.mvp.packagedetails;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.Package;
-import io.github.marktony.espresso.data.PackageStatus;
 import io.github.marktony.espresso.data.source.PackagesRepository;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -109,12 +105,6 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                 .subscribeWith(new DisposableObserver<Package>() {
                     @Override
                     public void onNext(Package value) {
-
-                        List<PackageStatus> list = new ArrayList<>();
-                        for (PackageStatus status : value.getData()) {
-                            list.add(status);
-                        }
-
                         view.showPackageStatus(value);
                     }
 

@@ -10,6 +10,7 @@ import io.realm.RealmObject;
 
 /**
  * Created by lizhaotailang on 2017/2/24.
+ * Immutable model class for a PackageStatus.
  */
 public class PackageStatus extends RealmObject {
 

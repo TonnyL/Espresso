@@ -7,9 +7,10 @@ import java.util.List;
 
 /**
  * Created by lizhaotailang on 2017/2/9.
+ * Immutable model class for a CompanyRecognition.
  */
 
-public class CompanyAuto {
+public class CompanyRecognition {
 
     @Expose
     @SerializedName("companyCode")

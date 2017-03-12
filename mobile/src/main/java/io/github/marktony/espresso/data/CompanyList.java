@@ -7,6 +7,7 @@ import io.realm.RealmList;
 
 /**
  * Created by lizhaotailang on 2017/2/22.
+ * Immutable model class for a PackageList.
  */
 
 public class CompanyList {

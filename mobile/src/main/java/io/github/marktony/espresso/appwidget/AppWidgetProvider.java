@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import io.github.marktony.espresso.R;
@@ -62,19 +61,18 @@ public class AppWidgetProvider extends android.appwidget.AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
         String action = intent.getAction();
 
         if (REFRESH_ACTION.equals(action)) {
             boolean shouldSync = intent.getBooleanExtra(EXTRA_PERFORM_SYNC, false);
-            Log.d("sync", "" + shouldSync);
             if (shouldSync) {
                 AppWidgetManager manager = AppWidgetManager.getInstance(context);
                 ComponentName name = new ComponentName(context, AppWidgetProvider.class);
                 manager.notifyAppWidgetViewDataChanged(manager.getAppWidgetIds(name), R.id.listViewWidget);
-
             }
         }
-
-        super.onReceive(context, intent);
     }
+
 }

@@ -20,6 +20,11 @@ import io.reactivex.functions.Function;
 
 /**
  * Created by lizhaotailang on 2017/2/12.
+ * Concrete implementation to load packages from the data sources into a cache.
+ * <p/>
+ * For simplicity, this implements a dumb synchronisation between locally persisted data and data
+ * obtained from the server, by using the remote data source only if the local database doesn't
+ * exist or is empty.
  */
 
 public class PackagesRepository implements PackagesDataSource {
@@ -42,6 +47,7 @@ public class PackagesRepository implements PackagesDataSource {
         this.packagesLocalDataSource = packagesLocalDataSource;
     }
 
+    // The access for other classes.
     public static PackagesRepository getInstance(@NonNull PackagesDataSource packagesRemoteDataSource,
                                                  @NonNull PackagesDataSource packagesLocalDataSource) {
         if (INSTANCE == null) {
@@ -54,6 +60,15 @@ public class PackagesRepository implements PackagesDataSource {
         INSTANCE = null;
     }
 
+    /**
+     * It is designed to gotten the packages from both database
+     * and network. Which are faster then return them.
+     * But in our app, we need not to update the data by accessing the network
+     * when user enter the app every time because we run a service in backyard.
+     * So we just return the data from database.
+     * But in future, it may change.
+     * @return Packages from {@link io.github.marktony.espresso.data.source.local.PackagesLocalDataSource}.
+     */
     @Override
     public Observable<List<Package>> getPackages() {
         if (cachedPackages != null) {
@@ -79,6 +94,7 @@ public class PackagesRepository implements PackagesDataSource {
         } else {
             cachedPackages = new LinkedHashMap<>();
 
+            // Return the cached packages.
             return packagesLocalDataSource
                     .getPackages()
                     .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
@@ -100,6 +116,11 @@ public class PackagesRepository implements PackagesDataSource {
 
     }
 
+    /**
+     * Get a package of specific number from data source.
+     * @param packNumber The primary key or the package id. See {@link Package}.
+     * @return The package.
+     */
     @Override
     public Observable<Package> getPackage(@NonNull final String packNumber) {
         Package cachedPackage = getPackageWithNumber(packNumber);
@@ -109,6 +130,13 @@ public class PackagesRepository implements PackagesDataSource {
         return getPackageWithNumberFromLocalRepository(packNumber);
     }
 
+    /**
+     * Save the package to data source and cache.
+     * It is supposed to save it to database and network too.
+     * But we have no cloud(The account system) yet.
+     * It may change either.
+     * @param pack The package to save. See more @{@link Package}.
+     */
     @Override
     public void savePackage(@NonNull Package pack) {
         packagesLocalDataSource.savePackage(pack);
@@ -120,22 +148,42 @@ public class PackagesRepository implements PackagesDataSource {
         }
     }
 
+    /**
+     * Delete a package from data source and cache.
+     * @param packageId The primary id or in another words, the package number.
+     *                  See more @{@link Package#number}.
+     */
     @Override
     public void deletePackage(@NonNull String packageId) {
         packagesLocalDataSource.deletePackage(packageId);
         cachedPackages.remove(packageId);
     }
 
+    /**
+     * Refresh the packages.
+     * Just call the remote data source and it will make everything done.
+     * @return The observable packages.
+     */
     @Override
     public Observable<List<Package>> refreshPackages() {
         return packagesRemoteDataSource.getPackages();
     }
 
+    /**
+     * Refresh one package.
+     * Just call the remote data source and it will make everything done.
+     * @param packageId The primary key(The package number).
+     *                  See more @{@link Package#number}.
+     * @return The observable package.
+     */
     @Override
     public Observable<Package> refreshPackage(@NonNull String packageId) {
         return packagesRemoteDataSource.getPackage(packageId);
     }
 
+    /**
+     * Set the packages read in both data source and cache.
+     */
     @Override
     public void setAllPackagesRead() {
 
@@ -151,6 +199,13 @@ public class PackagesRepository implements PackagesDataSource {
         }
     }
 
+    /**
+     * Set a package with specific number read or unread new
+     * in both data source and cache.
+     * @param packageId The primary key (The package number).
+     *                  See more @{@link Package#number}.
+     * @param readable Unread new or read.
+     */
     @Override
     public void setPackageReadable(@NonNull String packageId, boolean readable) {
         Package p = cachedPackages.get(packageId);
@@ -158,11 +213,22 @@ public class PackagesRepository implements PackagesDataSource {
         packagesLocalDataSource.setPackageReadable(packageId, readable);
     }
 
+    /**
+     * Checkout out the existence of a package with specific number.
+     * @param packageId The primary key or in another words, the package number.
+     *                  See more @{@link Package#number}.
+     * @return Whether the package exists.
+     */
     @Override
     public boolean isPackageExist(@NonNull String packageId) {
         return getPackageWithNumber(packageId) != null;
     }
 
+    /**
+     * Get a package with package number.
+     * @param packNumber The package id(number). See more @{@link Package#number}.
+     * @return The package with specific number.
+     */
     @Nullable
     private Package getPackageWithNumber(@NonNull String packNumber) {
         if (cachedPackages == null || cachedPackages.isEmpty()) {
@@ -172,6 +238,11 @@ public class PackagesRepository implements PackagesDataSource {
         }
     }
 
+    /**
+     * As the function name says, get a package from local repository.
+     * @param packNumber The package number.
+     * @return The package.
+     */
     @Nullable
     private Observable<Package> getPackageWithNumberFromLocalRepository(@NonNull final String packNumber) {
         return packagesLocalDataSource

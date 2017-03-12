@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import java.util.List;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.appwidget.AppWidgetProvider;
 import io.github.marktony.espresso.mvp.addpack.AddPackageActivity;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
@@ -135,6 +136,7 @@ public class PackagesFragment extends Fragment
         super.onPause();
         presenter.unsubscribe();
         setLoadingIndicator(false);
+        AppWidgetProvider.getRefreshBroadcastIntent(getContext(), true);
     }
 
     @Override

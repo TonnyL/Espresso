@@ -10,6 +10,7 @@ import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
+ * Immutable model class for a Package.
  * 示例JSON格式
  * JSON format sample
  * {
@@ -208,4 +209,8 @@ public class Package extends RealmObject {
         return timestamp;
     }
 
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
 }

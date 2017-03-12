@@ -9,6 +9,8 @@ import io.reactivex.Observable;
 
 /**
  * Created by lizhaotailang on 2017/2/25.
+ * Main entry point for accessing packages data.
+ * <p>
  */
 
 public interface PackagesDataSource {

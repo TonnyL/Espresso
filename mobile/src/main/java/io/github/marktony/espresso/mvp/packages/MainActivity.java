@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.appwidget.AppWidgetProvider;
 import io.github.marktony.espresso.data.source.remote.PackagesRemoteDataSource;
 import io.github.marktony.espresso.mvp.companies.CompaniesFragment;
 import io.github.marktony.espresso.mvp.companies.CompaniesPresenter;
@@ -90,6 +91,19 @@ public class MainActivity extends AppCompatActivity
         // Show the default fragment.
         showPackagesFragment();
 
+        sendBroadcast(AppWidgetProvider.getRefreshBroadcastIntent(MainActivity.this, true));
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sendBroadcast(AppWidgetProvider.getRefreshBroadcastIntent(MainActivity.this, true));
     }
 
     /**
