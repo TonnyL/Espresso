@@ -53,7 +53,8 @@ Name | Introduction
 ----- | ------
 [Android Support Libraries](https://developer.android.com/topic/libraries/support-library/index.html) | The Android Support Library offers a number of features that are not built into the framework. These libraries offer backward-compatible versions of new features, provide useful UI elements that are not included in the framework, and provide a range of utilities that apps can draw on.
 [Realm](https://github.com/realm/realm-java) | Realm is a mobile database: a replacement for SQLite & ORMs
-[Retrofit](https://github.com/ReactiveX/RxAndroid) | RxJava bindings for Android
+[Retrofit](https://github.com/square/retrofit) | Type-safe HTTP client for Android and Java by Square, Inc. 
+[RxAndroid](https://github.com/ReactiveX/RxAndroid) | RxJava bindings for Android
 [RxJava](https://github.com/ReactiveX/RxJava) | RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
 [Zxing](https://github.com/zxing/zxing) | ZXing ("zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library implemented in Java, with ports to other languages.
 
