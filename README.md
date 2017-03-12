@@ -1,2 +1,80 @@
-# Espresso
-MVP+Material Design+RxJava2+Retrofit2实现的快递查询Android App
+# Espresso Android App
+Espresso is an express delivery tracking app designed with Material Design style, built on MVP(Model-View-Presenter) architecture with RxJava2, Retrofit2 and Realm database.
+
+The source code in this repository reflects the app which supports mobile devices running Android 5.0+ and wearable devices running Android Wear 2.0+.
+
+### Features
+With this app, you can:
+
++ Add packages by inputting the package number or just scanning the express sheet.
++ View the package's detais such as the latest location
++ Search infomation about the express companies.
++ Get important notifation when the package is on delivery.
++ Send feedback on using experience from your devices.
++ Support Andrdoi Wear devices.
+
+### How to Work with the Source
+I hope the source code for this app is useful for you as a reference or starting point for creating your own app. Here is some instructions to help you better build and run the code in Android Studio.
+
+Clone the Repository:
+
+```
+git clone https://github.com/marktony/Espresso.git
+```
+
+Check out the master branch:
+
+```
+git checkout master
+```
+
+Notice: If you want to review a different branch, replace the `master` with the name you want to checkout if it does exist. Finally open the `Espresso/` directory in Android Studio.
+
+Suggestion: It is better for you to update your Android Studio to version 2.3 when you open open this project.
+
+### Todos
+This project is still in progress. Here are the some features that I will finish in the future.
+
+- [] Refreshing package details by accessing the network.
+- [] Launcher app widgets.
+- [] App Shortcuts on devices that running Android 7.1+.
+- [] Chrome Custom Tabs.
+- [] Sticky header view of companies list.
+- [] Alphabet indexing for companies list.
+- [] Search packages and companies.
+- [] Day and night mode.
+- [] Service to build notifactions.
+- [] Settings and about page.
+- [] Supporting Android Wear.
+- [] UI test and unit test.
+
+### The Open Source Libraries Used in This App
+Name | Introduction
+----- | ------
+[Android Support Libraries](https://developer.android.com/topic/libraries/support-library/index.html) | The Android Support Library offers a number of features that are not built into the framework. These libraries offer backward-compatible versions of new features, provide useful UI elements that are not included in the framework, and provide a range of utilities that apps can draw on.
+[Realm](https://github.com/realm/realm-java) | Realm is a mobile database: a replacement for SQLite & ORMs
+[Retrofit](https://github.com/ReactiveX/RxAndroid) | RxJava bindings for Android
+[RxJava](https://github.com/ReactiveX/RxJava) | RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
+[Zxing](https://github.com/zxing/zxing) | ZXing ("zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library implemented in Java, with ports to other languages.
+
+### Thanks to
++ [fython](https://github.com/fython) - [PackageTracker](https://github.com/fython/PackageTracker)
++ [YoulunZhai](https://plus.google.com/+YoulunZhai) - The posters.
++ Other people who help me solve the problems when I met some difficult bugs.
+
+### License
+```
+Copyright 2017 lizhaotailang
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
