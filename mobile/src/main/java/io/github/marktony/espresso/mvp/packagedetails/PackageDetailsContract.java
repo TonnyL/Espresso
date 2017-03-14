@@ -24,13 +24,11 @@ public interface PackageDetailsContract {
 
         void setToolbarBackground(@DrawableRes int resId);
 
-        void setPackageUnread(@NonNull String packageId, int position);
-
         void shareTo(@NonNull Package pack);
 
-        void deletePackage(@NonNull String packageId, int position);
-
         void copyPackageNumber(@NonNull String packageId);
+
+        void exit();
 
     }
 
@@ -45,6 +43,10 @@ public interface PackageDetailsContract {
         void copyPackageNumber();
 
         void shareTo();
+
+        String getPackageName();
+
+        void updatePackageName(String newName);
 
     }
 

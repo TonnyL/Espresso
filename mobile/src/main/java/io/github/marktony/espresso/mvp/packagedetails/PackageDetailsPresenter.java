@@ -26,16 +26,15 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
     @NonNull
     private CompositeDisposable compositeDisposable;
 
+    private String packageName;
+
     @NonNull
     private String packageId;
-    private int position;
 
     public PackageDetailsPresenter(@NonNull String packageId,
-                                   @NonNull int position,
                                    @NonNull PackagesRepository packagesRepository,
                                    @NonNull PackageDetailsContract.View packageDetailView) {
         this.packageId = packageId;
-        this.position = position;
         this.view = packageDetailView;
         this.packagesRepository = packagesRepository;
         compositeDisposable = new CompositeDisposable();
@@ -60,6 +59,8 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                 .subscribeWith(new DisposableObserver<Package>() {
                     @Override
                     public void onNext(Package value) {
+
+                        packageName = value.getName();
 
                         view.showPackageStatus(value);
 
@@ -93,7 +94,7 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
     @Override
     public void setPackageUnread() {
         packagesRepository.setPackageReadable(packageId, true);
-        view.setPackageUnread(packageId, position);
+        view.exit();
     }
 
     @Override
@@ -124,7 +125,8 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
 
     @Override
     public void deletePackage() {
-        view.deletePackage(packageId, position);
+        packagesRepository.deletePackage(packageId);
+        view.exit();
     }
 
     @Override
@@ -155,6 +157,17 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                     }
                 });
         compositeDisposable.add(disposable);
+    }
+
+    @Override
+    public String getPackageName() {
+        return packageName;
+    }
+
+    @Override
+    public void updatePackageName(String newName) {
+        packagesRepository.updatePackageName(packageId, newName);
+        openDetail();
     }
 
 }

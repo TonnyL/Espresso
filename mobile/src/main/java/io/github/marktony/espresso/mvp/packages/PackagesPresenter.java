@@ -196,6 +196,30 @@ public class PackagesPresenter implements PackagesContract.Presenter {
         }
         Disposable disposable = packagesRepository
                 .getPackages()
+                .flatMap(new Function<List<Package>, ObservableSource<Package>>() {
+                    @Override
+                    public ObservableSource<Package> apply(List<Package> list) throws Exception {
+                        return Observable.fromIterable(list);
+                    }
+                })
+                .filter(new Predicate<Package>() {
+                    @Override
+                    public boolean test(Package aPackage) throws Exception {
+                        int state = Integer.parseInt(aPackage.getState());
+                        switch (currentFiltering) {
+                            case ON_THE_WAY_PACKAGES:
+                                return state != Package.STATUS_DELIVERED;
+                            case DELIVERED_PACKAGES:
+                                return state == Package.STATUS_DELIVERED;
+                            case ALL_PACKAGES:
+                                return true;
+                            default:
+                                return true;
+                        }
+                    }
+                })
+                .toList()
+                .toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<Package>>() {

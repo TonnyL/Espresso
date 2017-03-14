@@ -224,6 +224,14 @@ public class PackagesRepository implements PackagesDataSource {
         return getPackageWithNumber(packageId) != null;
     }
 
+    @Override
+    public void updatePackageName(@NonNull String packageId, @NonNull String name) {
+        if (getPackageWithNumber(packageId) != null) {
+            getPackageWithNumber(packageId).setName(name);
+        }
+        packagesLocalDataSource.updatePackageName(packageId, name);
+    }
+
     /**
      * Get a package with package number.
      * @param packNumber The package id(number). See more @{@link Package#number}.

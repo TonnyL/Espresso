@@ -169,4 +169,17 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         return (results != null) && (!results.isEmpty());
     }
 
+    @Override
+    public void updatePackageName(@NonNull String packageId, @NonNull String name) {
+        Package p = realm.where(Package.class)
+                .equalTo("number", packageId)
+                .findFirst();
+        if (p != null) {
+            realm.beginTransaction();
+            p.setName(name);
+            realm.copyToRealmOrUpdate(p);
+            realm.commitTransaction();
+        }
+    }
+
 }

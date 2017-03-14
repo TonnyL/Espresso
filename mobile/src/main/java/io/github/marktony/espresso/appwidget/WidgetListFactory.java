@@ -95,7 +95,6 @@ public class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory 
         remoteViews.setImageViewResource(R.id.imageViewAvatar, p.getColorAvatar());
 
         Intent intent = new Intent();
-        intent.putExtra(PackageDetailsActivity.PACKAGE_POSITION, position);
         intent.putExtra(PackageDetailsActivity.PACKAGE_ID, p.getNumber());
         remoteViews.setOnClickFillInIntent(R.id.layoutPackageItemMain, intent);
 

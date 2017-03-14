@@ -33,4 +33,6 @@ public interface PackagesDataSource {
 
     boolean isPackageExist(@NonNull String packageId);
 
+    void updatePackageName(@NonNull String packageId, @NonNull String name);
+
 }

@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -15,6 +16,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -46,12 +49,6 @@ public class PackageDetailsFragment extends Fragment
 
     private PackageDetailsContract.Presenter presenter;
 
-    // The values must be different to the existing
-    // Result numbers of the {@link Activity}
-    // like RESULT_OK = -1, RESULT_CANCEL = 0.
-    public static final int RESULT_DELETE = 99;
-    public static final int RESULT_SET_UNREAD = 100;
-
     public PackageDetailsFragment() {}
 
     public static PackageDetailsFragment newInstance() {
@@ -73,7 +70,7 @@ public class PackageDetailsFragment extends Fragment
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showEditNameDialog();
             }
         });
 
@@ -112,11 +109,11 @@ public class PackageDetailsFragment extends Fragment
         int id = item.getItemId();
         if (id == android.R.id.home) {
 
-            getActivity().onBackPressed();
+            exit();
 
         } else if (id == R.id.action_delete) {
 
-            presenter.deletePackage();
+            showDeleteAlertDialog();
 
         } else if (id == R.id.action_set_readable) {
 
@@ -176,17 +173,6 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
-    public void setPackageUnread(@NonNull String packageId, int position) {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putString(PackageDetailsActivity.PACKAGE_ID, packageId);
-        bundle.putInt(PackageDetailsActivity.PACKAGE_POSITION, position);
-        intent.putExtras(bundle);
-        getActivity().setResult(RESULT_SET_UNREAD, intent);
-        getActivity().finish();
-    }
-
-    @Override
     public void shareTo(@NonNull Package pack) {
         String shareData = pack.getName()
                 + "\n( "
@@ -218,22 +204,78 @@ public class PackageDetailsFragment extends Fragment
     }
 
     @Override
-    public void deletePackage(@NonNull String packageId, int position) {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putString(PackageDetailsActivity.PACKAGE_ID, packageId);
-        bundle.putInt(PackageDetailsActivity.PACKAGE_POSITION, position);
-        intent.putExtras(bundle);
-        getActivity().setResult(RESULT_DELETE, intent);
-        getActivity().finish();
-    }
-
-    @Override
     public void copyPackageNumber(@NonNull String packageId) {
         ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData data = ClipData.newPlainText("text", packageId);
         manager.setPrimaryClip(data);
         Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void exit() {
+        getActivity().onBackPressed();
+    }
+
+    /**
+     * Show a dialog when user select the DELETE option menu item.
+     */
+    private void showDeleteAlertDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
+        dialog.setTitle(R.string.delete);
+        dialog.setMessage(getString(R.string.delete_package_massage));
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                presenter.deletePackage();
+            }
+        });
+        dialog.show();
+    }
+
+    /**
+     * Show the dialog which contains an EditText.
+     */
+    private void showEditNameDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
+        dialog.setTitle(getString(R.string.edit_name));
+
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_edit_package_name, null);
+        final AppCompatEditText editText = (AppCompatEditText) view.findViewById(R.id.editTextName);
+        editText.setText(presenter.getPackageName());
+        dialog.setView(view);
+
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String input = editText.getText().toString();
+                if (input.isEmpty()) {
+                    showInputIsEmpty();
+                } else {
+                    presenter.updatePackageName(input);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void showInputIsEmpty() {
+        Snackbar.make(fab, R.string.input_empty, Snackbar.LENGTH_SHORT).show();
     }
 
 }

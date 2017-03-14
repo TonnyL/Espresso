@@ -2,6 +2,7 @@ package io.github.marktony.espresso.data.source.remote;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.List;
 
@@ -102,13 +103,21 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
 
                         // To avoid the server error or other problems
                         // making the data in database being dirty.
-                        if (aPackage.getData() != null && aPackage.getData().size() > 0) {
+                        if (aPackage != null && aPackage.getData() != null) {
                             // It is necessary to build a new realm instance
                             // in a different thread.
                             Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
                                     .deleteRealmIfMigrationNeeded()
                                     .name(DATABASE_NAME)
                                     .build());
+
+                            // Only when the origin data is null or the origin
+                            // data's size is less than the latest data's size
+                            // set the package unread new(readable = true).
+                            if (p.getData() == null || aPackage.getData().size() > p.getData().size()) {
+                                p.setReadable(true);
+                                Log.d("!!", "accept: new");
+                            }
 
                             // DO NOT forget to begin a transaction.
                             rlm.beginTransaction();
@@ -166,4 +175,11 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
         // of refreshing the packages from all available data source
         return false;
     }
+
+    @Override
+    public void updatePackageName(@NonNull String packageId, @NonNull String name) {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
+    }
+
 }

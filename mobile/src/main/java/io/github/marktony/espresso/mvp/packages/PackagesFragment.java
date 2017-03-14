@@ -34,7 +34,6 @@ import io.github.marktony.espresso.mvp.addpack.AddPackageActivity;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
-import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsFragment;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -181,46 +180,6 @@ public class PackagesFragment extends Fragment
     }
 
     /**
-     * To handle different result after another activity finished.
-     * @param requestCode Defined in {@link PackagesFragment}.
-     * @param resultCode Defined in different fragments. One point that should
-     *                   be noticed is that the result code value should be different
-     *                   with the values which is already defined in {@link android.app.Activity}
-     *                   such {@link android.app.Activity#RESULT_OK}, whose value is -1
-     *                   and {@link android.app.Activity#RESULT_CANCELED}, whose value is 0, etc.
-     *                   See {@link PackageDetailsFragment#RESULT_SET_UNREAD}
-     *                   {@link PackageDetailsFragment#RESULT_DELETE}
-     * @param data The extra data.
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_OPEN_DETAILS:
-                if (resultCode == PackageDetailsFragment.RESULT_DELETE) {
-                    Bundle bundle = data.getExtras();
-                    if (null != bundle) {
-                        int position = bundle.getInt(PackageDetailsActivity.PACKAGE_POSITION, -1);
-                        presenter.deletePackage(position);
-                    }
-                }
-
-                if (resultCode == PackageDetailsFragment.RESULT_SET_UNREAD) {
-                    Bundle bundle = data.getExtras();
-                    if (null != bundle) {
-                        String number = bundle.getString(PackageDetailsActivity.PACKAGE_ID);
-                        if (number != null) {
-                            presenter.setPackageReadable(number, true);
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
      * Init the views by findViewById.
      * @param view The container view.
      */
@@ -350,7 +309,6 @@ public class PackagesFragment extends Fragment
                 public void OnItemClick(View v, int position) {
                     Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
                     intent.putExtra(PackageDetailsActivity.PACKAGE_ID, list.get(position).getNumber());
-                    intent.putExtra(PackageDetailsActivity.PACKAGE_POSITION, position);
                     startActivityForResult(intent, REQUEST_OPEN_DETAILS);
                 }
 

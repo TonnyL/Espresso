@@ -51,6 +51,9 @@
     <string name="unable_to_open_camera">相机打开出错，请稍后重试</string>
     <string name="all_packages_are_delivered">所有包裹均已送达。</string>
     <string name="to_add_packages">点击"添加"按钮新建包裹。</string>
+    <string name="delete_package_massage">你将不再跟踪这个包裹的物流信息。</string>
+    <string name="edit_name">编辑名称</string>
+    <string name="input_empty">包裹名称不能为空！</string>
 
     <string-array name="package_status">
         <item>运输中</item>
