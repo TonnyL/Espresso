@@ -51,6 +51,9 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
         compositeDisposable.clear();
     }
 
+    /**
+     * Load data from repository.
+     */
     private void openDetail() {
         Disposable disposable = packagesRepository
                 .getPackage(packageId)
@@ -62,7 +65,7 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
 
                         packageName = value.getName();
 
-                        view.showPackageStatus(value);
+                        view.showPackageDetails(value);
 
                         int state = Integer.parseInt(value.getState());
                         if (state == Package.STATUS_FAILED) {
@@ -91,12 +94,23 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
 
     }
 
+    /**
+     * Set the current package is unread new.
+     * Once the user enter the package details page,
+     * the package will be marked as read(NOT unread new).
+     * So here is only one option to set the package unread.
+     */
     @Override
     public void setPackageUnread() {
         packagesRepository.setPackageReadable(packageId, true);
         view.exit();
     }
 
+    /**
+     * Refresh the package by access the network.
+     * No matter the refresh is successful or failed,
+     * Do not forget to stop the indicator.
+     */
     @Override
     public void refreshPackage() {
         Disposable disposable = packagesRepository
@@ -106,12 +120,13 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
                 .subscribeWith(new DisposableObserver<Package>() {
                     @Override
                     public void onNext(Package value) {
-                        view.showPackageStatus(value);
+                        view.showPackageDetails(value);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         view.setLoadingIndicator(false);
+                        view.showNetworkError();
                     }
 
                     @Override
@@ -123,17 +138,26 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
 
     }
 
+    /**
+     * Delete the package from repository(both in cache and database).
+     */
     @Override
     public void deletePackage() {
         packagesRepository.deletePackage(packageId);
         view.exit();
     }
 
+    /**
+     * Copy the current package number to clipboard.
+     */
     @Override
     public void copyPackageNumber() {
         view.copyPackageNumber(packageId);
     }
 
+    /**
+     * Share the package data.
+     */
     @Override
     public void shareTo() {
         Disposable disposable = packagesRepository
@@ -159,11 +183,20 @@ public class PackageDetailsPresenter implements PackageDetailsContract.Presenter
         compositeDisposable.add(disposable);
     }
 
+    /**
+     * Get the current package name.
+     * @return Package name. See at {@link Package#name}
+     */
     @Override
     public String getPackageName() {
         return packageName;
     }
 
+    /**
+     * Set the current package a new name(both in cache and database).
+     * @param newName The new name of package.
+     *                See at {@link Package#name}
+     */
     @Override
     public void updatePackageName(String newName) {
         packagesRepository.updatePackageName(packageId, newName);

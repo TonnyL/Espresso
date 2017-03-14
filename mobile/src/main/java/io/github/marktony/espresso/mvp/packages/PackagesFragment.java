@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -57,9 +58,7 @@ public class PackagesFragment extends Fragment
     public static final int REQUEST_OPEN_DETAILS = 0;
 
     // As a fragment, default constructor is needed.
-    public PackagesFragment() {
-
-    }
+    public PackagesFragment() {}
 
     public static PackagesFragment newInstance() {
         return new PackagesFragment();
@@ -276,8 +275,13 @@ public class PackagesFragment extends Fragment
      * @param active Loading or not.
      */
     @Override
-    public void setLoadingIndicator(boolean active) {
-        refreshLayout.setRefreshing(active);
+    public void setLoadingIndicator(final boolean active) {
+        refreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.setRefreshing(active);
+            }
+        });
     }
 
     /**
@@ -383,6 +387,22 @@ public class PackagesFragment extends Fragment
         ClipData data = ClipData.newPlainText("text", getSelectedPackageNumber());
         manager.setPrimaryClip(data);
         Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
+    }
+
+    /**
+     * When the network is not connected or slow,
+     * can not refresh the data, show this message.
+     */
+    @Override
+    public void showNetworkError() {
+        Snackbar.make(fab, R.string.network_error, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.go_to_settings, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent().setAction(Settings.ACTION_SETTINGS));
+                    }
+                })
+                .show();
     }
 
     /**

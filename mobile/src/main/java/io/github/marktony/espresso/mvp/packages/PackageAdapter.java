@@ -92,12 +92,19 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.listener = listener;
     }
 
+    /**
+     * Update the data. Keep the data is the latest.
+     * @param list The data.
+     */
     public void updateData(@NonNull List<Package> list) {
         this.list.clear();
         this.list.addAll(list);
         notifyDataSetChanged();
     }
 
+    /**
+     * The view holder of package in home list.
+     */
     public class PackageViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnCreateContextMenuListener {
 
@@ -138,12 +145,19 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }
 
+        /**
+         * Create the context menu.
+         * @param menu The context menu.
+         * @param v The view.
+         * @param menuInfo The menu information.
+         */
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             if (menu != null) {
                 ((MainActivity)context).setSelectedPackageId(list.get(getLayoutPosition()).getNumber());
                 Package pack = list.get(getLayoutPosition());
                 menu.setHeaderTitle(pack.getName());
+                // Set different title according to the data({@link Package#readable})
                 if (pack.isReadable()) {
                     menu.add(Menu.NONE, R.id.action_set_readable, 0, R.string.set_read);
                 } else {

@@ -43,7 +43,6 @@
     <string name="something_wrong">发生了一些错误…</string>
     <string name="undo">撤销</string>
     <string name="package_removed_msg">删除成功</string>
-    <string name="add_to_list_successfully">添加成功</string>
     <string name="package_exist">运单已存在</string>
     <string name="permission_denied">权限被拒绝</string>
     <string name="deliver_man">快递员</string>
@@ -54,6 +53,8 @@
     <string name="delete_package_massage">你将不再跟踪这个包裹的物流信息。</string>
     <string name="edit_name">编辑名称</string>
     <string name="input_empty">包裹名称不能为空！</string>
+    <string name="network_error">Network error, try again later.</string>
+    <string name="retry">RETRY</string>
 
     <string-array name="package_status">
         <item>运输中</item>

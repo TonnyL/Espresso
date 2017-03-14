@@ -88,6 +88,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                     public void onError(Throwable e) {
                         view.showNumberError();
                         view.setProgressIndicator(false);
+                        view.showNetworkError();
                     }
 
                     @Override
@@ -121,7 +122,6 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                         value.setTimestamp(System.currentTimeMillis());
 
                         packagesDataSource.savePackage(value);
-                        view.showSuccess();
                         view.showPackagesList();
                     }
 

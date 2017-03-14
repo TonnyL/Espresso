@@ -17,9 +17,9 @@ public interface AddPackageContract {
 
         void setProgressIndicator(boolean loading);
 
-        void showSuccess();
-
         void showPackagesList();
+
+        void showNetworkError();
 
     }
 

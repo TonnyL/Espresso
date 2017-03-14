@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -131,6 +132,10 @@ public class PackageDetailsFragment extends Fragment
         return true;
     }
 
+    /**
+     * Init views.
+     * @param view The root view of fragment.
+     */
     @Override
     public void initViews(View view) {
 
@@ -147,18 +152,50 @@ public class PackageDetailsFragment extends Fragment
 
     }
 
+    /**
+     * Bind the presenter to view.
+     * @param presenter The presenter. See at {@link PackageDetailsPresenter}
+     */
     @Override
     public void setPresenter(@NonNull PackageDetailsContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
+    /**
+     * Set the refresh layout as an indicator. Change the indicator's loading status.
+     * @param loading Whether is loading.
+     */
     @Override
-    public void setLoadingIndicator(boolean loading) {
-        swipeRefreshLayout.setRefreshing(loading);
+    public void setLoadingIndicator(final boolean loading) {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(loading);
+            }
+        });
     }
 
+    /**
+     * When the network is slow or is not connected, show this message.
+     */
     @Override
-    public void showPackageStatus(@NonNull Package p) {
+    public void showNetworkError() {
+        Snackbar.make(fab, R.string.network_error, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.go_to_settings, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent().setAction(Settings.ACTION_SETTINGS));
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * Show the package details.
+     * @param p The package. See at {@link Package}
+     */
+    @Override
+    public void showPackageDetails(@NonNull Package p) {
         if (adapter == null) {
             adapter = new PackageDetailsAdapter(getContext(), p);
             recyclerView.setAdapter(adapter);
@@ -167,11 +204,19 @@ public class PackageDetailsFragment extends Fragment
         }
     }
 
+    /**
+     * Set different image to toolbar layout as banner.
+     * @param resId The resource id of image.
+     */
     @Override
     public void setToolbarBackground(@DrawableRes int resId) {
         toolbarLayout.setBackgroundResource(resId);
     }
 
+    /**
+     * Build the share info and call the system intent chooser to share.
+     * @param pack The package to share. See more at {@link Package}
+     */
     @Override
     public void shareTo(@NonNull Package pack) {
         String shareData = pack.getName()
@@ -203,6 +248,10 @@ public class PackageDetailsFragment extends Fragment
         }
     }
 
+    /**
+     * Copy the package number(id) to clipboard.
+     * @param packageId The package number.
+     */
     @Override
     public void copyPackageNumber(@NonNull String packageId) {
         ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -211,6 +260,9 @@ public class PackageDetailsFragment extends Fragment
         Snackbar.make(fab, R.string.package_number_copied, Snackbar.LENGTH_SHORT).show();
     }
 
+    /**
+     * Finish the activity.
+     */
     @Override
     public void exit() {
         getActivity().onBackPressed();
@@ -274,6 +326,9 @@ public class PackageDetailsFragment extends Fragment
         dialog.show();
     }
 
+    /**
+     * Show the message that the user's input is empty.
+     */
     private void showInputIsEmpty() {
         Snackbar.make(fab, R.string.input_empty, Snackbar.LENGTH_SHORT).show();
     }

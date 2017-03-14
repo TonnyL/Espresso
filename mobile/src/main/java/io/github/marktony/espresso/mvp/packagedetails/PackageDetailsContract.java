@@ -20,7 +20,9 @@ public interface PackageDetailsContract {
 
         void setLoadingIndicator(boolean loading);
 
-        void showPackageStatus(@NonNull Package p);
+        void showNetworkError();
+
+        void showPackageDetails(@NonNull Package p);
 
         void setToolbarBackground(@DrawableRes int resId);
 

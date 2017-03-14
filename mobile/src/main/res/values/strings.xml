@@ -44,7 +44,6 @@
     <string name="something_wrong">Something wrong…</string>
     <string name="undo">UNDO</string>
     <string name="package_removed_msg">has been removed</string>
-    <string name="add_to_list_successfully">Add to list successfully</string>
     <string name="package_exist">The package is in your list</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="deliver_man">Deliver man</string>
@@ -55,6 +54,8 @@
     <string name="delete_package_massage">You will not continue track this package.</string>
     <string name="edit_name">Edit Name</string>
     <string name="input_empty">The package name can not be empty!</string>
+    <string name="network_error">Network error, try again later.</string>
+    <string name="retry">RETRY</string>\
 
     <string-array name="package_status">
         <item>Normal</item>

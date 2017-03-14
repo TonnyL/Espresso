@@ -28,6 +28,8 @@ public interface PackagesContract {
 
         void copyPackageNumber();
 
+        void showNetworkError();
+
     }
 
     interface Presenter extends BasePresenter {

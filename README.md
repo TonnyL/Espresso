@@ -35,7 +35,7 @@ Suggestion: It is better for you to update your Android Studio to version 2.3 wh
 ### Todos
 This project is still in progress. Here are the some features that I will finish in the future.
 
-- [ ] Refreshing package details by accessing the network.
+- [x] Refreshing package details by accessing the network.
 - [ ] Launcher app widgets.
 - [ ] App Shortcuts on devices that running Android 7.1+.
 - [ ] Chrome Custom Tabs.
@@ -48,15 +48,15 @@ This project is still in progress. Here are the some features that I will finish
 - [ ] Supporting Android Wear.
 - [ ] UI test and unit test.
 
-### The Open Source Libraries Used in This App
-Name | Introduction
------ | ------
-[Android Support Libraries](https://developer.android.com/topic/libraries/support-library/index.html) | The Android Support Library offers a number of features that are not built into the framework. These libraries offer backward-compatible versions of new features, provide useful UI elements that are not included in the framework, and provide a range of utilities that apps can draw on.
-[Realm](https://github.com/realm/realm-java) | Realm is a mobile database: a replacement for SQLite & ORMs.
-[Retrofit](https://github.com/square/retrofit) | Type-safe HTTP client for Android and Java by Square, Inc.
-[RxAndroid](https://github.com/ReactiveX/RxAndroid) | RxJava bindings for Android.
-[RxJava](https://github.com/ReactiveX/RxJava) | RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
-[ZXing](https://github.com/zxing/zxing) | ZXing ("zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library implemented in Java, with ports to other languages.
+### Libraries Used in This App
+Name | Introduction | Version
+----- | ------ | ---
+[Android Support Libraries](https://developer.android.com/topic/libraries/support-library/index.html) | The Android Support Library offers a number of features that are not built into the framework. These libraries offer backward-compatible versions of new features, provide useful UI elements that are not included in the framework, and provide a range of utilities that apps can draw on. | 25.2.0
+[Realm](https://github.com/realm/realm-java) | Realm is a mobile database: a replacement for SQLite & ORMs. | 3.0.0
+[Retrofit](https://github.com/square/retrofit) | Type-safe HTTP client for Android and Java by Square, Inc. | 2.2.0
+[RxAndroid](https://github.com/ReactiveX/RxAndroid) | RxJava bindings for Android. | 2.0.1
+[RxJava](https://github.com/ReactiveX/RxJava) | RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM. | 2.0.1
+[ZXing](https://github.com/zxing/zxing) | ZXing ("zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library implemented in Java, with ports to other languages. | 3.3.0
 
 ### Thanks to
 + [googlesamples](https://github.com/googlesamples) - [android-architecture](https://github.com/googlesamples/android-architecture)

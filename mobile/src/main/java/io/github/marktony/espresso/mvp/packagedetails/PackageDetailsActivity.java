@@ -24,6 +24,7 @@ public class PackageDetailsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.container);
 
+        // Restore the status.
         if (savedInstanceState != null) {
             fragment = (PackageDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "PackageDetailsFragment");
         } else {
@@ -34,6 +35,7 @@ public class PackageDetailsActivity extends AppCompatActivity{
                 .replace(R.id.container, fragment)
                 .commit();
 
+        // Create the presenter.
         new PackageDetailsPresenter(
                 getIntent().getStringExtra(PACKAGE_ID),
                 PackagesRepository.getInstance(
@@ -43,9 +45,11 @@ public class PackageDetailsActivity extends AppCompatActivity{
 
     }
 
+    // Save the fragment state to bundle.
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, "PackageDetailsFragment", fragment);
     }
+
 }

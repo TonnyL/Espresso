@@ -51,7 +51,7 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         // Pass a RealmList as parameter directly where List is required
         // is NOT a good idea.
         // The code below will make some terrible bugs.
-        // view.showPackageStatus(list);
+        // view.showPackageDetails(list);
         // One the them is that the first load works perfectly.
         // But when the screen call onPause and back to user again,
         // the list (RecyclerView) is lost and all the data is removed from DB.

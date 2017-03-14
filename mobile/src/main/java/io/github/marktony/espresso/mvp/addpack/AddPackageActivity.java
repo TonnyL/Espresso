@@ -19,8 +19,6 @@ public class AddPackageActivity extends AppCompatActivity {
 
     public static final int REQUEST_ADD_PACKAGE = 1;
 
-    public static final String SHOULD_LOAD_DATA_FROM_REPO_KEY = "SHOULD_LOAD_DATA_FROM_REPO_KEY";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +36,7 @@ public class AddPackageActivity extends AppCompatActivity {
                     .commit();
         }
 
+        // Create the presenter.
         new AddPackagePresenter(PackagesRepository.getInstance(
                 PackagesRemoteDataSource.getInstance(),
                 PackagesLocalDataSource.getInstance()),
@@ -45,6 +44,7 @@ public class AddPackageActivity extends AppCompatActivity {
 
     }
 
+    // Save the fragment state to bundle.
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

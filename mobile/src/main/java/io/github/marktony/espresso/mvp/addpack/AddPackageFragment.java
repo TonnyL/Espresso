@@ -120,11 +120,25 @@ public class AddPackageFragment extends Fragment
         return view;
     }
 
-    // Scroll the screen to avoid edit text being covered by imm such as the soft keyboard.
-    // It is better to set the height as 150 because some devices
-    // has the navigation bar. The height 100 might not trigger the scrolling action.
-    // main --> the scroll view
-    // scroll --> to view to show
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.unsubscribe();
+    }
+
+    /**
+     * Scroll the screen to avoid edit text being covered by imm such as the soft keyboard.
+     * It is better to set the height as 150 because some devices
+     * has the navigation bar. The height 100 might not trigger the scrolling action.
+     * @param main The scroll view.
+     * @param scroll The view to show.
+     */
     private void addLayoutListener(final View main, final View scroll) {
         main.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -153,6 +167,10 @@ public class AddPackageFragment extends Fragment
         return true;
     }
 
+    /**
+     * Init views.
+     * @param view The root view of fragment.
+     */
     @Override
     public void initViews(View view) {
 
@@ -169,11 +187,21 @@ public class AddPackageFragment extends Fragment
 
     }
 
+    /**
+     * Bind presenter to fragment(view).
+     * @param presenter The presenter. See at {@link AddPackagePresenter}.
+     */
     @Override
     public void setPresenter(@NonNull AddPackageContract.Presenter presenter) {
         this.presenter = presenter;
     }
 
+    /**
+     * Handle the scanning result.
+     * @param requestCode The request code. See at {@link AddPackageFragment#SCANNING_REQUEST_CODE}.
+     * @param resultCode The result code.
+     * @param data The result.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -191,10 +219,15 @@ public class AddPackageFragment extends Fragment
         }
     }
 
-    // To handle the permission grant result.
-    // If the user denied the permission, show a dialog to explain
-    // the reason why the app need such permission and lead he/her
-    // to the system settings to grant permission.
+    /**
+     * To handle the permission grant result.
+     * If the user denied the permission, show a dialog to explain
+     * the reason why the app need such permission and lead he/her
+     * to the system settings to grant permission.
+     * @param requestCode The request code. See at {@link AddPackageFragment#REQUEST_CAMERA_PERMISSION_CODE}
+     * @param permissions The wanted permissions.
+     * @param grantResults The results.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -235,8 +268,10 @@ public class AddPackageFragment extends Fragment
         }
     }
 
-    // Check whether the camera permission has been granted.
-    // If not, request it. Or just launch the camera to scan barcode or QR code.
+    /**
+     * Check whether the camera permission has been granted.
+     * If not, request it. Or just launch the camera to scan barcode or QR code.
+     */
     private void checkPermissionOrToScan() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -253,7 +288,9 @@ public class AddPackageFragment extends Fragment
         }
     }
 
-    // Launch the camera
+    /**
+     * Launch the camera
+     */
     private void startScanningActivity() {
         try {
             Intent intent = new Intent(getContext(), CaptureActivity.class);
@@ -264,16 +301,26 @@ public class AddPackageFragment extends Fragment
         }
     }
 
+    /**
+     * Show massage that the package is existed.
+     */
     @Override
     public void showNumberExistError() {
         Snackbar.make(fab, R.string.package_exist, Snackbar.LENGTH_SHORT).show();
     }
 
+    /**
+     * Show massage that number is invalid.
+     */
     @Override
     public void showNumberError() {
         Snackbar.make(fab, R.string.wrong_number_and_check, Snackbar.LENGTH_SHORT).show();
     }
 
+    /**
+     * Set the refresh layout as an indicator whether is refreshing or not.
+     * @param loading Whether is loading.
+     */
     @Override
     public void setProgressIndicator(boolean loading) {
         if (loading) {
@@ -283,30 +330,33 @@ public class AddPackageFragment extends Fragment
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        presenter.subscribe();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        presenter.unsubscribe();
-    }
-
-    @Override
-    public void showSuccess() {
-        Snackbar.make(fab, R.string.add_to_list_successfully, Snackbar.LENGTH_SHORT).show();
-    }
-
+    /**
+     * Finish current activity.
+     */
     @Override
     public void showPackagesList() {
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
     }
 
-    // Hide the input method like soft keyboard, etc... when they are active.
+    /**
+     * Show message that the network is in error.
+     */
+    @Override
+    public void showNetworkError() {
+        Snackbar.make(fab, R.string.network_error, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.go_to_settings, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent().setAction(Settings.ACTION_SETTINGS));
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * Hide the input method like soft keyboard, etc... when they are active.
+     */
     private void hideImm() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm.isActive()) {

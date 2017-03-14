@@ -128,11 +128,13 @@ public class PackagesPresenter implements PackagesContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        view.setLoadingIndicator(false);
+                        view.showNetworkError();
                     }
 
                     @Override
                     public void onComplete() {
+                        view.setLoadingIndicator(false);
                         loadPackages();
                     }
                 });
