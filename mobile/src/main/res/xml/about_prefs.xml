@@ -1,4 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory
+        android:title="@string/nav_about">
+
+        <Preference
+            android:title="@string/version"
+            android:summary="@string/version_desc" />
+
+        <Preference
+            android:title="@string/rate"
+            android:summary="@string/rate_desc"/>
+
+        <Preference
+            android:title="@string/license" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/thanks">
+
+        <Preference
+            android:title="@string/thanks_1"
+            android:summary="@string/thanks_1_desc" />
+
+        <Preference
+            android:title="@string/thanks_2"
+            android:summary="@string/thanks_2_desc" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/support">
+
+        <Preference
+            android:title="@string/source_code"
+            android:summary="@string/source_code_desc" />
+
+        <Preference
+            android:title="@string/send_advices"
+            android:summary="@string/send_advices_desc" />
+
+        <Preference
+            android:title="@string/donate"
+            android:summary="@string/donate_desc" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

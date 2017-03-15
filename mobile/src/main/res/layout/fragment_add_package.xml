@@ -125,6 +125,7 @@
         android:contentDescription="@string/activity_add_package"
         app:srcCompat="@drawable/ic_done_white_24dp"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"/>
+        app:layout_anchorGravity="bottom|end"
+        android:transitionName="fabShare"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -150,7 +150,7 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public PackageStatusViewHolder(View itemView) {
             super(itemView);
-            textViewLocation = (AppCompatTextView) itemView.findViewById(R.id.textViewLocation);
+            textViewLocation = (AppCompatTextView) itemView.findViewById(R.id.textViewStatus);
             textViewTime = (AppCompatTextView) itemView.findViewById(R.id.textViewTime);
             timeLine = (Timeline) itemView.findViewById(R.id.timeLine);
             contactCard = (CardView) itemView.findViewById(R.id.contactCard);

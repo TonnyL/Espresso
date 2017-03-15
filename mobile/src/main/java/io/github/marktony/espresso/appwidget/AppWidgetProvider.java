@@ -1,5 +1,6 @@
 package io.github.marktony.espresso.appwidget;
 
+import android.app.Application;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -54,9 +55,9 @@ public class AppWidgetProvider extends android.appwidget.AppWidgetProvider {
         return remoteViews;
     }
 
-    public static void updateManually(Context context) {
-        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, AppWidgetProvider.class));
-        AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(ids, R.id.listViewWidget);
+    public static void updateManually(Application app) {
+        int[] ids = AppWidgetManager.getInstance(app).getAppWidgetIds(new ComponentName(app, AppWidgetProvider.class));
+        AppWidgetManager.getInstance(app).notifyAppWidgetViewDataChanged(ids, R.id.listViewWidget);
     }
 
     @Override

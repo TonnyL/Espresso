@@ -1,5 +1,6 @@
 package io.github.marktony.espresso.mvp.packages;
 
+import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -43,11 +44,15 @@ import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 public class PackagesFragment extends Fragment
         implements PackagesContract.View {
 
+
+    // View references
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private LinearLayout emptyView;
     private SwipeRefreshLayout refreshLayout;
+
+    private View contentView;
 
     private PackageAdapter adapter;
 
@@ -72,14 +77,16 @@ public class PackagesFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_packages, container, false);
+        contentView = inflater.inflate(R.layout.fragment_packages, container, false);
 
-        initViews(view);
+        initViews(contentView);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getContext(), AddPackageActivity.class), AddPackageActivity.REQUEST_ADD_PACKAGE);
+                startActivityForResult(new Intent(getContext(), AddPackageActivity.class),
+                        AddPackageActivity.REQUEST_ADD_PACKAGE,
+                        ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
             }
         });
 
@@ -120,7 +127,7 @@ public class PackagesFragment extends Fragment
         // Set true to inflater the options menu.
         setHasOptionsMenu(true);
 
-        return view;
+        return contentView;
     }
 
     @Override
@@ -313,14 +320,12 @@ public class PackagesFragment extends Fragment
                 public void OnItemClick(View v, int position) {
                     Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
                     intent.putExtra(PackageDetailsActivity.PACKAGE_ID, list.get(position).getNumber());
-                    startActivityForResult(intent, REQUEST_OPEN_DETAILS);
+                    startActivityForResult(intent, REQUEST_OPEN_DETAILS, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                 }
 
             });
             recyclerView.setAdapter(adapter);
         } else {
-            // The reason why not just call adapter.notifyDataSetChanged
-            // at {@link PackagesAdapter}
             adapter.updateData(list);
         }
         showEmptyView(list.isEmpty());

@@ -55,7 +55,6 @@
     <string name="edit_name">Edit Name</string>
     <string name="input_empty">The package name can not be empty!</string>
     <string name="network_error">Network error, try again later.</string>
-    <string name="retry">RETRY</string>\
 
     <string-array name="package_status">
         <item>Normal</item>
@@ -66,5 +65,52 @@
         <item>On the way</item>
         <item>Returning</item>
     </string-array>
+
+    <!--Settings-->
+    <string name="retry">RETRY</string>
+    <string name="do_not_disturb_mode">Do not disturb mode</string>
+    <string name="do_not_disturb_mode_desc">Don\'t send notifications during the hours set</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="notification_interval">Notification interval</string>
+
+    <string-array name="notification_interval">
+        <item>10 minutes</item>
+        <item>30 minutes</item>
+        <item>60 minutes</item>
+        <item>90 minutes</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="notification_interval_item">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <!--Settings end-->
+
+    <!--About-->
+    <string name="version">Version</string>
+    <string name="version_desc">1.0.0-Debug</string>
+    <string name="rate">Rate</string>
+    <string name="rate_desc">If you like the Espresso app,please do rate it</string>
+    <string name="license">License</string>
+    <string name="thanks">Thanks</string>
+    <string name="thanks_1">FengGo</string>
+    <string name="thanks_1_desc">Package Tracker Project</string>
+    <string name="thanks_2">+Youlun Zhai</string>
+    <string name="thanks_2_desc">Poster designer</string>
+    <string name="source_code">Source code</string>
+    <string name="source_code_desc">https://github.com/TonnyL/Espresso</string>
+    <string name="support">Support</string>
+    <string name="send_advices">Send advices</string>
+    <string name="mail_account">mailto:marktonymengyi@gmail.com</string>
+    <string name="mail_topic">Espresso Advices</string>
+    <string name="send_advices_desc">Help me improve this app.</string>
+    <string name="donate">Donate</string>
+    <string name="donate_account">marktonymengyi@gmail.com</string>
+    <string name="donate_desc">If you think, I deserve to get paid for my work. You can leave me a cup of coffee here.</string>
+    <!--About end-->
 
 </resources>

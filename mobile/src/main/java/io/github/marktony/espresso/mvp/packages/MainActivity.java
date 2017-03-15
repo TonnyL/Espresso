@@ -1,5 +1,7 @@
 package io.github.marktony.espresso.mvp.packages;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -9,7 +11,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
 import android.view.MenuItem;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.appwidget.AppWidgetProvider;
@@ -18,6 +22,7 @@ import io.github.marktony.espresso.mvp.companies.CompaniesFragment;
 import io.github.marktony.espresso.mvp.companies.CompaniesPresenter;
 import io.github.marktony.espresso.data.source.local.PackagesLocalDataSource;
 import io.github.marktony.espresso.data.source.PackagesRepository;
+import io.github.marktony.espresso.ui.PrefsActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -41,6 +46,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Begin the slide animation.
+        Slide slide = new Slide();
+        slide.setDuration(500);
+        slide.setInterpolator(new AccelerateDecelerateInterpolator());
+        getWindow().setExitTransition(slide);
 
         initViews();
 
@@ -91,8 +102,6 @@ public class MainActivity extends AppCompatActivity
         // Show the default fragment.
         showPackagesFragment();
 
-        sendBroadcast(AppWidgetProvider.getRefreshBroadcastIntent(MainActivity.this, true));
-
     }
 
     @Override
@@ -103,7 +112,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        sendBroadcast(AppWidgetProvider.getRefreshBroadcastIntent(MainActivity.this, true));
+        AppWidgetProvider.updateManually(getApplication());
     }
 
     /**
@@ -141,7 +150,15 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_settings) {
 
+            Intent intent = new Intent(MainActivity.this, PrefsActivity.class);
+            intent.putExtra(PrefsActivity.EXTRA_FLAG, PrefsActivity.FLAG_SETTINGS);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
         } else if (id == R.id.nav_about) {
+
+            Intent intent = new Intent(MainActivity.this, PrefsActivity.class);
+            intent.putExtra(PrefsActivity.EXTRA_FLAG, PrefsActivity.FLAG_ABOUT);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
         }
 

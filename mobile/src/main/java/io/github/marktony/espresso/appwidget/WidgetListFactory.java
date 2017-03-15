@@ -2,7 +2,6 @@ package io.github.marktony.espresso.appwidget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -29,21 +28,10 @@ public class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory 
 
     private String[] packageStatus;
 
-    private Realm realm;
-
-    private List<Package> results;
-
     public WidgetListFactory(Context context) {
         this.context = context;
         statusError = context.getString(R.string.get_status_error);
         packageStatus = context.getResources().getStringArray(R.array.package_status);
-        realm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(DATABASE_NAME)
-                .build());
-        results = realm.copyFromRealm(realm.where(Package.class)
-                .notEqualTo("state", String.valueOf(Package.STATUS_DELIVERED))
-                .findAllSorted("timestamp", Sort.DESCENDING));
     }
 
     @Override
@@ -77,6 +65,14 @@ public class WidgetListFactory implements RemoteViewsService.RemoteViewsFactory 
     public RemoteViews getViewAt(int position) {
         RemoteViews remoteViews = new RemoteViews(
                 context.getPackageName(), R.layout.package_item_for_widget);
+
+        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .name(DATABASE_NAME)
+                .build());
+        List<Package> results = rlm.copyFromRealm(rlm.where(Package.class)
+                .notEqualTo("state", String.valueOf(Package.STATUS_DELIVERED))
+                .findAllSorted("timestamp", Sort.DESCENDING));
 
         Package p = results.get(position);
 

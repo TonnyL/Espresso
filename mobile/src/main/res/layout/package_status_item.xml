@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:id="@+id/textViewLocation"
+            android:id="@+id/textViewStatus"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <android.support.v7.widget.CardView

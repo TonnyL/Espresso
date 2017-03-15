@@ -54,6 +54,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        android:src="@drawable/ic_mode_edit_white_24dp"/>
+        android:src="@drawable/ic_mode_edit_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>
