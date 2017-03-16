@@ -2,7 +2,6 @@ package io.github.marktony.espresso.data.source.remote;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.List;
 
@@ -14,6 +13,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -48,12 +48,38 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
         INSTANCE = null;
     }
 
+    @Override
+    public Observable<List<Package>> getPackages() {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
+        return null;
+    }
+
+    @Override
+    public Observable<Package> getPackage(@NonNull String packNumber) {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
+        return null;
+    }
+
+    @Override
+    public void savePackage(@NonNull Package pack) {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
+    }
+
+    @Override
+    public void deletePackage(@NonNull String packageId) {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
+    }
+
     /**
      * Update and save the packages' status by accessing the Internet.
      * @return The observable packages whose status are the latest.
      */
     @Override
-    public Observable<List<Package>> getPackages() {
+    public Observable<List<Package>> refreshPackages() {
         // It is necessary to build a new realm instance
         // in a different thread.
         Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
@@ -67,7 +93,7 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                     @Override
                     public ObservableSource<Package> apply(Package aPackage) throws Exception {
                         // A nested request.
-                        return getPackage(aPackage.getNumber());
+                        return refreshPackage(aPackage.getNumber());
                     }
                 })
                 .toList()
@@ -76,11 +102,11 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
 
     /**
      * Update and save a package's status by accessing the network.
-     * @param packNumber The package's id or number. See {@link Package#number}
+     * @param packageId The package's id or number. See {@link Package#number}
      * @return The observable package of latest status.
      */
     @Override
-    public Observable<Package> getPackage(@NonNull String packNumber) {
+    public Observable<Package> refreshPackage(@NonNull String packageId) {
         // It is necessary to build a new realm instance
         // in a different thread.
         Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
@@ -89,13 +115,19 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                 .build());
         // Set a copy rather than use the raw data.
         final Package p = realm.copyFromRealm(realm.where(Package.class)
-                .equalTo("number", packNumber)
+                .equalTo("number", packageId)
                 .findFirst());
 
         // Access the network.
         return RetrofitClient.getInstance()
                 .create(RetrofitService.class)
                 .getPackageState(p.getCompany(), p.getNumber())
+                .filter(new Predicate<Package>() {
+                    @Override
+                    public boolean test(Package aPackage) throws Exception {
+                        return aPackage.getData() != null && aPackage.getData().size() > p.getData().size();
+                    }
+                })
                 .observeOn(Schedulers.io())
                 .doOnNext(new Consumer<Package>() {
                     @Override
@@ -116,7 +148,6 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                             // set the package unread new(readable = true).
                             if (p.getData() == null || aPackage.getData().size() > p.getData().size()) {
                                 p.setReadable(true);
-                                Log.d("!!", "accept: new");
                             }
 
                             // DO NOT forget to begin a transaction.
@@ -128,33 +159,6 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                         }
                     }
                 });
-
-    }
-
-    @Override
-    public void savePackage(@NonNull Package pack) {
-        // Not required because the {@link PackagesRepository} handles the logic
-        // of refreshing the packages from all available data source
-    }
-
-    @Override
-    public void deletePackage(@NonNull String packageId) {
-        // Not required because the {@link PackagesRepository} handles the logic
-        // of refreshing the packages from all available data source
-    }
-
-    @Override
-    public Observable<List<Package>> refreshPackages() {
-        // Not required because the {@link PackagesRepository} handles the logic
-        // of refreshing the packages from all available data source.
-        return null;
-    }
-
-    @Override
-    public Observable<Package> refreshPackage(@NonNull String packageId) {
-        // Not required because the {@link PackagesRepository} handles the logic
-        // of refreshing the packages from all available data source.
-        return null;
     }
 
     @Override

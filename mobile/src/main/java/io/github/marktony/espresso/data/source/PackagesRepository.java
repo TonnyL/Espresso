@@ -23,8 +23,8 @@ import io.reactivex.functions.Function;
  * Concrete implementation to load packages from the data sources into a cache.
  * <p/>
  * For simplicity, this implements a dumb synchronisation between locally persisted data and data
- * obtained from the server, by using the remote data source only if the local database doesn't
- * exist or is empty.
+ * obtained from the server, by using the remote data source only if the local database
+ * is not the latest.
  */
 
 public class PackagesRepository implements PackagesDataSource {
@@ -166,7 +166,27 @@ public class PackagesRepository implements PackagesDataSource {
      */
     @Override
     public Observable<List<Package>> refreshPackages() {
-        return packagesRemoteDataSource.getPackages();
+        return packagesRemoteDataSource
+                .refreshPackages()
+                .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
+                    @Override
+                    public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
+
+                        return Observable
+                                .fromIterable(packages)
+                                .doOnNext(new Consumer<Package>() {
+                                    @Override
+                                    public void accept(Package aPackage) throws Exception {
+                                        Package p = cachedPackages.get(aPackage.getNumber());
+                                        if (p != null) {
+                                            p.setData(aPackage.getData());
+                                        }
+                                    }
+                                })
+                                .toList()
+                                .toObservable();
+                    }
+                });
     }
 
     /**
@@ -177,8 +197,25 @@ public class PackagesRepository implements PackagesDataSource {
      * @return The observable package.
      */
     @Override
-    public Observable<Package> refreshPackage(@NonNull String packageId) {
-        return packagesRemoteDataSource.getPackage(packageId);
+    public Observable<Package> refreshPackage(@NonNull final String packageId) {
+        return packagesRemoteDataSource
+                .refreshPackage(packageId)
+                .flatMap(new Function<Package, ObservableSource<Package>>() {
+                    @Override
+                    public ObservableSource<Package> apply(Package p) throws Exception {
+                        return Observable
+                                .just(p)
+                                .doOnNext(new Consumer<Package>() {
+                                    @Override
+                                    public void accept(Package aPackage) throws Exception {
+                                        Package pkg = cachedPackages.get(aPackage.getNumber());
+                                        if (pkg != null) {
+                                            pkg.setData(aPackage.getData());
+                                        }
+                                    }
+                                });
+                    }
+                });
     }
 
     /**
