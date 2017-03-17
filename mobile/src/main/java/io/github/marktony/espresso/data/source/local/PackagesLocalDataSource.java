@@ -143,7 +143,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         for (Package p : results) {
             rlm.beginTransaction();
             p.setReadable(false);
-            rlm.copyFromRealm(p);
+            rlm.copyToRealmOrUpdate(p);
             rlm.commitTransaction();
         }
     }

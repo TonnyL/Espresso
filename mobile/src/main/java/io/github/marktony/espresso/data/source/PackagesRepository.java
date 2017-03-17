@@ -180,6 +180,7 @@ public class PackagesRepository implements PackagesDataSource {
                                         Package p = cachedPackages.get(aPackage.getNumber());
                                         if (p != null) {
                                             p.setData(aPackage.getData());
+                                            p.setReadable(true);
                                         }
                                     }
                                 })
@@ -211,6 +212,7 @@ public class PackagesRepository implements PackagesDataSource {
                                         Package pkg = cachedPackages.get(aPackage.getNumber());
                                         if (pkg != null) {
                                             pkg.setData(aPackage.getData());
+                                            pkg.setReadable(true);
                                         }
                                     }
                                 });

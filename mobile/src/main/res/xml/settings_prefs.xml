@@ -3,34 +3,52 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Notification">
+        android:title="@string/notifications">
+
+        <CheckBoxPreference
+            android:key="alert"
+            android:title="@string/alert"
+            android:defaultValue="true"
+            android:summary="@string/alert_desc" />
 
         <CheckBoxPreference
             android:key="do_not_disturb_mode"
             android:title="@string/do_not_disturb_mode"
             android:defaultValue="true"
+            android:dependency="alert"
             android:summary="@string/do_not_disturb_mode_desc" />
 
         <Preference
             android:key="do_not_disturb_mode_start"
-            android:title="@string/start"
-            android:summary="23:00PM"
+            android:title="@string/start_time"
+            android:summary="%s"
             android:dependency="do_not_disturb_mode"/>
 
         <Preference
             android:key="do_not_disturb_mode_end"
-            android:title="@string/end"
-            android:summary="06:00AM"
+            android:title="@string/end_time"
+            android:summary="@string/end_time_desc"
             android:dependency="do_not_disturb_mode" />
 
         <ListPreference
             android:key="notification_interval"
             android:title="@string/notification_interval"
             android:summary="%s"
+            android:dependency="alert"
             android:entries="@array/notification_interval"
             android:entryValues="@array/notification_interval_item"
-            android:defaultValue="1"
-            />
+            android:defaultValue="1" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/user_interface">
+
+        <CheckBoxPreference
+            android:key="navigation_bar_tint"
+            android:defaultValue="true"
+            android:title="@string/navigation_bar_tint"
+            android:summary="@string/navigation_bar_tint_desc"/>
 
     </PreferenceCategory>
 

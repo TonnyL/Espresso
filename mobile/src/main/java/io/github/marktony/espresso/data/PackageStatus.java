@@ -91,7 +91,7 @@ public class PackageStatus extends RealmObject {
 
         Pattern cnPattern = Pattern.compile(chinesePhone);
         Matcher matcher = cnPattern.matcher(s);
-        StringBuffer buffer = new StringBuffer(64);
+        StringBuilder buffer = new StringBuilder(64);
         while (matcher.find()) {
             buffer.append(matcher.group()).append("~");
         }

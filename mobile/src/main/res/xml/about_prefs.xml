@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:title="@string/nav_about">
 
         <Preference
             android:title="@string/version"
-            android:summary="@string/version_desc" />
+            app:key="version"
+            android:summary="%s" />
 
         <Preference
             android:title="@string/rate"
+            android:key="rate"
             android:summary="@string/rate_desc"/>
 
         <Preference
-            android:title="@string/license" />
+            android:title="@string/licenses"
+            android:key="licenses"/>
 
     </PreferenceCategory>
 
@@ -22,10 +26,12 @@
 
         <Preference
             android:title="@string/thanks_1"
+            android:key="thanks_1"
             android:summary="@string/thanks_1_desc" />
 
         <Preference
             android:title="@string/thanks_2"
+            android:key="thanks_2"
             android:summary="@string/thanks_2_desc" />
 
     </PreferenceCategory>
@@ -35,14 +41,17 @@
 
         <Preference
             android:title="@string/source_code"
+            android:key="source_code"
             android:summary="@string/source_code_desc" />
 
         <Preference
             android:title="@string/send_advices"
+            android:key="send_advices"
             android:summary="@string/send_advices_desc" />
 
         <Preference
             android:title="@string/donate"
+            android:key="donate"
             android:summary="@string/donate_desc" />
 
     </PreferenceCategory>

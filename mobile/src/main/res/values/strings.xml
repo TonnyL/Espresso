@@ -12,7 +12,7 @@
     <string name="action_search">Search</string>
     <string name="nav_home">Home</string>
     <string name="nav_companies">Companies</string>
-    <string name="nav_switch_theme">Switch Theme</string>
+    <string name="nav_switch_theme">Day/Night Mode</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_about">About</string>
     <string name="package_status">PACKAGE STATUS</string>
@@ -55,6 +55,7 @@
     <string name="edit_name">Edit Name</string>
     <string name="input_empty">The package name can not be empty!</string>
     <string name="network_error">Network error, try again later.</string>
+    <string name="retry">RETRY</string>
 
     <string-array name="package_status">
         <item>Normal</item>
@@ -67,19 +68,26 @@
     </string-array>
 
     <!--Settings-->
-    <string name="retry">RETRY</string>
+    <string name="notifications">Notifications</string>
+    <string name="alert">Alert</string>
+    <string name="alert_desc">Send notifications when packages get updated</string>
     <string name="do_not_disturb_mode">Do not disturb mode</string>
     <string name="do_not_disturb_mode_desc">Don\'t send notifications during the hours set</string>
-    <string name="start">Start</string>
-    <string name="end">End</string>
+    <string name="start_time">Start time</string>
+    <string name="start_time_desc">23:00</string>
+    <string name="end_time">End time</string>
+    <string name="end_time_desc">06:00</string>
     <string name="notification_interval">Notification interval</string>
+    <string name="user_interface">User interface</string>
+    <string name="navigation_bar_tint">Navigation bar tint</string>
+    <string name="navigation_bar_tint_desc">Color the navigation bar</string>
 
     <string-array name="notification_interval">
         <item>10 minutes</item>
         <item>30 minutes</item>
-        <item>60 minutes</item>
-        <item>90 minutes</item>
-        <item>Never</item>
+        <item>1 hour</item>
+        <item>1.5 hours</item>
+        <item>2 hours</item>
     </string-array>
     <string-array name="notification_interval_item">
         <item>0</item>
@@ -92,10 +100,9 @@
 
     <!--About-->
     <string name="version">Version</string>
-    <string name="version_desc">1.0.0-Debug</string>
     <string name="rate">Rate</string>
-    <string name="rate_desc">If you like the Espresso app,please do rate it</string>
-    <string name="license">License</string>
+    <string name="rate_desc">If you like the Espresso app, please do rate it</string>
+    <string name="licenses">Licenses</string>
     <string name="thanks">Thanks</string>
     <string name="thanks_1">FengGo</string>
     <string name="thanks_1_desc">Package Tracker Project</string>
@@ -110,7 +117,9 @@
     <string name="send_advices_desc">Help me improve this app.</string>
     <string name="donate">Donate</string>
     <string name="donate_account">marktonymengyi@gmail.com</string>
-    <string name="donate_desc">If you think, I deserve to get paid for my work. You can leave me a cup of coffee here.</string>
+    <string name="donate_desc">Buy me a cup of coffee to keep me awake during my night coding sessions.</string>
+    <string name="donate_msg">Alipay account will be copied to clipboard. Launch Alipay and paste it to finish donating. Thanks for support!</string>
+    <string name="set_end_time_error">Start time can not be same as end time</string>
     <!--About end-->
 
 </resources>

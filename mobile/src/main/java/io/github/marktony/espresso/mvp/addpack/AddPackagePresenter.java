@@ -100,7 +100,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
         compositeDisposable.add(disposable);
     }
 
-    private void checkPackageLatestStatus(String type, final String number, final String name) {
+    private void checkPackageLatestStatus(final String type, final String number, final String name) {
 
         Disposable disposable = RetrofitClient.getInstance()
                 .create(RetrofitService.class)
@@ -110,6 +110,8 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                 .subscribeWith(new DisposableObserver<Package>() {
                     @Override
                     public void onNext(Package value) {
+                        // Set the company
+                        value.setCompany(type);
                         // Set the name of package
                         value.setName(name);
                         // Some package numbers, which are unable to get the latest status

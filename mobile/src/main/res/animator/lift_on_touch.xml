@@ -1,0 +1,23 @@
+<!-- animate the translationZ property of a view when pressed -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_enabled="true"
+        android:state_pressed="true">
+        <set>
+            <objectAnimator
+                android:duration="@android:integer/config_shortAnimTime"
+                android:propertyName="translationZ"
+                android:valueTo="6dp"
+                android:valueType="floatType"/>
+        </set>
+    </item>
+    <item>
+        <set>
+            <objectAnimator
+                android:duration="@android:integer/config_shortAnimTime"
+                android:propertyName="translationZ"
+                android:valueTo="0dp"
+                android:valueType="floatType"/>
+        </set>
+    </item>
+</selector>

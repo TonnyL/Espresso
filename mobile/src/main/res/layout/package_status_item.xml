@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/contactCard"
-            android:foreground="?attr/selectableItemBackground"
+            android:stateListAnimator="@animator/lift_on_touch"
             android:visibility="gone"
             app:cardElevation="2dp"
             app:cardCornerRadius="2dp"

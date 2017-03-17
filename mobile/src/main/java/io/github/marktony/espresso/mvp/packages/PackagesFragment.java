@@ -308,7 +308,7 @@ public class PackagesFragment extends Fragment
     }
 
     /**
-     * Show packages data.
+     * Show packages with recycler view.
      * @param list The data.
      */
     @Override
