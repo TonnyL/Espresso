@@ -37,14 +37,14 @@ This project is still in progress. Here are the some features that I will finish
 
 - [x] Refreshing package details by accessing the network.
 - [ ] Launcher app widgets.
-- [ ] App Shortcuts on devices that running Android 7.1+.
+- [x] App Shortcuts on devices that running Android 7.1+.
 - [ ] Chrome Custom Tabs.
 - [ ] Sticky header view of companies list.
 - [ ] Alphabet indexing for companies list.
 - [ ] Search packages and companies.
 - [ ] Day and night mode.
 - [ ] Service to build notifactions.
-- [ ] Settings and about page.
+- [x] Settings and about page.
 - [ ] Supporting Android Wear.
 - [ ] UI test and unit test.
 

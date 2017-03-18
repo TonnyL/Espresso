@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
  * Created by lizhaotailang on 2017/3/17.
  */
 
-public class TimeUtil {
+public class TimeFormatUtils {
 
     public static String formatTimeIntToString(int hour, int minute) {
         StringBuilder buffer = new StringBuilder(16);

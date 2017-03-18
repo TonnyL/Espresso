@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_add"
+        android:shortcutId="shortcut_add_package"
+        android:shortcutShortLabel="@string/shortcut_label_add_package"
+        android:shortcutLongLabel="@string/shortcut_label_add_package">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="io.github.marktony.espresso"
+            android:targetClass="io.github.marktony.espresso.mvp.addpackage.AddPackageActivity" />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_scan_code"
+        android:shortcutId="shortcut_scan_code"
+        android:shortcutShortLabel="@string/shortcut_label_scan_code"
+        android:shortcutLongLabel="@string/shortcut_label_scan_code">
+
+        <intent
+            android:action="io.github.marktony.espresso.mvp.addpackage.AddPackageActivity"
+            android:targetPackage="io.github.marktony.espresso"
+            android:targetClass="io.github.marktony.espresso.mvp.addpackage.AddPackageActivity" />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_search"
+        android:shortcutId="shortcut_search"
+        android:shortcutShortLabel="@string/shortcut_label_search"
+        android:shortcutLongLabel="@string/shortcut_label_search">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="io.github.marktony.espresso"
+            android:targetClass="io.github.marktony.espresso.mvp.search.SearchActivity" />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+</Shortcuts>

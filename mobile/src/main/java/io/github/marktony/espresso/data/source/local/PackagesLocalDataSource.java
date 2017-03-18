@@ -91,6 +91,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         rlm.beginTransaction();
         rlm.copyToRealmOrUpdate(pack);
         rlm.commitTransaction();
+        rlm.close();
     }
 
     /**
@@ -113,6 +114,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
             p.deleteFromRealm();
         }
         rlm.commitTransaction();
+        rlm.close();
     }
 
     @Override
@@ -146,6 +148,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
             rlm.copyToRealmOrUpdate(p);
             rlm.commitTransaction();
         }
+        rlm.close();
     }
 
     /**
@@ -167,9 +170,12 @@ public class PackagesLocalDataSource implements PackagesDataSource {
                 .findFirst();
         if (p != null) {
             p.setReadable(readable);
+            // When a package is not readable, it is not pushable.
+            p.setPushable(readable);
             rlm.copyToRealmOrUpdate(p);
         }
         rlm.commitTransaction();
+        rlm.close();
     }
 
     /**
@@ -205,6 +211,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
             rlm.copyToRealmOrUpdate(p);
             rlm.commitTransaction();
         }
+        rlm.close();
     }
 
 }

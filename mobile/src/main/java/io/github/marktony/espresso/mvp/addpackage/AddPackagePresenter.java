@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.mvp.addpack;
+package io.github.marktony.espresso.mvp.addpackage;
 
 import android.support.annotation.NonNull;
 
@@ -76,7 +76,8 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                 .subscribeWith(new DisposableObserver<CompanyRecognition>() {
                     @Override
                     public void onNext(CompanyRecognition value) {
-                        if (value.getAuto().size() > 0) {
+
+                        if (value.getAuto().size() > 0 && value.getAuto().get(0).getCompanyCode() != null) {
                             checkPackageLatestStatus(value.getAuto().get(0).getCompanyCode(), number, name);
                         } else {
                             view.showNumberError();
@@ -110,20 +111,26 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                 .subscribeWith(new DisposableObserver<Package>() {
                     @Override
                     public void onNext(Package value) {
-                        // Set the company
-                        value.setCompany(type);
-                        // Set the name of package
-                        value.setName(name);
-                        // Some package numbers, which are unable to get the latest status
-                        // has no number value after converted to a gson  value
-                        // We need to set the number manually.
-                        value.setNumber(number);
-                        // Set a random color value for the package
-                        value.setColorAvatar(avatarColors[new Random().nextInt(avatarColors.length)]);
-                        // Set the add-time(timestamp) of package
-                        value.setTimestamp(System.currentTimeMillis());
+                        if (value != null) {
 
-                        packagesDataSource.savePackage(value);
+                            if (value.getData() != null && value.getData().size() > 0) {
+                                value.setReadable(true);
+                            }
+                            // Set the company
+                            value.setCompany(type);
+                            // Set the name of package
+                            value.setName(name);
+                            // Some package numbers, which are unable to get the latest status
+                            // has no number value after converted to a gson  value
+                            // We need to set the number manually.
+                            value.setNumber(number);
+                            // Set a random color value for the package
+                            value.setColorAvatar(avatarColors[new Random().nextInt(avatarColors.length)]);
+                            // Set the add-time(timestamp) of package
+                            value.setTimestamp(System.currentTimeMillis());
+
+                            packagesDataSource.savePackage(value);
+                        }
                         view.showPackagesList();
                     }
 

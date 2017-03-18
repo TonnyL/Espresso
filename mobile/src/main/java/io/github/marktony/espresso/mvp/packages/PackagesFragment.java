@@ -32,7 +32,7 @@ import java.util.List;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.appwidget.AppWidgetProvider;
-import io.github.marktony.espresso.mvp.addpack.AddPackageActivity;
+import io.github.marktony.espresso.mvp.addpackage.AddPackageActivity;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;

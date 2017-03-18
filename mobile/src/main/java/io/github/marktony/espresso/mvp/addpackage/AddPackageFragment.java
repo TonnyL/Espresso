@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.mvp.addpack;
+package io.github.marktony.espresso.mvp.addpackage;
 
 import android.Manifest;
 import android.app.Activity;
@@ -44,6 +44,8 @@ public class AddPackageFragment extends Fragment
 
     public final static int SCANNING_REQUEST_CODE = 1;
     public final static int REQUEST_CAMERA_PERMISSION_CODE = 0;
+
+    public static final String ACTION_SCAN_CODE = "io.github.marktony.espresso.mvp.addpackage.AddPackageActivity";
 
     private TextInputEditText editTextNumber, editTextName;
     private AppCompatTextView textViewScanCode;
@@ -114,6 +116,11 @@ public class AddPackageFragment extends Fragment
                 checkPermissionOrToScan();
             }
         });
+
+        String action = getActivity().getIntent().getAction();
+        if (action != null && action.equals(ACTION_SCAN_CODE)) {
+            checkPermissionOrToScan();
+        }
 
         setHasOptionsMenu(true);
 

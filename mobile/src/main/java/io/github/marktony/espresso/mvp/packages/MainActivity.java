@@ -25,6 +25,7 @@ import io.github.marktony.espresso.mvp.companies.CompaniesPresenter;
 import io.github.marktony.espresso.data.source.local.PackagesLocalDataSource;
 import io.github.marktony.espresso.data.source.PackagesRepository;
 import io.github.marktony.espresso.ui.PrefsActivity;
+import io.github.marktony.espresso.util.PushUtils;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -108,6 +109,8 @@ public class MainActivity extends AppCompatActivity
 
         // Show the default fragment.
         showPackagesFragment();
+
+        PushUtils.startReminderService(this);
 
     }
 

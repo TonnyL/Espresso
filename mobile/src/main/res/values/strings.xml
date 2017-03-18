@@ -8,6 +8,7 @@
     <string name="activity_package_details">Package Details</string>
     <string name="activity_add_package">Add Package</string>
     <string name="activity_company_details">Company Details</string>
+    <string name="activity_search">Search</string>
 
     <string name="action_search">Search</string>
     <string name="nav_home">Home</string>
@@ -120,6 +121,16 @@
     <string name="donate_desc">Buy me a cup of coffee to keep me awake during my night coding sessions.</string>
     <string name="donate_msg">Alipay account will be copied to clipboard. Launch Alipay and paste it to finish donating. Thanks for support!</string>
     <string name="set_end_time_error">Start time can not be same as end time</string>
+    <string name="notification_new_message">\"The package has a new message\"</string>
     <!--About end-->
+
+    <!--shortcuts-->
+    <string name="shortcut_label_add_package">Add manually</string>
+    <string name="shortcut_label_search">Search</string>
+    <string name="shortcut_label_scan_code">Scan code</string>
+    <!--shortcuts end-->
+
+    <!--search-->
+
 
 </resources>

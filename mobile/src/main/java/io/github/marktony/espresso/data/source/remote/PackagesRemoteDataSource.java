@@ -148,6 +148,7 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                             // set the package unread new(readable = true).
                             if (p.getData() == null || aPackage.getData().size() > p.getData().size()) {
                                 p.setReadable(true);
+                                p.setPushable(true);
                             }
 
                             // DO NOT forget to begin a transaction.
@@ -156,6 +157,7 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                             rlm.copyToRealmOrUpdate(p);
                             rlm.commitTransaction();
 
+                            rlm.close();
                         }
                     }
                 });

@@ -1,4 +1,4 @@
-package io.github.marktony.espresso.mvp.addpack;
+package io.github.marktony.espresso.mvp.addpackage;
 
 import io.github.marktony.espresso.mvp.BasePresenter;
 import io.github.marktony.espresso.mvp.BaseView;
