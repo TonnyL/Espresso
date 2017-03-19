@@ -5,7 +5,7 @@ package io.github.marktony.espresso.constant;
  * Created by lizhaotailang on 2017/2/9.
  */
 
-public class API {
+public class Api {
 
 
     // 基础API

@@ -1,9 +1,9 @@
 package io.github.marktony.espresso.service;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,22 +16,20 @@ import android.util.Log;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.appwidget.AppWidgetProvider;
 import io.github.marktony.espresso.data.Package;
-import io.github.marktony.espresso.data.source.PackagesRepository;
-import io.github.marktony.espresso.data.source.local.PackagesLocalDataSource;
-import io.github.marktony.espresso.data.source.remote.PackagesRemoteDataSource;
 import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.github.marktony.espresso.ui.SettingsFragment;
+import io.github.marktony.espresso.util.NetworkUtil;
 import io.github.marktony.espresso.util.PushUtils;
-import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -42,7 +40,7 @@ import static io.github.marktony.espresso.data.source.local.PackagesLocalDataSou
  * Background service to build notifications and send them to user.
  */
 
-public class ReminderService extends Service {
+public class ReminderService extends IntentService {
 
     private SharedPreferences preference;
 
@@ -50,15 +48,20 @@ public class ReminderService extends Service {
 
     public static final String TAG = ReminderService.class.getSimpleName();
 
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     */
     public ReminderService() {
-
+        super(TAG);
     }
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         preference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         compositeDisposable = new CompositeDisposable();
+        Log.d(TAG, "onCreate: ");
     }
 
     @Nullable
@@ -68,7 +71,9 @@ public class ReminderService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    protected void onHandleIntent(@Nullable Intent intent) {
+        Log.d(TAG, "onHandleIntent: ");
+
         boolean alert = preference.getBoolean(SettingsFragment.KEY_ALERT, true);
         boolean isDisturbMode = preference.getBoolean(SettingsFragment.KEY_DO_NOT_DISTURB_MODE, true);
 
@@ -76,67 +81,57 @@ public class ReminderService extends Service {
         // or DO-NOT-DISTURB-MODE is off
         // or time now is not in the DO-NOT-DISTURB-MODE range.
         if (!alert || (isDisturbMode && PushUtils.isInDisturbTime(this, Calendar.getInstance()))) {
-            return super.onStartCommand(intent, flags, startId);
+            return;
         }
 
-        final Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
+        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .name(DATABASE_NAME)
                 .build());
 
-        final List<Package> results = rlm.copyFromRealm(
+        List<Package> results = rlm.copyFromRealm(
                 rlm.where(Package.class)
                         .notEqualTo("state", String.valueOf(Package.STATUS_DELIVERED))
                         .findAll());
 
-        final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         for (int i = 0; i < results.size(); i++) {
-            final Package pkg = results.get(i);
-            synchronized (this) {
-                if (compositeDisposable.isDisposed()) {
-                    compositeDisposable.clear();
+            if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
+                refreshPackage(i, results.get(i));
+            } else {
+
+                Package p = results.get(i);
+                // Avoid repeated pushing
+                if (p.isPushable()) {
+
+                    setNotifications(i, results.get(i));
+
+                    Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
+                            .deleteRealmIfMigrationNeeded()
+                            .name(DATABASE_NAME)
+                            .build());
+
+                    p.setPushable(false);
+                    realm.beginTransaction();
+                    realm.copyToRealmOrUpdate(p);
+                    realm.commitTransaction();
+                    realm.close();
                 }
-                final int finalI = i;
-                Disposable disposable = Observable
-                        .interval(PushUtils.getIntervalTime(Integer.parseInt(android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(SettingsFragment.KEY_NOTIFICATION_INTERVAL, "1"))), TimeUnit.MILLISECONDS)
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                RetrofitClient.getInstance()
-                                        .create(RetrofitService.class)
-                                        .getPackageState(pkg.getCompany(), pkg.getNumber())
-                                        .subscribe(new Consumer<Package>() {
-                                            @Override
-                                            public void accept(Package aPackage) throws Exception {
-
-                                                if (aPackage.getData() != null
-                                                        && aPackage.getData().size() > pkg.getData().size()) {
-
-                                                    pkg.setData(aPackage.getData());
-                                                    pkg.setReadable(true);
-
-                                                    rlm.beginTransaction();
-                                                    rlm.copyToRealmOrUpdate(pkg);
-                                                    rlm.commitTransaction();
-                                                    rlm.close();
-                                                    nm.notify(finalI, setNotifications(finalI, pkg));
-                                                }
-                                            }
-                                        });
-                            }
-                        });
-                compositeDisposable.add(disposable);
             }
         }
-        return super.onStartCommand(intent, flags, startId);
 
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand: ");
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         compositeDisposable.clear();
+        Log.d(TAG, "onDestroy: ");
     }
 
     private static Notification buildNotification(Context context, String title, String subject, String longText, String time, int icon, int color,
@@ -157,6 +152,12 @@ public class ReminderService extends Service {
 
     }
 
+    /**
+     * Set the details like title, subject, etc. of notifications.
+     * @param position Position.
+     * @param pkg The package.
+     * @return The notification.
+     */
     private Notification setNotifications(int position, Package pkg) {
         if (pkg != null) {
 
@@ -168,8 +169,10 @@ public class ReminderService extends Service {
 
             String title = pkg.getName();
             String subject;
+            int smallIcon = R.drawable.ic_local_shipping_teal_24dp;
             if (Integer.parseInt(pkg.getState()) == Package.STATUS_DELIVERED) {
                 subject = getString(R.string.delivered);
+                smallIcon = R.drawable.ic_assignment_turned_in_teal_24dp;
             } else {
                 if (Integer.parseInt(pkg.getState()) == Package.STATUS_ON_THE_WAY) {
                     subject = getString(R.string.on_the_way);
@@ -183,7 +186,7 @@ public class ReminderService extends Service {
                     subject,
                     pkg.getData().get(0).getContext(),
                     pkg.getData().get(0).getTime(),
-                    R.drawable.ic_local_shipping_black_24dp,
+                    smallIcon,
                     R.color.colorPrimary,
                     intent,
                     null);
@@ -195,6 +198,66 @@ public class ReminderService extends Service {
             return notification;
         }
         return null;
+    }
+
+    /**
+     * Update the package by accessing network,
+     * then build and send the notifications.
+     * @param position Position.
+     * @param p The package.
+     */
+    private void refreshPackage(final int position, final Package p) {
+
+        final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        RetrofitClient.getInstance()
+                .create(RetrofitService.class)
+                .getPackageState(p.getCompany(), p.getNumber())
+                .observeOn(Schedulers.io())
+                .doOnNext(new Consumer<Package>() {
+                    @Override
+                    public void accept(Package aPackage) throws Exception {
+                        if (p.isPushable()
+                                && aPackage != null
+                                && aPackage.getData().size() > p.getData().size()) {
+                            Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
+                                    .deleteRealmIfMigrationNeeded()
+                                    .name(DATABASE_NAME)
+                                    .build());
+
+                            p.setReadable(true);
+                            p.setPushable(false);
+                            p.setData(aPackage.getData());
+
+                            rlm.beginTransaction();
+                            rlm.copyToRealmOrUpdate(p);
+                            rlm.commitTransaction();
+                            rlm.close();
+
+                            // Send notification
+                            nm.notify(position + 1000, setNotifications(position, p));
+
+                            // Update the widget
+                            AppWidgetProvider.updateManually(getApplication());
+                        }
+                    }
+                })
+                .subscribeWith(new DisposableObserver<Package>() {
+                    @Override
+                    public void onNext(Package value) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+        });
     }
 
 }

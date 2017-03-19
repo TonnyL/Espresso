@@ -151,9 +151,9 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                                 p.setPushable(true);
                             }
 
+                            p.setData(aPackage.getData());
                             // DO NOT forget to begin a transaction.
                             rlm.beginTransaction();
-                            p.setData(aPackage.getData());
                             rlm.copyToRealmOrUpdate(p);
                             rlm.commitTransaction();
 

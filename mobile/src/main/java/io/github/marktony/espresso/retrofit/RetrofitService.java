@@ -1,6 +1,6 @@
 package io.github.marktony.espresso.retrofit;
 
-import io.github.marktony.espresso.constant.API;
+import io.github.marktony.espresso.constant.Api;
 import io.github.marktony.espresso.data.CompanyRecognition;
 import io.github.marktony.espresso.data.CompanyList;
 import io.github.marktony.espresso.data.Package;
@@ -14,13 +14,13 @@ import retrofit2.http.Query;
 
 public interface RetrofitService {
 
-    @GET(API.COMPANY_QUERY)
+    @GET(Api.COMPANY_QUERY)
     Observable<CompanyRecognition> query(@Query("text") String number);
 
-    @GET(API.PACKAGE_STATE)
+    @GET(Api.PACKAGE_STATE)
     Observable<Package> getPackageState(@Query("type") String type, @Query("postid") String postId);
 
-    @GET(API.COMPANIES)
+    @GET(Api.COMPANIES)
     Observable<CompanyList> getCompanies();
 
 }

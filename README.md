@@ -43,7 +43,7 @@ This project is still in progress. Here are the some features that I will finish
 - [ ] Alphabet indexing for companies list.
 - [ ] Search packages and companies.
 - [ ] Day and night mode.
-- [ ] Service to build notifactions.
+- [x] Service to build notifactions.
 - [x] Settings and about page.
 - [ ] Supporting Android Wear.
 - [ ] UI test and unit test.
