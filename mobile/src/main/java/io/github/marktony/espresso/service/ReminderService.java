@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
@@ -111,6 +112,7 @@ public class ReminderService extends IntentService {
                             .build());
 
                     p.setPushable(false);
+
                     realm.beginTransaction();
                     realm.copyToRealmOrUpdate(p);
                     realm.commitTransaction();
@@ -118,6 +120,8 @@ public class ReminderService extends IntentService {
                 }
             }
         }
+
+        rlm.close();
 
     }
 
@@ -143,6 +147,8 @@ public class ReminderService extends IntentService {
         builder.setPriority(NotificationCompat.PRIORITY_MAX);
         builder.setStyle(new NotificationCompat.BigTextStyle(builder).bigText(longText));
         builder.setSmallIcon(icon);
+        builder.setShowWhen(true);
+        builder.setWhen(System.currentTimeMillis());
         builder.setContentIntent(contentIntent);
         builder.setSubText(time);
         builder.setAutoCancel(true);
@@ -187,7 +193,7 @@ public class ReminderService extends IntentService {
                     pkg.getData().get(0).getContext(),
                     pkg.getData().get(0).getTime(),
                     smallIcon,
-                    R.color.colorPrimary,
+                    ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
                     intent,
                     null);
 
@@ -208,6 +214,7 @@ public class ReminderService extends IntentService {
      */
     private void refreshPackage(final int position, final Package p) {
 
+        Log.d(TAG, "refreshPackage: ");
         final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         RetrofitClient.getInstance()
@@ -217,9 +224,9 @@ public class ReminderService extends IntentService {
                 .doOnNext(new Consumer<Package>() {
                     @Override
                     public void accept(Package aPackage) throws Exception {
-                        if (p.isPushable()
-                                && aPackage != null
-                                && aPackage.getData().size() > p.getData().size()) {
+
+                        if (aPackage != null && aPackage.getData().size() > p.getData().size()) {
+
                             Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
                                     .deleteRealmIfMigrationNeeded()
                                     .name(DATABASE_NAME)

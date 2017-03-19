@@ -233,9 +233,8 @@ public class PackagesRepository implements PackagesDataSource {
             cachedPackages = new HashMap<>();
         }
         for (Package p : cachedPackages.values()) {
-            if (p.isReadable()) {
-                p.setReadable(false);
-            }
+            p.setReadable(false);
+            p.setPushable(false);
         }
     }
 

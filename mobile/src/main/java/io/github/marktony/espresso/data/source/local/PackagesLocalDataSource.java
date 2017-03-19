@@ -140,11 +140,12 @@ public class PackagesLocalDataSource implements PackagesDataSource {
                 .deleteRealmIfMigrationNeeded()
                 .name(DATABASE_NAME)
                 .build());
-        List<Package> results = rlm.copyFromRealm(rlm.where(Package.class)
-                .notEqualTo("readable", true).findAll());
+        List<Package> results = rlm.copyFromRealm(rlm.where(Package.class).findAll());
+
         for (Package p : results) {
-            rlm.beginTransaction();
             p.setReadable(false);
+            p.setPushable(false);
+            rlm.beginTransaction();
             rlm.copyToRealmOrUpdate(p);
             rlm.commitTransaction();
         }
