@@ -93,6 +93,11 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
 
+        // Make sure the data in repository is the latest.
+        // Also to void the repo only contains a package
+        // when user has already gone to detail page
+        // by check a notification or widget.
+        PackagesRepository.destroyInstance();
         // Init the presenters.
         packagesPresenter = new PackagesPresenter(packagesFragment,
                 PackagesRepository.getInstance(
@@ -117,12 +122,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AppWidgetProvider.updateManually(getApplication());
+        sendBroadcast(AppWidgetProvider.getRefreshBroadcastIntent(getApplicationContext()));
     }
 
     /**

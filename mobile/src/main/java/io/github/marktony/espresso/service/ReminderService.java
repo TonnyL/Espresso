@@ -25,7 +25,6 @@ import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.github.marktony.espresso.ui.SettingsFragment;
-import io.github.marktony.espresso.util.NetworkUtil;
 import io.github.marktony.espresso.util.PushUtils;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -73,15 +72,15 @@ public class ReminderService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+
         Log.d(TAG, "onHandleIntent: ");
 
-        boolean alert = preference.getBoolean(SettingsFragment.KEY_ALERT, true);
         boolean isDisturbMode = preference.getBoolean(SettingsFragment.KEY_DO_NOT_DISTURB_MODE, true);
 
         // The alert mode is off
         // or DO-NOT-DISTURB-MODE is off
         // or time now is not in the DO-NOT-DISTURB-MODE range.
-        if (!alert || (isDisturbMode && PushUtils.isInDisturbTime(this, Calendar.getInstance()))) {
+        if (isDisturbMode && PushUtils.isInDisturbTime(this, Calendar.getInstance())) {
             return;
         }
 
@@ -95,30 +94,32 @@ public class ReminderService extends IntentService {
                         .notEqualTo("state", String.valueOf(Package.STATUS_DELIVERED))
                         .findAll());
 
-        for (int i = 0; i < results.size(); i++) {
-            if (NetworkUtil.isNetworkConnected(getApplicationContext())) {
-                refreshPackage(i, results.get(i));
+        for (int i = 0; i < results.size(); i++){
+
+            Package p = results.get(i);
+            // Avoid repeated pushing
+            if (p.isPushable()) {
+
+                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
+                        .deleteRealmIfMigrationNeeded()
+                        .name(DATABASE_NAME)
+                        .build());
+
+                p.setPushable(false);
+
+                nm.notify(i + 1001, setNotifications(i, p));
+
+                realm.beginTransaction();
+                realm.copyToRealmOrUpdate(p);
+                realm.commitTransaction();
+                realm.close();
+
             } else {
-
-                Package p = results.get(i);
-                // Avoid repeated pushing
-                if (p.isPushable()) {
-
-                    setNotifications(i, results.get(i));
-
-                    Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
-                            .deleteRealmIfMigrationNeeded()
-                            .name(DATABASE_NAME)
-                            .build());
-
-                    p.setPushable(false);
-
-                    realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(p);
-                    realm.commitTransaction();
-                    realm.close();
-                }
+                refreshPackage(i, results.get(i));
             }
+
         }
 
         rlm.close();
@@ -245,26 +246,11 @@ public class ReminderService extends IntentService {
                             nm.notify(position + 1000, setNotifications(position, p));
 
                             // Update the widget
-                            AppWidgetProvider.updateManually(getApplication());
+                            sendBroadcast(AppWidgetProvider.getRefreshBroadcastIntent(getApplicationContext()));
                         }
                     }
                 })
-                .subscribeWith(new DisposableObserver<Package>() {
-                    @Override
-                    public void onNext(Package value) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-        });
+                .subscribe();
     }
 
 }

@@ -92,6 +92,7 @@ public class PackagesRepository implements PackagesDataSource {
                 }
             });
         } else {
+
             cachedPackages = new LinkedHashMap<>();
 
             // Return the cached packages.
@@ -299,6 +300,9 @@ public class PackagesRepository implements PackagesDataSource {
                 .doOnNext(new Consumer<Package>() {
                     @Override
                     public void accept(Package aPackage) throws Exception {
+                        if (cachedPackages == null) {
+                            cachedPackages = new LinkedHashMap<>();
+                        }
                         cachedPackages.put(packNumber, aPackage);
                     }
                 });

@@ -1,6 +1,5 @@
 package io.github.marktony.espresso.appwidget;
 
-import android.app.Application;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -20,12 +19,9 @@ public class AppWidgetProvider extends android.appwidget.AppWidgetProvider {
 
     private static final String REFRESH_ACTION = "io.github.marktony.espresso.appwidget.action.REFRESH";
 
-    private static final String EXTRA_PERFORM_SYNC = "io.github.marktony.espresso.appwidget.extra.PERFORM_SYNC";
-
-    public static Intent getRefreshBroadcastIntent(Context context, boolean performSync) {
+    public static Intent getRefreshBroadcastIntent(Context context) {
         return new Intent(REFRESH_ACTION)
-                .setComponent(new ComponentName(context, AppWidgetProvider.class))
-                .putExtra(EXTRA_PERFORM_SYNC, performSync);
+                .setComponent(new ComponentName(context, AppWidgetProvider.class));
     }
 
     @Override
@@ -55,24 +51,14 @@ public class AppWidgetProvider extends android.appwidget.AppWidgetProvider {
         return remoteViews;
     }
 
-    public static void updateManually(Application app) {
-        int[] ids = AppWidgetManager.getInstance(app).getAppWidgetIds(new ComponentName(app, AppWidgetProvider.class));
-        AppWidgetManager.getInstance(app).notifyAppWidgetViewDataChanged(ids, R.id.listViewWidget);
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-
         String action = intent.getAction();
-
         if (REFRESH_ACTION.equals(action)) {
-            boolean shouldSync = intent.getBooleanExtra(EXTRA_PERFORM_SYNC, false);
-            if (shouldSync) {
-                AppWidgetManager manager = AppWidgetManager.getInstance(context);
-                ComponentName name = new ComponentName(context, AppWidgetProvider.class);
-                manager.notifyAppWidgetViewDataChanged(manager.getAppWidgetIds(name), R.id.listViewWidget);
-            }
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName name = new ComponentName(context, AppWidgetProvider.class);
+            manager.notifyAppWidgetViewDataChanged(manager.getAppWidgetIds(name), R.id.listViewWidget);
         }
     }
 

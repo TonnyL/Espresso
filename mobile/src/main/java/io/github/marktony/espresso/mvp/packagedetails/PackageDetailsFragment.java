@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.PackageStatus;
+import io.github.marktony.espresso.data.source.PackagesRepository;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -97,6 +98,12 @@ public class PackageDetailsFragment extends Fragment
     public void onPause() {
         super.onPause();
         presenter.unsubscribe();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PackagesRepository.destroyInstance();
     }
 
     @Override

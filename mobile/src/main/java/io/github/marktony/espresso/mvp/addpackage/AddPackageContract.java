@@ -25,7 +25,7 @@ public interface AddPackageContract {
 
     interface Presenter extends BasePresenter {
 
-        void savePackage(String number, String name);
+        void savePackage(String number, String name, int color);
 
     }
 

@@ -47,7 +47,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".zxing.CaptureActivity"
-            android:label="@string/scan_code"
+            android:label="@string/activity_scan_code"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="io.github.marktony.espresso.zxing.CaptureActivity" />

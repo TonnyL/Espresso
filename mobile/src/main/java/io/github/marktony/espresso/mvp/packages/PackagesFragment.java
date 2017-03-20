@@ -141,7 +141,7 @@ public class PackagesFragment extends Fragment
         super.onPause();
         presenter.unsubscribe();
         setLoadingIndicator(false);
-        AppWidgetProvider.getRefreshBroadcastIntent(getContext(), true);
+        getActivity().sendBroadcast(AppWidgetProvider.getRefreshBroadcastIntent(getContext()));
     }
 
     @Override

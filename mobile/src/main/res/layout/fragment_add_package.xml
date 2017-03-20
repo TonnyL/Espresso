@@ -35,27 +35,27 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/app_bar_height"
-        android:id="@+id/scrollView"
-        android:scrollbars="vertical"
-        android:scrollbarFadeDuration="1"
-        android:fadeScrollbars="true">
+        android:layout_marginTop="@dimen/app_bar_height" >
 
-        <LinearLayout
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            android:indeterminate="true" />
 
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/progressBar"
-                android:visibility="gone"
-                android:indeterminate="true" />
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView"
+            android:scrollbars="vertical"
+            android:scrollbarFadeDuration="1"
+            android:fadeScrollbars="true">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,7 +79,7 @@
                         android:id="@+id/editTextNumber"
                         android:drawableStart="@drawable/ic_dialpad_black_24dp"
                         android:drawablePadding="16dp"
-                        android:hint="Number"
+                        android:hint="@string/tint_package_number"
                         android:inputType="textVisiblePassword"/>
 
                 </android.support.design.widget.TextInputLayout>
@@ -106,15 +106,15 @@
                         android:id="@+id/editTextName"
                         android:drawableStart="@drawable/ic_assignment_black_24dp"
                         android:drawablePadding="16dp"
-                        android:hint="Name(Optional)"/>
+                        android:hint="@string/tint_package_name"/>
 
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
-    </android.support.v4.widget.NestedScrollView>
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

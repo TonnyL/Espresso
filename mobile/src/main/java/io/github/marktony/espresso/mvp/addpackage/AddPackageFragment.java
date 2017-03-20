@@ -30,6 +30,8 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
+import java.util.Random;
+
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.zxing.CaptureActivity;
 
@@ -47,6 +49,7 @@ public class AddPackageFragment extends Fragment
 
     public static final String ACTION_SCAN_CODE = "io.github.marktony.espresso.mvp.addpackage.AddPackageActivity";
 
+    // View references.
     private TextInputEditText editTextNumber, editTextName;
     private AppCompatTextView textViewScanCode;
     private FloatingActionButton fab;
@@ -54,6 +57,8 @@ public class AddPackageFragment extends Fragment
     private NestedScrollView scrollView;
 
     private AddPackageContract.Presenter presenter;
+
+    private int[] colorRes;
 
     public AddPackageFragment() {}
 
@@ -64,6 +69,11 @@ public class AddPackageFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        colorRes = new int[]{
+                R.color.cyan_500, R.color.amber_500,
+                R.color.pink_500, R.color.orange_500,
+                R.color.light_blue_500, R.color.lime_500,
+                R.color.green_500};
     }
 
     @Nullable
@@ -85,7 +95,7 @@ public class AddPackageFragment extends Fragment
                 String number = editTextNumber.getText().toString().replaceAll("\\s*", "");
 
                 // Check the length of the input number
-                if (number.length() < 5) {
+                if (number.length() < 5 || number.replace(" ", "").isEmpty()) {
                     showNumberError();
                     return;
                 }
@@ -106,7 +116,8 @@ public class AddPackageFragment extends Fragment
                 }
 
                 editTextName.setText(name);
-                presenter.savePackage(editTextNumber.getText().toString(), name);
+                // Set a random color as avatar background
+                presenter.savePackage(editTextNumber.getText().toString(), name, colorRes[new Random().nextInt(colorRes.length)]);
             }
         });
 

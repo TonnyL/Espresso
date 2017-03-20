@@ -22,11 +22,17 @@ public class PushUtils {
     public static final String TAG = PushUtils.class.getSimpleName();
 
     public static void startAlarmService(Context context, Class<?> service, long interval) {
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, service);
-        PendingIntent pendingIntent = PendingIntent.getService(context, 10000, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 0, interval, pendingIntent);
-        Log.d(TAG, "startAlarmService");
+
+        boolean alert = PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(SettingsFragment.KEY_ALERT, true);
+
+        if (alert) {
+            AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(context, service);
+            PendingIntent pendingIntent = PendingIntent.getService(context, 10000, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 0, interval, pendingIntent);
+            Log.d(TAG, "startAlarmService");
+        }
     }
 
     public static void stopAlarmService(Context context, Class<?> service) {

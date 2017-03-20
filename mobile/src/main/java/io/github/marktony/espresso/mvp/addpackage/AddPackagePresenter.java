@@ -31,11 +31,6 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
     @NonNull
     private CompositeDisposable compositeDisposable;
 
-    @NonNull
-    private int[] avatarColors = {R.color.cyan_500, R.color.amber_500, R.color.gray_500,
-            R.color.indigo_500, R.color.light_blue_500, R.color.lime_500,
-            R.color.teal_500};
-
     public AddPackagePresenter(@NonNull PackagesDataSource dataSource, @NonNull AddPackageContract.View view) {
         this.view = view;
         this.view.setPresenter(this);
@@ -44,9 +39,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
     }
 
     @Override
-    public void subscribe() {
-
-    }
+    public void subscribe() {}
 
     @Override
     public void unsubscribe() {
@@ -54,12 +47,12 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
     }
 
     @Override
-    public void savePackage(String number, String name) {
+    public void savePackage(String number, String name, int color) {
         compositeDisposable.clear();
-        checkNumber(number, name);
+        checkNumber(number, name, color);
     }
 
-    private void checkNumber(final String number, final String name) {
+    private void checkNumber(final String number, final String name, final int color) {
 
         if (packagesDataSource.isPackageExist(number)) {
             view.showNumberExistError();
@@ -78,7 +71,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                     public void onNext(CompanyRecognition value) {
 
                         if (value.getAuto().size() > 0 && value.getAuto().get(0).getCompanyCode() != null) {
-                            checkPackageLatestStatus(value.getAuto().get(0).getCompanyCode(), number, name);
+                            checkPackageLatestStatus(value.getAuto().get(0).getCompanyCode(), number, name, color);
                         } else {
                             view.showNumberError();
                             view.setProgressIndicator(false);
@@ -101,7 +94,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
         compositeDisposable.add(disposable);
     }
 
-    private void checkPackageLatestStatus(final String type, final String number, final String name) {
+    private void checkPackageLatestStatus(final String type, final String number, final String name, final int color) {
 
         Disposable disposable = RetrofitClient.getInstance()
                 .create(RetrofitService.class)
@@ -115,6 +108,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
 
                             if (value.getData() != null && value.getData().size() > 0) {
                                 value.setReadable(true);
+                                value.setPushable(true);
                             }
                             // Set the company
                             value.setCompany(type);
@@ -125,7 +119,7 @@ public class AddPackagePresenter implements AddPackageContract.Presenter{
                             // We need to set the number manually.
                             value.setNumber(number);
                             // Set a random color value for the package
-                            value.setColorAvatar(avatarColors[new Random().nextInt(avatarColors.length)]);
+                            value.setColorAvatar(color);
                             // Set the add-time(timestamp) of package
                             value.setTimestamp(System.currentTimeMillis());
 

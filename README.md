@@ -36,7 +36,7 @@ Suggestion: It is better for you to update your Android Studio to version 2.3 wh
 This project is still in progress. Here are the some features that I will finish in the future.
 
 - [x] Refreshing package details by accessing the network.
-- [ ] Launcher app widgets.
+- [x] Launcher app widgets.
 - [x] App Shortcuts on devices that running Android 7.1+.
 - [ ] Chrome Custom Tabs.
 - [ ] Sticky header view of companies list.
@@ -60,7 +60,9 @@ Name | Introduction | Version
 [ZXing](https://github.com/zxing/zxing) | ZXing ("zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library implemented in Java, with ports to other languages. | 3.3.0
 
 ### Thanks to
++ [Express 100](https://www.kuaidi100.com/)
 + [googlesamples](https://github.com/googlesamples) - [android-architecture](https://github.com/googlesamples/android-architecture)
++ [google](https://github.com/google) - [iosched](https://github.com/google/iosched)
 + [fython](https://github.com/fython) - [PackageTracker](https://github.com/fython/PackageTracker)
 + [YoulunZhai](https://plus.google.com/+YoulunZhai) - The posters.
 + Other people who help me solve the problems when I met some difficult bugs.
