@@ -88,7 +88,7 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                 .build());
 
         return Observable.fromIterable(realm.copyFromRealm(realm.where(Package.class).findAll()))
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .flatMap(new Function<Package, ObservableSource<Package>>() {
                     @Override
                     public ObservableSource<Package> apply(Package aPackage) throws Exception {
@@ -128,7 +128,7 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                         return aPackage.getData() != null && aPackage.getData().size() > p.getData().size();
                     }
                 })
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .doOnNext(new Consumer<Package>() {
                     @Override
                     public void accept(Package aPackage) throws Exception {

@@ -19,11 +19,16 @@
         <item name="preferenceTheme">@style/MaterialPreferenceTheme</item>
     </style>
 
+    <style name="AppTheme.Onboarding" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/transparent_black</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    // Custom the preference style
+    <!--Custom the preference style-->
     <style name="MaterialPreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
         <item name="android:fadeScrollbars">true</item>
         <item name="android:scrollbars">vertical</item>

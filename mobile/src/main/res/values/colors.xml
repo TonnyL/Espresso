@@ -7,6 +7,7 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
+    <color name="transparent_black">#33000000</color>
 
     <color name="cyan_500">#00BCD4</color>
     <color name="green_500">#4CAF50</color>
@@ -21,5 +22,8 @@
     <color name="layout_background">#fafafa</color>
 
     <color name="gray_200">#EEEEEE</color>
+
+    <color name="indicator_selected">@android:color/white</color>
+    <color name="indicator_unselected">#4D000000</color>
 
 </resources>

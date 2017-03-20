@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.transition.Slide;
 import android.view.MenuItem;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -60,6 +61,11 @@ public class MainActivity extends AppCompatActivity
         slide.setDuration(500);
         slide.setInterpolator(new AccelerateDecelerateInterpolator());
         getWindow().setExitTransition(slide);
+
+        Explode explode = new Explode();
+        explode.setDuration(500);
+        explode.setInterpolator(new AccelerateDecelerateInterpolator());
+        getWindow().setEnterTransition(explode);
 
         initViews();
 

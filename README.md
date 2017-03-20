@@ -52,6 +52,7 @@ This project is still in progress. Here are the some features that I will finish
 Name | Introduction | Version
 ----- | ------ | ---
 [Android Support Libraries](https://developer.android.com/topic/libraries/support-library/index.html) | The Android Support Library offers a number of features that are not built into the framework. These libraries offer backward-compatible versions of new features, provide useful UI elements that are not included in the framework, and provide a range of utilities that apps can draw on. | 25.2.0
+[Gson](https://github.com/google/gson) | A Java serialization/deserialization library that can convert Java Objects into JSON and back. | 2.7
 [MaterialDateTimePicker](https://github.com/wdullaer/MaterialDateTimePicker) | Pick a date or time on Android in style. | 3.1.3
 [Realm](https://github.com/realm/realm-java) | Realm is a mobile database: a replacement for SQLite & ORMs. | 3.0.0
 [Retrofit](https://github.com/square/retrofit) | Type-safe HTTP client for Android and Java by Square, Inc. | 2.2.0

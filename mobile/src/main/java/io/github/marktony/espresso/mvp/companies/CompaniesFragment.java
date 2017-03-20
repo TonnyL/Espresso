@@ -58,16 +58,20 @@ public class CompaniesFragment extends Fragment
             }
         });
 
-        presenter.subscribe();
-
         setHasOptionsMenu(true);
 
         return view;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onResume() {
+        super.onResume();
+        presenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         presenter.unsubscribe();
     }
 
@@ -80,7 +84,7 @@ public class CompaniesFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
-
+            presenter.subscribe();
         }
         return true;
     }

@@ -8,7 +8,6 @@ import io.realm.RealmObject;
 /**
  * Created by lizhaotailang on 2017/2/23.
  * Immutable model class for a Company.
- * JSON格式示例
  * JSON format sample
  * {
  * 'cid':'9',

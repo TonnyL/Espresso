@@ -28,7 +28,6 @@ import io.github.marktony.espresso.ui.SettingsFragment;
 import io.github.marktony.espresso.util.PushUtils;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -100,7 +99,6 @@ public class ReminderService extends IntentService {
             // Avoid repeated pushing
             if (p.isPushable()) {
 
-                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                 Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
                         .deleteRealmIfMigrationNeeded()
@@ -109,7 +107,7 @@ public class ReminderService extends IntentService {
 
                 p.setPushable(false);
 
-                nm.notify(i + 1001, setNotifications(i, p));
+                pushNotification(i + 1001, setNotifications(i, p));
 
                 realm.beginTransaction();
                 realm.copyToRealmOrUpdate(p);
@@ -216,12 +214,11 @@ public class ReminderService extends IntentService {
     private void refreshPackage(final int position, final Package p) {
 
         Log.d(TAG, "refreshPackage: ");
-        final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         RetrofitClient.getInstance()
                 .create(RetrofitService.class)
                 .getPackageState(p.getCompany(), p.getNumber())
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .doOnNext(new Consumer<Package>() {
                     @Override
                     public void accept(Package aPackage) throws Exception {
@@ -243,7 +240,7 @@ public class ReminderService extends IntentService {
                             rlm.close();
 
                             // Send notification
-                            nm.notify(position + 1000, setNotifications(position, p));
+                            pushNotification(position + 1000, setNotifications(position, p));
 
                             // Update the widget
                             sendBroadcast(AppWidgetProvider.getRefreshBroadcastIntent(getApplicationContext()));
@@ -251,6 +248,11 @@ public class ReminderService extends IntentService {
                     }
                 })
                 .subscribe();
+    }
+
+    private void pushNotification(int i, Notification n) {
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(i, n);
     }
 
 }

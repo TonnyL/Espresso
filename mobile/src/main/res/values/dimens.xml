@@ -10,4 +10,6 @@
     <dimen name="timeline_dot_size">16dp</dimen>
     <dimen name="timeline_line_size">2dp</dimen>
     <dimen name="timeline_padding_top">20dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="activity_margin_half">8dp</dimen>
 </resources>
