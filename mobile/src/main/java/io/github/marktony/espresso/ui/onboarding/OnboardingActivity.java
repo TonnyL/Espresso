@@ -2,9 +2,11 @@ package io.github.marktony.espresso.ui.onboarding;
 
 import android.animation.ArgbEvaluator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -19,6 +21,7 @@ import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.source.CompaniesRepository;
 import io.github.marktony.espresso.data.source.local.CompaniesLocalDataSource;
 import io.github.marktony.espresso.mvp.packages.MainActivity;
+import io.github.marktony.espresso.util.SettingsUtils;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -37,61 +40,75 @@ public class OnboardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_onboarding);
 
-        new InitCompaniesDataTask().execute();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sp.getBoolean(SettingsUtils.KEY_FIRST_LAUNCH, true)) {
 
-        initViews();
+            setContentView(R.layout.activity_onboarding);
 
-        initData();
+            new InitCompaniesDataTask().execute();
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            initViews();
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                int colorUpdate = (Integer) new ArgbEvaluator().evaluate(positionOffset, bgColors[position], bgColors[position == 2 ? position : position + 1]);
-                viewPager.setBackgroundColor(colorUpdate);
-            }
+            initData();
 
-            @Override
-            public void onPageSelected(int position) {
-                currentPosition = position;
-                updateIndicators(position);
-                viewPager.setBackgroundColor(bgColors[position]);
-                buttonPre.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
-                buttonNext.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
-                buttonFinish.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
-            }
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    int colorUpdate = (Integer) new ArgbEvaluator().evaluate(positionOffset, bgColors[position], bgColors[position == 2 ? position : position + 1]);
+                    viewPager.setBackgroundColor(colorUpdate);
+                }
 
-            }
-        });
+                @Override
+                public void onPageSelected(int position) {
+                    currentPosition = position;
+                    updateIndicators(position);
+                    viewPager.setBackgroundColor(bgColors[position]);
+                    buttonPre.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
+                    buttonNext.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
+                    buttonFinish.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
+                }
 
-        buttonFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(OnboardingActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentPosition += 1;
-                viewPager.setCurrentItem(currentPosition, true);
-            }
-        });
+                }
+            });
 
-        buttonPre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentPosition -= 1;
-                viewPager.setCurrentItem(currentPosition, true);
-            }
-        });
+            buttonFinish.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    navigateToMainActivity();
+                }
+            });
+
+            buttonNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentPosition += 1;
+                    viewPager.setCurrentItem(currentPosition, true);
+                }
+            });
+
+            buttonPre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentPosition -= 1;
+                    viewPager.setCurrentItem(currentPosition, true);
+                }
+            });
+
+            SharedPreferences.Editor ed = sp.edit();
+            ed.putBoolean(SettingsUtils.KEY_FIRST_LAUNCH, false);
+            ed.apply();
+
+        } else {
+
+            navigateToMainActivity();
+
+            finish();
+        }
 
     }
 
@@ -152,6 +169,12 @@ public class OnboardingActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
 
         }
+    }
+
+    private void navigateToMainActivity() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 
 }

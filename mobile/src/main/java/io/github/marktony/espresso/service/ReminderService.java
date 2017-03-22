@@ -24,8 +24,8 @@ import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
-import io.github.marktony.espresso.ui.SettingsFragment;
 import io.github.marktony.espresso.util.PushUtils;
+import io.github.marktony.espresso.util.SettingsUtils;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -74,7 +74,7 @@ public class ReminderService extends IntentService {
 
         Log.d(TAG, "onHandleIntent: ");
 
-        boolean isDisturbMode = preference.getBoolean(SettingsFragment.KEY_DO_NOT_DISTURB_MODE, true);
+        boolean isDisturbMode = preference.getBoolean(SettingsUtils.KEY_DO_NOT_DISTURB_MODE, true);
 
         // The alert mode is off
         // or DO-NOT-DISTURB-MODE is off
