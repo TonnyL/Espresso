@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-import static io.github.marktony.espresso.data.source.local.PackagesLocalDataSource.DATABASE_NAME;
+import static io.github.marktony.espresso.realm.RealmHelper.DATABASE_NAME;
 
 /**
  * Created by lizhaotailang on 2017/3/7.
@@ -149,6 +149,7 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                             if (p.getData() == null || aPackage.getData().size() > p.getData().size()) {
                                 p.setReadable(true);
                                 p.setPushable(true);
+                                p.setState(aPackage.getState());
                             }
 
                             p.setData(aPackage.getData());

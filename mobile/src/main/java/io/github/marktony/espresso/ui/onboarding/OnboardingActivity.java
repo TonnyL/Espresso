@@ -2,6 +2,9 @@ package io.github.marktony.espresso.ui.onboarding;
 
 import android.animation.ArgbEvaluator;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -13,11 +16,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.data.source.CompaniesRepository;
+import io.github.marktony.espresso.data.source.local.CompaniesLocalDataSource;
 import io.github.marktony.espresso.mvp.packages.MainActivity;
 
 public class OnboardingActivity extends AppCompatActivity {
-
-    private OnboardingPagerAdapter pagerAdapter;
 
     private ViewPager viewPager;
     private AppCompatButton buttonFinish;
@@ -29,10 +32,14 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private int currentPosition;
 
+    private static final int MSG_DATA_INSERT_FINISH = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
+
+        new InitCompaniesDataTask().execute();
 
         initViews();
 
@@ -89,10 +96,11 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        pagerAdapter = new OnboardingPagerAdapter(getSupportFragmentManager());
+        OnboardingPagerAdapter pagerAdapter = new OnboardingPagerAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(pagerAdapter);
         buttonFinish = (AppCompatButton) findViewById(R.id.buttonFinish);
+        buttonFinish.setEnabled(false);
         buttonNext = (ImageButton) findViewById(R.id.imageButtonNext);
         buttonPre = (ImageButton) findViewById(R.id.imageButtonPre);
         indicators = new ImageView[] {(ImageView) findViewById(R.id.imageViewIndicator0),
@@ -111,6 +119,38 @@ public class OnboardingActivity extends AppCompatActivity {
             indicators[i].setBackgroundResource(
                     i == position ? R.drawable.onboarding_indicator_selected : R.drawable.onboarding_indicator_unselected
             );
+        }
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_DATA_INSERT_FINISH:
+                    buttonFinish.setEnabled(true);
+                    break;
+            }
+        }
+    };
+
+    private class InitCompaniesDataTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            CompaniesRepository.getInstance(CompaniesLocalDataSource.getInstance())
+                    .initData();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            handler.sendEmptyMessage(MSG_DATA_INSERT_FINISH);
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
         }
     }
 

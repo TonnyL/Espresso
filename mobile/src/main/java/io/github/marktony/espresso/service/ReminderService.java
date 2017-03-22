@@ -32,7 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-import static io.github.marktony.espresso.data.source.local.PackagesLocalDataSource.DATABASE_NAME;
+import static io.github.marktony.espresso.realm.RealmHelper.DATABASE_NAME;
 
 /**
  * Created by lizhaotailang on 2017/3/8.
@@ -233,6 +233,7 @@ public class ReminderService extends IntentService {
                             p.setReadable(true);
                             p.setPushable(false);
                             p.setData(aPackage.getData());
+                            p.setState(aPackage.getState());
 
                             rlm.beginTransaction();
                             rlm.copyToRealmOrUpdate(p);
