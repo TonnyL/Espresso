@@ -54,7 +54,7 @@ public class PackagesFragment extends Fragment
 
     private View contentView;
 
-    private PackageAdapter adapter;
+    private PackagesAdapter adapter;
 
     private PackagesContract.Presenter presenter;
 
@@ -223,9 +223,9 @@ public class PackagesFragment extends Fragment
                 // ViewHolder's ItemView is the default view to be operated.
                 // Here we call getDefaultUIUtil's function clearView to pass
                 // specified view.
-                getDefaultUIUtil().clearView(((PackageAdapter.PackageViewHolder) viewHolder).layoutMain);
-                ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.GONE);
-                ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.GONE);
+                getDefaultUIUtil().clearView(((PackagesAdapter.PackageViewHolder) viewHolder).layoutMain);
+                ((PackagesAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.GONE);
+                ((PackagesAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.GONE);
             }
 
             @Override
@@ -233,25 +233,25 @@ public class PackagesFragment extends Fragment
                 // The callback when ViewHolder's status of drag or swipe action changed.
                 if (viewHolder != null) {
                     // ViewHolder's ItemView is the default view to be operated.
-                    getDefaultUIUtil().onSelected(((PackageAdapter.PackageViewHolder) viewHolder).layoutMain);
+                    getDefaultUIUtil().onSelected(((PackagesAdapter.PackageViewHolder) viewHolder).layoutMain);
                 }
             }
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                getDefaultUIUtil().onDraw(c, recyclerView, ((PackageAdapter.PackageViewHolder) viewHolder).layoutMain, dX, dY, actionState, isCurrentlyActive);
+                getDefaultUIUtil().onDraw(c, recyclerView, ((PackagesAdapter.PackageViewHolder) viewHolder).layoutMain, dX, dY, actionState, isCurrentlyActive);
                 if (dX > 0) {
                     // Left swipe
-                    ((PackageAdapter.PackageViewHolder) viewHolder).wrapperView.setBackgroundResource(R.color.deep_orange);
-                    ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.VISIBLE);
-                    ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.GONE);
+                    ((PackagesAdapter.PackageViewHolder) viewHolder).wrapperView.setBackgroundResource(R.color.deep_orange);
+                    ((PackagesAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.VISIBLE);
+                    ((PackagesAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.GONE);
                 }
 
                 if (dX < 0) {
                     // Right swipe
-                    ((PackageAdapter.PackageViewHolder) viewHolder).wrapperView.setBackgroundResource(R.color.deep_orange);
-                    ((PackageAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.GONE);
-                    ((PackageAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.VISIBLE);
+                    ((PackagesAdapter.PackageViewHolder) viewHolder).wrapperView.setBackgroundResource(R.color.deep_orange);
+                    ((PackagesAdapter.PackageViewHolder) viewHolder).imageViewRemove.setVisibility(View.GONE);
+                    ((PackagesAdapter.PackageViewHolder) viewHolder).textViewRemove.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -261,7 +261,7 @@ public class PackagesFragment extends Fragment
                 // Be called by ItemTouchHelper's onDrawOver function.
                 // Draw with a canvas object.
                 // The pattern will be above the RecyclerView
-                getDefaultUIUtil().onDrawOver(c, recyclerView, ((PackageAdapter.PackageViewHolder) viewHolder).layoutMain, dX, dY, actionState, isCurrentlyActive);
+                getDefaultUIUtil().onDrawOver(c, recyclerView, ((PackagesAdapter.PackageViewHolder) viewHolder).layoutMain, dX, dY, actionState, isCurrentlyActive);
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -314,7 +314,7 @@ public class PackagesFragment extends Fragment
     @Override
     public void showPackages(@NonNull final List<Package> list) {
         if (adapter == null) {
-            adapter = new PackageAdapter(getContext(), list);
+            adapter = new PackagesAdapter(getContext(), list);
             adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
                 @Override
                 public void OnItemClick(View v, int position) {

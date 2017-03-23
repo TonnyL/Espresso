@@ -21,7 +21,6 @@
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A"
             android:textColor="@android:color/white"
             android:textSize="24sp"
             android:layout_gravity="center"/>

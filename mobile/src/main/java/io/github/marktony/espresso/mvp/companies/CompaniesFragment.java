@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,7 +27,6 @@ public class CompaniesFragment extends Fragment
         implements CompaniesContract.View {
 
     private RecyclerView recyclerView;
-    private SwipeRefreshLayout refreshLayout;
 
     private CompaniesContract.Presenter presenter;
 
@@ -47,16 +44,10 @@ public class CompaniesFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_companies_list, container, false);
 
         initViews(view);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-            }
-        });
 
         setHasOptionsMenu(true);
 
@@ -91,10 +82,8 @@ public class CompaniesFragment extends Fragment
 
     @Override
     public void initViews(View view) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewCompaniesList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-        refreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
     }
 
     @Override

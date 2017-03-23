@@ -70,10 +70,9 @@ public class PackagesLocalDataSource implements PackagesDataSource {
                 .deleteRealmIfMigrationNeeded()
                 .name(RealmHelper.DATABASE_NAME)
                 .build());
-        Package pack = rlm.where(Package.class)
+        return Observable.just(rlm.copyFromRealm(rlm.where(Package.class)
                 .equalTo("number", packNumber)
-                .findFirst();
-        return Observable.just(pack);
+                .findFirst()));
     }
 
     /**
@@ -108,11 +107,11 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         Package p = rlm.where(Package.class)
                 .equalTo("number", packageId)
                 .findFirst();
-        rlm.beginTransaction();
         if (p != null) {
+            rlm.beginTransaction();
             p.deleteFromRealm();
+            rlm.commitTransaction();
         }
-        rlm.commitTransaction();
         rlm.close();
     }
 
@@ -164,18 +163,18 @@ public class PackagesLocalDataSource implements PackagesDataSource {
                 .deleteRealmIfMigrationNeeded()
                 .name(RealmHelper.DATABASE_NAME)
                 .build());
-        rlm.beginTransaction();
-        Package p = rlm.where(Package.class)
+        Package p = rlm.copyFromRealm(rlm.where(Package.class)
                 .equalTo("number", packageId)
-                .findFirst();
+                .findFirst());
         if (p != null) {
+            rlm.beginTransaction();
             p.setReadable(readable);
             // When a package is not readable, it is not pushable.
             p.setPushable(readable);
             rlm.copyToRealmOrUpdate(p);
+            rlm.commitTransaction();
+            rlm.close();
         }
-        rlm.commitTransaction();
-        rlm.close();
     }
 
     /**

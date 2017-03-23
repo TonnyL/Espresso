@@ -25,7 +25,7 @@ import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
  * Created by lizhaotailang on 2017/2/11.
  */
 
-public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PackagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @NonNull
     private final Context context;
@@ -41,7 +41,7 @@ public class PackageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private String[] packageStatus;
 
-    public PackageAdapter(@NonNull Context context, @NonNull List<Package> list) {
+    public PackagesAdapter(@NonNull Context context, @NonNull List<Package> list) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.list = list;

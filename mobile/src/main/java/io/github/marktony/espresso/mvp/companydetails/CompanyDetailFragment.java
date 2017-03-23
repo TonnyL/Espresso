@@ -60,6 +60,18 @@ public class CompanyDetailFragment extends Fragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.unsubscribe();
+    }
+
+    @Override
     public void initViews(View view) {
 
         PackageDetailsActivity activity = (PackageDetailsActivity) getActivity();

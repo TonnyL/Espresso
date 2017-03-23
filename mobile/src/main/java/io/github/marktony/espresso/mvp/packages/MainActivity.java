@@ -20,6 +20,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.appwidget.AppWidgetProvider;
+import io.github.marktony.espresso.data.source.CompaniesRepository;
+import io.github.marktony.espresso.data.source.local.CompaniesLocalDataSource;
 import io.github.marktony.espresso.data.source.remote.PackagesRemoteDataSource;
 import io.github.marktony.espresso.mvp.companies.CompaniesFragment;
 import io.github.marktony.espresso.mvp.companies.CompaniesPresenter;
@@ -110,7 +112,8 @@ public class MainActivity extends AppCompatActivity
                         PackagesRemoteDataSource.getInstance(),
                         PackagesLocalDataSource.getInstance()));
 
-        new CompaniesPresenter(companiesFragment);
+        new CompaniesPresenter(companiesFragment,
+                CompaniesRepository.getInstance(CompaniesLocalDataSource.getInstance()));
 
         // Get data from Bundle.
         if (savedInstanceState != null) {

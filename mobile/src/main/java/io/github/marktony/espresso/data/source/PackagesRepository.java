@@ -250,7 +250,6 @@ public class PackagesRepository implements PackagesDataSource {
     public void setPackageReadable(@NonNull String packageId, boolean readable) {
         Package p = cachedPackages.get(packageId);
         p.setReadable(readable);
-        // When a package is not readable, it is not pushable.
         p.setPushable(readable);
         packagesLocalDataSource.setPackageReadable(packageId, readable);
     }

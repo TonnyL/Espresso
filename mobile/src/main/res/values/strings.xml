@@ -144,6 +144,10 @@
     <string name="shortcut_label_scan_code">Scan code</string>
     <!--shortcuts end-->
 
+    <!--widget-->
+    <string name="all_packages_are_delivered">All packages are delivered.</string>
+    <!--widget end-->
+
     <!--search-->
 
 
