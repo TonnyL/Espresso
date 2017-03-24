@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
+<io.github.marktony.espresso.component.FastScrollRecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/recyclerViewCompaniesList"/>
+    android:id="@+id/recyclerViewCompaniesList"
+    app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+    app:fastScrollAutoHide="true"
+    app:fastScrollAutoHideDelay="1500" />

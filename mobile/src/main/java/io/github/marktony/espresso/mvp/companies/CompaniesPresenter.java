@@ -56,7 +56,7 @@ public class CompaniesPresenter implements CompaniesContract.Presenter {
                 .subscribeWith(new DisposableObserver<List<Company>>() {
                     @Override
                     public void onNext(List<Company> value) {
-
+                        view.showCompanies(value);
                     }
 
                     @Override

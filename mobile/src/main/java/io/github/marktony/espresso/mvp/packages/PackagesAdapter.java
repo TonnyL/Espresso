@@ -16,8 +16,8 @@ import android.widget.LinearLayout;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.component.CircleImageView;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 

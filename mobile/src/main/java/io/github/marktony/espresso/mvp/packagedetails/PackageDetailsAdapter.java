@@ -74,7 +74,7 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         if (getItemViewType(position) == TYPE_HEADER) {
             HeaderViewHolder vh = (HeaderViewHolder) holder;
-            vh.textViewCompany.setText(aPackage.getCompany());
+            vh.textViewCompany.setText(aPackage.getCompanyChineseName());
             vh.textViewName.setText(aPackage.getName());
             vh.textViewNumber.setText(aPackage.getNumber());
         } else {

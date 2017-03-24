@@ -38,12 +38,12 @@ This project is still in progress. Here are the some features that I will finish
 - [x] Refreshing package details by accessing the network.
 - [x] Launcher app widgets.
 - [x] App Shortcuts on devices that running Android 7.1+.
+- [x] Material design app onboarding pages.
 - [ ] Chrome Custom Tabs.
-- [ ] Sticky header view of companies list.
 - [ ] Alphabet indexing for companies list.
 - [ ] Search packages and companies.
 - [ ] Day and night mode.
-- [x] Service to build notifactions.
+- [x] Service to build notifications.
 - [x] Settings and about page.
 - [ ] Supporting Android Wear.
 - [ ] UI test and unit test.
@@ -51,7 +51,8 @@ This project is still in progress. Here are the some features that I will finish
 ### Libraries Used in This App
 Name | Introduction | Version
 ----- | ------ | ---
-[Android Support Libraries](https://developer.android.com/topic/libraries/support-library/index.html) | The Android Support Library offers a number of features that are not built into the framework. These libraries offer backward-compatible versions of new features, provide useful UI elements that are not included in the framework, and provide a range of utilities that apps can draw on. | 25.2.0
+[Android Support Libraries](https://developer.android.com/topic/libraries/support-library/alphabet.html) | The Android Support Library offers a number of features that are not built into the framework. These libraries offer backward-compatible versions of new features, provide useful UI elements that are not included in the framework, and provide a range of utilities that apps can draw on. | 25.2.0
+[CircleImageView](https://github.com/hdodenhof/CircleImageView) | A circular ImageView for Android | 2.1.0
 [Gson](https://github.com/google/gson) | A Java serialization/deserialization library that can convert Java Objects into JSON and back. | 2.7
 [MaterialDateTimePicker](https://github.com/wdullaer/MaterialDateTimePicker) | Pick a date or time on Android in style. | 3.1.3
 [Realm](https://github.com/realm/realm-java) | Realm is a mobile database: a replacement for SQLite & ORMs. | 3.0.0

@@ -14,10 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.Company;
+import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -29,6 +30,8 @@ public class CompaniesFragment extends Fragment
     private RecyclerView recyclerView;
 
     private CompaniesContract.Presenter presenter;
+
+    private CompaniesAdapter adapter;
 
     public CompaniesFragment() {}
 
@@ -83,7 +86,8 @@ public class CompaniesFragment extends Fragment
     @Override
     public void initViews(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewCompaniesList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
@@ -97,8 +101,17 @@ public class CompaniesFragment extends Fragment
     }
 
     @Override
-    public void showCompanies(ArrayList<Company> list) {
+    public void showCompanies(List<Company> list) {
+        if (adapter == null) {
+            adapter = new CompaniesAdapter(getContext(), list);
+            adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
+                @Override
+                public void OnItemClick(View v, int position) {
 
+                }
+            });
+            recyclerView.setAdapter(adapter);
+        }
     }
 
 }

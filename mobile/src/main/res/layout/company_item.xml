@@ -12,26 +12,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <io.github.marktony.espresso.component.CircleImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
+            android:id="@+id/imageViewAvatar"
             android:src="@color/colorPrimary"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/textViewAvatar"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
         
     </FrameLayout>
-    
-    <android.support.v7.widget.AppCompatTextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:gravity="start|center_vertical"
-        android:text="顺丰速运"/>
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewCompanyName"
+            android:gravity="start|center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewCompanyTel"
+            android:gravity="start|center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

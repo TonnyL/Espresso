@@ -7,6 +7,8 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
+    <color name="colorHeaderBackground">#ebebeb</color>
+
     <color name="transparent_black">#33000000</color>
 
     <color name="cyan_500">#00BCD4</color>

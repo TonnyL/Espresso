@@ -9,6 +9,8 @@ import android.transition.Explode;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.data.source.CompaniesRepository;
+import io.github.marktony.espresso.data.source.local.CompaniesLocalDataSource;
 import io.github.marktony.espresso.data.source.local.PackagesLocalDataSource;
 import io.github.marktony.espresso.data.source.PackagesRepository;
 import io.github.marktony.espresso.data.source.remote.PackagesRemoteDataSource;
@@ -53,6 +55,7 @@ public class AddPackageActivity extends AppCompatActivity {
         new AddPackagePresenter(PackagesRepository.getInstance(
                 PackagesRemoteDataSource.getInstance(),
                 PackagesLocalDataSource.getInstance()),
+                CompaniesRepository.getInstance(CompaniesLocalDataSource.getInstance()),
                 fragment);
 
     }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stickyHeaderLayout"
+        android:paddingStart="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:background="@color/colorHeaderBackground">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/stickyHeaderText"
+            android:textColor="@color/colorPrimaryText"
+            android:paddingLeft="@dimen/activity_margin_half"
+            android:paddingRight="@dimen/activity_margin_half" />
+
+    </FrameLayout>
+
+    <include layout="@layout/company_item" />
+
+</LinearLayout>

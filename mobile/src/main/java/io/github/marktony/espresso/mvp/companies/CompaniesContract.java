@@ -1,6 +1,7 @@
 package io.github.marktony.espresso.mvp.companies;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.github.marktony.espresso.mvp.BasePresenter;
 import io.github.marktony.espresso.mvp.BaseView;
@@ -16,7 +17,7 @@ public interface CompaniesContract {
 
         void showGetCompaniesError();
 
-        void showCompanies(ArrayList<Company> list);
+        void showCompanies(List<Company> list);
 
     }
 

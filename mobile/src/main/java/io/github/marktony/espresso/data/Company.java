@@ -1,5 +1,6 @@
 package io.github.marktony.espresso.data;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,11 +12,12 @@ import io.realm.annotations.PrimaryKey;
  * Immutable model class for a Company.
  * JSON format sample
  * {
- * ‘companyname’:'EMS',
+ * ‘name’:'EMS',
  * 'id':'ems',
  * 'tel':'11183',
  * 'website':'http://www.ems.com.cn/',
- * 'index':'ems'
+ * 'alphabet':'ems',
+ * 'avatar': '#009688'
  * }
  *
  */
@@ -23,8 +25,8 @@ import io.realm.annotations.PrimaryKey;
 public class Company extends RealmObject {
 
     @Expose
-    @SerializedName("companyname")
-    private String chineseName;
+    @SerializedName("name")
+    private String name;
 
     @PrimaryKey
     @Expose
@@ -40,15 +42,19 @@ public class Company extends RealmObject {
     private String website;
 
     @Expose
-    @SerializedName("index")
-    private String index;
+    @SerializedName("alphabet")
+    private String alphabet;
 
-    public String getChineseName() {
-        return chineseName;
+    @Expose
+    @SerializedName("avatar")
+    private String avatar;
+
+    public String getName() {
+        return name;
     }
 
-    public void setChineseName(String chineseName) {
-        this.chineseName = chineseName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getId() {
@@ -75,11 +81,24 @@ public class Company extends RealmObject {
         this.website = website;
     }
 
-    public String getIndex() {
-        return index;
+    public String getAlphabet() {
+        return alphabet;
     }
 
-    public void setIndex(String index) {
-        this.index = index;
+    public void setAlphabet(String alphabet) {
+        this.alphabet = alphabet;
+    }
+
+    public String getAvatarColor() {
+        return avatar;
+    }
+
+    public void setAvatarColor(String avatar) {
+        this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }
