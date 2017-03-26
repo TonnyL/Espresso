@@ -1,7 +1,6 @@
 package io.github.marktony.espresso.mvp.companies;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 
@@ -18,8 +17,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class CompaniesPresenter implements CompaniesContract.Presenter {
-
-    private static final String TAG = CompaniesPresenter.class.getSimpleName();
 
     @NonNull
     private CompaniesContract.View view;

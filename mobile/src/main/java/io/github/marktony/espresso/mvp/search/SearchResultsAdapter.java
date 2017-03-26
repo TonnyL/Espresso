@@ -4,17 +4,19 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.Company;
 import io.github.marktony.espresso.data.Package;
@@ -162,7 +164,33 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public void updateData(List<Package> packages, List<Company> companies) {
-        
+        this.packages.clear();
+        this.companies.clear();
+        this.list.clear();
+        this.packages = packages;
+        this.companies = companies;
+        this.list.add(new ItemWrapper(ItemWrapper.TYPE_CATEGORY));
+        if (packages.size() > 0) {
+            for (int i = 0; i < packages.size(); i++) {
+                ItemWrapper wrapper = new ItemWrapper(ItemWrapper.TYPE_PACKAGE);
+                wrapper.index = i;
+                list.add(wrapper);
+            }
+        } else {
+            list.add(new ItemWrapper(ItemWrapper.TYPE_EMPTY));
+        }
+
+        this.list.add(new ItemWrapper(ItemWrapper.TYPE_CATEGORY));
+        if (companies.size() > 0) {
+            for (int i = 0; i < companies.size(); i++) {
+                ItemWrapper wrapper = new ItemWrapper(ItemWrapper.TYPE_COMPANY);
+                wrapper.index = i;
+                list.add(wrapper);
+            }
+        } else {
+            list.add(new ItemWrapper(ItemWrapper.TYPE_EMPTY));
+        }
+        notifyDataSetChanged();
     }
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
@@ -180,7 +208,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         PackageHolder(View itemView, OnRecyclerViewItemClickListener listener) {
             super(itemView);
-            avatar = (CircleImageView) itemView.findViewById(R.id.imageViewAvatar);
+            avatar = (CircleImageView) itemView.findViewById(R.id.circleImageView);
             textViewPackageName = (AppCompatTextView) itemView.findViewById(R.id.textViewPackageName);
             textViewStatus = (AppCompatTextView) itemView.findViewById(R.id.textViewStatus);
             textViewTime = (AppCompatTextView) itemView.findViewById(R.id.textViewTime);

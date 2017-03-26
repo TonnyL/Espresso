@@ -9,6 +9,7 @@ import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesDataSource;
 import io.github.marktony.espresso.realm.RealmHelper;
 import io.reactivex.Observable;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -211,6 +212,26 @@ public class PackagesLocalDataSource implements PackagesDataSource {
             rlm.commitTransaction();
         }
         rlm.close();
+    }
+
+    @Override
+    public Observable<List<Package>> searchPackages(@NonNull String keyWords) {
+        Realm rlm = newRealmInstance();
+        return Observable.fromIterable(rlm.copyFromRealm(
+                rlm.where(Package.class)
+                        .like("companyChineseName", "*" + keyWords + "*", Case.INSENSITIVE)
+                        /*.or().contains("company", "*" + keyWords + "*")
+                        .or().contains("number", "*" + keyWords + "*")*/
+                        .findAll()))
+                .toList()
+                .toObservable();
+    }
+
+    private Realm newRealmInstance() {
+        return Realm.getInstance(new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .name(RealmHelper.DATABASE_NAME)
+                .build());
     }
 
 }

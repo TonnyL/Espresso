@@ -23,8 +23,7 @@ public class PrefsActivity extends AppCompatActivity {
 
     public static final String EXTRA_FLAG= "EXTRA_FLAG";
 
-    public static final int FLAG_SETTINGS = 0, FLAG_ABOUT = 1,
-                        FLAG_LICENSES = 2;
+    public static final int FLAG_SETTINGS = 0, FLAG_ABOUT = 1, FLAG_LICENSES = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +60,7 @@ public class PrefsActivity extends AppCompatActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container_prefs,fragment)
+                .replace(R.id.container,fragment)
                 .commit();
 
     }

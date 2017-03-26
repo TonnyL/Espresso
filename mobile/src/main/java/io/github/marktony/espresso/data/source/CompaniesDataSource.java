@@ -21,4 +21,6 @@ public interface CompaniesDataSource {
 
     void initData();
 
+    Observable<List<Company>> searchCompanies(@NonNull String keyWords);
+
 }

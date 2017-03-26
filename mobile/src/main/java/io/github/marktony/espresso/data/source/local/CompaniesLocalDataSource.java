@@ -9,6 +9,7 @@ import io.github.marktony.espresso.data.Company;
 import io.github.marktony.espresso.data.source.CompaniesDataSource;
 import io.github.marktony.espresso.realm.RealmHelper;
 import io.reactivex.Observable;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.Sort;
@@ -139,7 +140,7 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'万象物流','id':'wanxiangwuliu','tel':'400-820-8088','website':'http://www.ewinshine.com','alphabet':'wanxiangwuliu','avatar':'#00BCD4'}");
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'宏品物流','id':'hongpinwuliu','tel':'400-612-1456','website':'http://www.hpexpress.com.cn','alphabet':'hongpinwuliu','avatar':'#00BCD4'}");
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'GLS','id':'gls','tel':'877-914-5465','website':'http://www.gls-group.net','alphabet':'gls','avatar':'#00BCD4'}");
-        rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'上大物流','id':'shangda','tel':'400-021-9122','website':'http://www.sundapost.net','alphabet':'zhongtiekuaiyun','avatar':'#00BCD4'}");
+        rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'上大物流','id':'shangda','tel':'400-021-9122','website':'http://www.sundapost.net','alphabet':'shangdawuliu','avatar':'#00BCD4'}");
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'中铁快运','id':'zhongtiewuliu','tel':'95572','website':'http://www.cre.cn','alphabet':'zhongtiekuaiyun','avatar':'#00BCD4'}");
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'原飞航','id':'yuanfeihangwuliu','tel':'0769-87001100','website':'http://www.yfhex.com','alphabet':'yuanfeihang','avatar':'#00BCD4'}");
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'海外环球','id':'haiwaihuanqiu','tel':'010-59790107','website':'http://www.haiwaihuanqiu.com/','alphabet':'haiwaihuanqiu','avatar':'#00BCD4'}");
@@ -703,11 +704,29 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'BCWELT','id':'bcwelt','tel':'','website':'','alphabet':'bcwelt','avatar':'#FFC107'}");
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'欧亚专线','id':'euasia','tel':'','website':'','alphabet':'ouyazhuanxian','avatar':'#FFC107'}");
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'远成快运','id':'ycgky','tel':'','website':'','alphabet':'yuanchengkuaiyun','avatar':'#FFC107'}");
-        rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'凡客配送(作废)','id':'vancl','tel':'400-600-6888','website':'http://www.vancl.com/','alphabet':'fankepeisong(zuofei)','avatar':'#FFC107'}");
-        rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'运通中港快递(作废)','id':'ytkd','tel':'','website':'','alphabet':'yuntongzhonggangkuaidi(zuofei)','avatar':'#FFC107'}");
+        rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'凡客订单','id':'vancl','tel':'400-600-6888','website':'http://www.vancl.com/','alphabet':'fankepeisong(zuofei)','avatar':'#FFC107'}");
+        rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'运通中港','id':'ytkd','tel':'','website':'','alphabet':'yuntongzhonggangkuaidi(zuofei)','avatar':'#FFC107'}");
         rlm.commitTransaction();
         rlm.close();
 
+    }
+
+    @Override
+    public Observable<List<Company>> searchCompanies(@NonNull String keyWords) {
+        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .name(RealmHelper.DATABASE_NAME)
+                .build());
+        List<Company> results = rlm.copyFromRealm(
+                rlm.where(Company.class)
+                        .like("name","*" + keyWords + "*", Case.INSENSITIVE)
+                        /*.contains("tel", "*" + keyWords + "*")
+                        .contains("website", "*" + keyWords + "*")
+                        .contains("alphabet", "*" + keyWords + "*")*/
+                        .findAll());
+        return Observable.fromIterable(results)
+                .toList()
+                .toObservable();
     }
 
 }

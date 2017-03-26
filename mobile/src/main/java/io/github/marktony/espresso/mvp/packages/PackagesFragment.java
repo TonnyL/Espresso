@@ -36,6 +36,7 @@ import io.github.marktony.espresso.mvp.addpackage.AddPackageActivity;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
 import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
+import io.github.marktony.espresso.mvp.search.SearchActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -154,7 +155,7 @@ public class PackagesFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-
+            startActivity(new Intent(getContext(), SearchActivity.class));
         } else if (id == R.id.action_mark_all_read) {
             presenter.markAllPacksRead();
         }

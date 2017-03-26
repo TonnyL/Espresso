@@ -41,7 +41,12 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        // Set the navigation bar color
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("navigation_bar_tint", true)) {
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        }
+
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (sp.getBoolean(SettingsUtils.KEY_FIRST_LAUNCH, true)) {
 
             setContentView(R.layout.activity_onboarding);
@@ -79,6 +84,9 @@ public class OnboardingActivity extends AppCompatActivity {
             buttonFinish.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SharedPreferences.Editor ed = sp.edit();
+                    ed.putBoolean(SettingsUtils.KEY_FIRST_LAUNCH, false);
+                    ed.apply();
                     navigateToMainActivity();
                 }
             });
@@ -98,10 +106,6 @@ public class OnboardingActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(currentPosition, true);
                 }
             });
-
-            SharedPreferences.Editor ed = sp.edit();
-            ed.putBoolean(SettingsUtils.KEY_FIRST_LAUNCH, false);
-            ed.apply();
 
         } else {
 

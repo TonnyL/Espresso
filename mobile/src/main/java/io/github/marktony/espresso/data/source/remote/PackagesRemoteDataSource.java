@@ -189,4 +189,11 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
         // of refreshing the packages from all available data source
     }
 
+    @Override
+    public Observable<List<Package>> searchPackages(@NonNull String keyWords) {
+        // Not required because the {@link PackagesRepository} handles the logic
+        // of refreshing the packages from all available data source
+        return null;
+    }
+
 }

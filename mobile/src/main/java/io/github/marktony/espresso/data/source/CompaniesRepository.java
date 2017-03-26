@@ -47,4 +47,9 @@ public class CompaniesRepository implements CompaniesDataSource {
         localDataSource.initData();
     }
 
+    @Override
+    public Observable<List<Company>> searchCompanies(@NonNull String keyWords) {
+        return localDataSource.searchCompanies(keyWords);
+    }
+
 }

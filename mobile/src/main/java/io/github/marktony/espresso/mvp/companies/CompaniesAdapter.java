@@ -49,9 +49,9 @@ public class CompaniesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_NORMAL) {
-            return new NormalViewHolder(inflater.inflate(R.layout.company_item, parent, false), listener);
+            return new NormalViewHolder(inflater.inflate(R.layout.item_company, parent, false), listener);
         }
-        return new WithHeaderViewHolder(inflater.inflate(R.layout.company_item_with_header, parent, false), listener);
+        return new WithHeaderViewHolder(inflater.inflate(R.layout.item_company_with_header, parent, false), listener);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class CompaniesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             textViewAvatar = (AppCompatTextView) itemView.findViewById(R.id.textViewAvatar);
             textViewCompanyName = (AppCompatTextView) itemView.findViewById(R.id.textViewCompanyName);
             textViewCompanyTel = (AppCompatTextView) itemView.findViewById(R.id.textViewCompanyTel);
-            stickyHeaderText = (AppCompatTextView) itemView.findViewById(R.id.stickyHeaderText);
+            stickyHeaderText = (AppCompatTextView) itemView.findViewById(R.id.headerText);
 
             this.listener = listener;
             itemView.setOnClickListener(this);

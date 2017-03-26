@@ -148,7 +148,19 @@
     <string name="all_packages_are_delivered">All packages are delivered.</string>
     <!--widget end-->
 
+    <!--onboarding-->
+    <string name="onboarding_next_button_description">Next</string>
+    <string name="onboarding_finish_button_description">Finish</string>
+    <string name="onboarding_pre_button_description">Pre</string>
+    <!--onboarding end-->
+
     <!--search-->
+    <string name="no_result">NO RESULT</string>
+    <string name="search_hint">Package or company…</string>
+    <string name="search_label_package">PACKAGE</string>
+    <string name="search_label_company">COMPANY</string>
+    <string name="item_loading">Loading…</string>
+    <!--search end-->
 
 
 </resources>

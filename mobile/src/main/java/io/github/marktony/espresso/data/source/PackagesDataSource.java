@@ -35,4 +35,6 @@ public interface PackagesDataSource {
 
     void updatePackageName(@NonNull String packageId, @NonNull String name);
 
+    Observable<List<Package>> searchPackages(@NonNull String keyWords);
+
 }

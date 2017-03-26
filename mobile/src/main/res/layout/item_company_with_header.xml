@@ -7,7 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/stickyHeaderLayout"
+        android:id="@+id/headerLayout"
         android:paddingStart="@dimen/activity_vertical_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:background="@color/colorHeaderBackground">
@@ -15,13 +15,13 @@
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/stickyHeaderText"
+            android:id="@+id/headerText"
             android:textColor="@color/colorPrimaryText"
             android:paddingLeft="@dimen/activity_margin_half"
             android:paddingRight="@dimen/activity_margin_half" />
 
     </FrameLayout>
 
-    <include layout="@layout/company_item" />
+    <include layout="@layout/item_company" />
 
 </LinearLayout>

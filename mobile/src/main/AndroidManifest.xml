@@ -14,12 +14,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".ui.onboarding.OnboardingActivity"
-            android:theme="@style/AppTheme.Onboarding"
-            android:noHistory="true">
-
+            android:noHistory="true"
+            android:theme="@style/AppTheme.Onboarding">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,33 +28,29 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-
         </activity>
-
         <activity
             android:name=".mvp.packages.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".mvp.addpackage.AddPackageActivity"
             android:label="@string/activity_add_package"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".mvp.packagedetails.PackageDetailsActivity"
             android:label="@string/activity_package_details"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".mvp.companydetails.CompanyDetailActivity"
+            android:label="@string/activity_company_details"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.PrefsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".mvp.search.SearchActivity"
-            android:label="@string/activity_search"
-            android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity android:name=".mvp.search.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/activity_search"/>
         <activity
             android:name=".zxing.CaptureActivity"
             android:label="@string/activity_scan_code"
@@ -69,7 +63,6 @@
         </activity>
 
         <service android:name=".service.ReminderService" />
-
         <service
             android:name=".appwidget.AppWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />

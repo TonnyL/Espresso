@@ -34,7 +34,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -66,7 +66,7 @@
                 android:layout_marginBottom="4dp"
                 android:id="@+id/textViewCompany"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:text="京东"/>
+                android:textIsSelectable="true"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                     android:layout_marginBottom="4dp"
                     android:id="@+id/textViewCompanyPhoneNumber"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="95543"/>
+                    android:textIsSelectable="true"/>
 
             </LinearLayout>
 
@@ -114,12 +114,24 @@
                     android:layout_marginBottom="4dp"
                     android:id="@+id/textViewCompanyWebsite"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:text="http://www.sf-express.com"/>
+                    android:textIsSelectable="true"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="@android:color/white"
+        android:contentDescription="@string/activity_add_package"
+        app:srcCompat="@drawable/ic_share_white_24dp"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        android:transitionName="fabShare"/>
 
 </android.support.design.widget.CoordinatorLayout>

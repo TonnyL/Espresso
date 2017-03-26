@@ -1,5 +1,7 @@
 package io.github.marktony.espresso.mvp.companies;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +21,7 @@ import java.util.List;
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.Company;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
+import io.github.marktony.espresso.mvp.companydetails.CompanyDetailActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -101,13 +104,15 @@ public class CompaniesFragment extends Fragment
     }
 
     @Override
-    public void showCompanies(List<Company> list) {
+    public void showCompanies(final List<Company> list) {
         if (adapter == null) {
             adapter = new CompaniesAdapter(getContext(), list);
             adapter.setOnRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
                 @Override
                 public void OnItemClick(View v, int position) {
-
+                    Intent intent = new Intent(getContext(), CompanyDetailActivity.class);
+                    intent.putExtra(CompanyDetailActivity.COMPANY_ID, list.get(position).getId());
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                 }
             });
             recyclerView.setAdapter(adapter);

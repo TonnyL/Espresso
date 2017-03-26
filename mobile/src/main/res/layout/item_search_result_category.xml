@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.AppCompatTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_margin_half"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:gravity="start"
+    android:id="@+id/tv_title"
+    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+    android:textSize="13sp"
+    android:textColor="@color/colorAccent" />

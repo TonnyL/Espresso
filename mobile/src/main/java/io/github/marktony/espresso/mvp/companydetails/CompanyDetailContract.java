@@ -1,5 +1,7 @@
 package io.github.marktony.espresso.mvp.companydetails;
 
+import java.util.List;
+
 import io.github.marktony.espresso.mvp.BasePresenter;
 import io.github.marktony.espresso.mvp.BaseView;
 
@@ -10,6 +12,16 @@ import io.github.marktony.espresso.mvp.BaseView;
 public interface CompanyDetailContract {
 
     interface View extends BaseView<Presenter> {
+
+        void setCompanyName(String name);
+
+        void setCompanyTel(String tel);
+
+        void setCompanyWebsite(String website);
+
+        void showErrorMsg();
+
+
 
     }
 

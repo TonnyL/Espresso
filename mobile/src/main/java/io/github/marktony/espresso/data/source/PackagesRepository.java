@@ -273,6 +273,12 @@ public class PackagesRepository implements PackagesDataSource {
         packagesLocalDataSource.updatePackageName(packageId, name);
     }
 
+    @Override
+    public Observable<List<Package>> searchPackages(@NonNull String keyWords) {
+        // Do nothing but just let local data source handle it.
+        return packagesLocalDataSource.searchPackages(keyWords);
+    }
+
     /**
      * Get a package with package number.
      * @param packNumber The package id(number). See more @{@link Package#number}.

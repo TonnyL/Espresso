@@ -24,6 +24,7 @@ public class AddPackageActivity extends AppCompatActivity {
     private AddPackageFragment fragment;
 
     public static final int REQUEST_ADD_PACKAGE = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

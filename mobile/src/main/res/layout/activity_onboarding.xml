@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageButtonPre"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:contentDescription="Pre"
+            android:contentDescription="@string/onboarding_pre_button_description"
             android:layout_gravity="start|center"
             android:padding="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_chevron_left_white_24dp"
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
-            android:text="Finish"
+            android:text="@string/onboarding_finish_button_description"
             android:textColor="@android:color/white"
             android:visibility="gone" />
 
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/imageButtonNext"
-            android:contentDescription="Next"
+            android:contentDescription="@string/onboarding_next_button_description"
             android:layout_gravity="end|center"
             android:padding="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_chevron_right_white_24dp"

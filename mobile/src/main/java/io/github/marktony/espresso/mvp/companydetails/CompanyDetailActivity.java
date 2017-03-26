@@ -5,8 +5,12 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Explode;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.data.source.CompaniesRepository;
+import io.github.marktony.espresso.data.source.local.CompaniesLocalDataSource;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -15,6 +19,8 @@ import io.github.marktony.espresso.R;
 public class CompanyDetailActivity extends AppCompatActivity {
 
     private CompanyDetailFragment fragment;
+
+    public static final String COMPANY_ID = "COMPANY_ID";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,6 +31,11 @@ public class CompanyDetailActivity extends AppCompatActivity {
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("navigation_bar_tint", true)) {
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
+
+        Explode explode = new Explode();
+        explode.setDuration(500);
+        explode.setInterpolator(new AccelerateDecelerateInterpolator());
+        getWindow().setEnterTransition(explode);
 
         if (savedInstanceState != null) {
             fragment = (CompanyDetailFragment) getSupportFragmentManager().getFragment(savedInstanceState, "CompanyDetailFragment");
@@ -38,7 +49,10 @@ public class CompanyDetailActivity extends AppCompatActivity {
                     .commit();
         }
 
-        new CompanyDetailPresenter(fragment);
+        new CompanyDetailPresenter(
+                fragment,
+                CompaniesRepository.getInstance(CompaniesLocalDataSource.getInstance()),
+                getIntent().getStringExtra(COMPANY_ID));
 
     }
 

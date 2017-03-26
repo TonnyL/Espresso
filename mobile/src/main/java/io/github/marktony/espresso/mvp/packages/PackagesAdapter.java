@@ -50,7 +50,7 @@ public class PackagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PackageViewHolder(inflater.inflate(R.layout.package_item, parent, false), listener);
+        return new PackageViewHolder(inflater.inflate(R.layout.item_package, parent, false), listener);
     }
 
     @Override

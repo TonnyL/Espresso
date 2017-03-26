@@ -1,17 +1,19 @@
 package io.github.marktony.espresso.mvp.companydetails;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -20,7 +22,12 @@ import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 public class CompanyDetailFragment extends Fragment
         implements CompanyDetailContract.View {
 
-    private LinearLayout layoutPhoneNumber, layoutWebsite;
+    // View references.
+    private FloatingActionButton fab;
+    private AppCompatTextView textViewCompanyName;
+    private AppCompatTextView textViewTel;
+    private AppCompatTextView textViewWebsite;
+    private View layoutTel, layoutWebsite;
 
     private CompanyDetailContract.Presenter presenter;
 
@@ -42,10 +49,22 @@ public class CompanyDetailFragment extends Fragment
 
         initViews(view);
 
-        layoutPhoneNumber.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        layoutTel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tel = textViewTel.getText().toString();
+                if (!tel.isEmpty()) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + tel));
+                    getActivity().startActivity(intent);
+                }
             }
         });
 
@@ -74,18 +93,41 @@ public class CompanyDetailFragment extends Fragment
     @Override
     public void initViews(View view) {
 
-        PackageDetailsActivity activity = (PackageDetailsActivity) getActivity();
+        CompanyDetailActivity activity = (CompanyDetailActivity) getActivity();
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        layoutWebsite = (LinearLayout) view.findViewById(R.id.layoutCompanyOfficialWebsite);
-        layoutPhoneNumber = (LinearLayout) view.findViewById(R.id.layoutCompanyPhoneNumber);
-
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        textViewCompanyName = (AppCompatTextView) view.findViewById(R.id.textViewCompany);
+        textViewTel = (AppCompatTextView) view.findViewById(R.id.textViewCompanyPhoneNumber);
+        textViewWebsite = (AppCompatTextView) view.findViewById(R.id.textViewCompanyWebsite);
+        layoutTel = view.findViewById(R.id.layoutCompanyPhoneNumber);
+        layoutWebsite = view.findViewById(R.id.layoutCompanyOfficialWebsite);
     }
 
     @Override
     public void setPresenter(@NonNull CompanyDetailContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void setCompanyName(String name) {
+        textViewCompanyName.setText(name);
+    }
+
+    @Override
+    public void setCompanyTel(String tel) {
+        textViewTel.setText(tel);
+    }
+
+    @Override
+    public void setCompanyWebsite(String website) {
+        textViewWebsite.setText(website);
+    }
+
+    @Override
+    public void showErrorMsg() {
+
     }
 
 }

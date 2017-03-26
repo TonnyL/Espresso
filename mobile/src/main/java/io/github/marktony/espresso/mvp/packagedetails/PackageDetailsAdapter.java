@@ -66,7 +66,7 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (viewType == TYPE_HEADER) {
             return new HeaderViewHolder(inflater.inflate(R.layout.package_details_header, parent, false));
         }
-        return new PackageStatusViewHolder(inflater.inflate(R.layout.package_status_item, parent, false));
+        return new PackageStatusViewHolder(inflater.inflate(R.layout.item_package_status, parent, false));
     }
 
     @Override
