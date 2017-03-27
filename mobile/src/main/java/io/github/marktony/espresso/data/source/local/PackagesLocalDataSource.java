@@ -194,9 +194,13 @@ public class PackagesLocalDataSource implements PackagesDataSource {
         Realm rlm = RealmHelper.newRealmInstance();
         return Observable.fromIterable(rlm.copyFromRealm(
                 rlm.where(Package.class)
+                        .like("name", "*" + keyWords + "*", Case.INSENSITIVE)
+                        .or()
                         .like("companyChineseName", "*" + keyWords + "*", Case.INSENSITIVE)
-                        /*.or().contains("company", "*" + keyWords + "*")
-                        .or().contains("number", "*" + keyWords + "*")*/
+                        .or()
+                        .like("company", "*" + keyWords + "*", Case.INSENSITIVE)
+                        .or()
+                        .like("number", "*" + keyWords + "*", Case.INSENSITIVE)
                         .findAll()))
                 .toList()
                 .toObservable();

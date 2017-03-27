@@ -54,69 +54,37 @@
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="4dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:text="@string/company_name"/>
+                android:layout_marginTop="@dimen/activity_margin_half"
+                android:layout_marginBottom="@dimen/activity_margin_half"
+                android:id="@+id/textViewCompany"
+                android:drawableStart="@drawable/ic_location_city_black_24dp"
+                android:drawablePadding="@dimen/activity_horizontal_margin"
+                android:lineSpacingExtra="@dimen/activity_margin_half"
+                android:textIsSelectable="true"/>
+
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:id="@+id/textViewCompany"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_marginTop="@dimen/activity_margin_half"
+                android:layout_marginBottom="@dimen/activity_margin_half"
+                android:drawableStart="@drawable/ic_phone_black_24dp"
+                android:lineSpacingExtra="@dimen/activity_margin_half"
+                android:drawablePadding="@dimen/activity_horizontal_margin"
+                android:id="@+id/textViewCompanyPhoneNumber"
                 android:textIsSelectable="true"/>
 
-            <LinearLayout
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/layoutCompanyPhoneNumber">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:text="@string/phone_number"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:id="@+id/textViewCompanyPhoneNumber"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textIsSelectable="true"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/layoutCompanyOfficialWebsite">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:text="@string/official_website"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:id="@+id/textViewCompanyWebsite"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textIsSelectable="true"/>
-
-            </LinearLayout>
+                android:layout_marginTop="@dimen/activity_margin_half"
+                android:layout_marginBottom="@dimen/activity_margin_half"
+                android:drawableStart="@drawable/ic_link_black_24dp"
+                android:drawablePadding="@dimen/activity_horizontal_margin"
+                android:id="@+id/textViewCompanyWebsite"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:lineSpacingExtra="@dimen/activity_margin_half"
+                android:textIsSelectable="true"/>
 
         </LinearLayout>
 

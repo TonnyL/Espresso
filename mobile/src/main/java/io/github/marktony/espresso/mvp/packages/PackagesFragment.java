@@ -61,8 +61,6 @@ public class PackagesFragment extends Fragment
 
     private String selectedPackageNumber;
 
-    public static final int REQUEST_OPEN_DETAILS = 0;
-
     // As a fragment, default constructor is needed.
     public PackagesFragment() {}
 
@@ -321,7 +319,7 @@ public class PackagesFragment extends Fragment
                 public void OnItemClick(View v, int position) {
                     Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
                     intent.putExtra(PackageDetailsActivity.PACKAGE_ID, list.get(position).getNumber());
-                    startActivityForResult(intent, REQUEST_OPEN_DETAILS, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                 }
 
             });

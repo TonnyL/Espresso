@@ -10,9 +10,9 @@ import android.widget.Toast;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import io.github.marktony.espresso.R;
-import io.github.marktony.espresso.util.PushUtils;
-import io.github.marktony.espresso.util.SettingsUtils;
-import io.github.marktony.espresso.util.TimeFormatUtils;
+import io.github.marktony.espresso.util.PushUtil;
+import io.github.marktony.espresso.util.SettingsUtil;
+import io.github.marktony.espresso.util.TimeFormatUtil;
 
 /**
  * Created by lizhaotailang on 2017/3/15.
@@ -37,13 +37,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         // Set the do-not-disturb-mode time initial range:
         // from 23:00 to 6:00
-        startHour = sp.getInt(SettingsUtils.KEY_DO_NOT_DISTURB_MODE_START_HOUR, 23);
-        startMinute = sp.getInt(SettingsUtils.KEY_DO_NOT_DISTURB_MODE_START_MINUTE, 0);
-        prefStartTime.setSummary(TimeFormatUtils.formatTimeIntToString(startHour, startMinute));
+        startHour = sp.getInt(SettingsUtil.KEY_DO_NOT_DISTURB_MODE_START_HOUR, 23);
+        startMinute = sp.getInt(SettingsUtil.KEY_DO_NOT_DISTURB_MODE_START_MINUTE, 0);
+        prefStartTime.setSummary(TimeFormatUtil.formatTimeIntToString(startHour, startMinute));
 
-        endHour = sp.getInt(SettingsUtils.KEY_DO_NOT_DISTURB_MODE_END_HOUR, 6);
-        endMinute = sp.getInt(SettingsUtils.KEY_DO_NOT_DISTURB_MODE_END_MINUTE, 0);
-        prefsEndTime.setSummary(TimeFormatUtils.formatTimeIntToString(endHour, endMinute));
+        endHour = sp.getInt(SettingsUtil.KEY_DO_NOT_DISTURB_MODE_END_HOUR, 6);
+        endMinute = sp.getInt(SettingsUtil.KEY_DO_NOT_DISTURB_MODE_END_MINUTE, 0);
+        prefsEndTime.setSummary(TimeFormatUtil.formatTimeIntToString(endHour, endMinute));
 
         prefStartTime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -54,11 +54,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
                         // Save the hour and minute value to shared preferences
                         SharedPreferences.Editor editor = sp.edit();
-                        editor.putInt(SettingsUtils.KEY_DO_NOT_DISTURB_MODE_START_HOUR, hourOfDay);
-                        editor.putInt(SettingsUtils.KEY_DO_NOT_DISTURB_MODE_START_MINUTE, minute);
+                        editor.putInt(SettingsUtil.KEY_DO_NOT_DISTURB_MODE_START_HOUR, hourOfDay);
+                        editor.putInt(SettingsUtil.KEY_DO_NOT_DISTURB_MODE_START_MINUTE, minute);
                         editor.apply();
                         // Update ui
-                        prefStartTime.setSummary(TimeFormatUtils.formatTimeIntToString(hourOfDay, minute));
+                        prefStartTime.setSummary(TimeFormatUtil.formatTimeIntToString(hourOfDay, minute));
                     }
                     // The final params setting true means that it is 24 hours mode.
                 }, startHour, startMinute, true);
@@ -81,10 +81,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         }
                         // Save the hour and minute value to shared preferences
                         SharedPreferences.Editor editor = sp.edit();
-                        editor.putInt(SettingsUtils.KEY_DO_NOT_DISTURB_MODE_END_HOUR, hourOfDay);
-                        editor.putInt(SettingsUtils.KEY_DO_NOT_DISTURB_MODE_END_MINUTE, minute);
+                        editor.putInt(SettingsUtil.KEY_DO_NOT_DISTURB_MODE_END_HOUR, hourOfDay);
+                        editor.putInt(SettingsUtil.KEY_DO_NOT_DISTURB_MODE_END_MINUTE, minute);
                         editor.apply();
-                        prefsEndTime.setSummary(TimeFormatUtils.formatTimeIntToString(hourOfDay, minute));
+                        prefsEndTime.setSummary(TimeFormatUtil.formatTimeIntToString(hourOfDay, minute));
                     }
                     // The final params setting true means that it is 24 hours mode.
                 }, endHour, endMinute, true);
@@ -99,9 +99,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean value = (boolean) newValue;
                 if (value) {
-                    PushUtils.startReminderService(getContext());
+                    PushUtil.startReminderService(getContext());
                 } else {
-                    PushUtils.stopReminderService(getContext());
+                    PushUtil.stopReminderService(getContext());
                 }
                 return true;
             }
@@ -111,9 +111,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putString(SettingsUtils.KEY_NOTIFICATION_INTERVAL, (String)newValue);
+                editor.putString(SettingsUtil.KEY_NOTIFICATION_INTERVAL, (String)newValue);
                 editor.apply();
-                PushUtils.restartReminderService(getContext());
+                PushUtil.restartReminderService(getContext());
                 return true;
             }
         });

@@ -1,5 +1,6 @@
 package io.github.marktony.espresso.mvp.packagedetails;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.component.Timeline;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.PackageStatus;
+import io.github.marktony.espresso.mvp.companydetails.CompanyDetailActivity;
 import io.realm.RealmList;
 
 /**
@@ -43,7 +45,7 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public static final int TYPE_FINISH = 0x03;
     public static final int TYPE_SINGLE = 0x04;
 
-    public PackageDetailsAdapter(@NonNull Context context, Package p) {
+    public PackageDetailsAdapter(@NonNull Context context, @NonNull Package p) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.aPackage = p;
@@ -186,6 +188,17 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             textViewCompany = (AppCompatTextView) itemView.findViewById(R.id.textViewCompany);
             textViewNumber = (AppCompatTextView) itemView.findViewById(R.id.textViewPackageNumber);
             textViewName = (AppCompatTextView) itemView.findViewById(R.id.textViewName);
+
+            textViewCompany.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (aPackage.getCompany() != null) {
+                        Intent intent = new Intent(context, CompanyDetailActivity.class);
+                        intent.putExtra(CompanyDetailActivity.COMPANY_ID, aPackage.getCompany());
+                        context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((PackageDetailsActivity)context).toBundle());
+                    }
+                }
+            });
         }
 
     }

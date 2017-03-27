@@ -21,8 +21,6 @@ public interface CompanyDetailContract {
 
         void showErrorMsg();
 
-
-
     }
 
     interface Presenter extends BasePresenter {

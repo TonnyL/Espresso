@@ -7,7 +7,6 @@ package io.github.marktony.espresso.retrofit;
 
 public class Api {
 
-
     // Base API
     public static final String API_BASE = "http://www.kuaidi100.com/";
 

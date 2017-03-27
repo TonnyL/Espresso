@@ -1,5 +1,7 @@
 package io.github.marktony.espresso.mvp.search;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +21,8 @@ import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.Company;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.interfaze.OnRecyclerViewItemClickListener;
+import io.github.marktony.espresso.mvp.companydetails.CompanyDetailActivity;
+import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 
 /**
  * Created by lizhaotailang on 2017/3/18.
@@ -109,13 +113,29 @@ public class SearchFragment extends Fragment
     }
 
     @Override
-    public void showResult(List<Package> packages, List<Company> companies) {
+    public void showResult(final List<Package> packages, final List<Company> companies) {
+        if (packages == null || companies == null) {
+            return;
+        }
         if (adapter == null) {
             adapter = new SearchResultsAdapter(getContext(), packages, companies);
             adapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
                 @Override
                 public void OnItemClick(View v, int position) {
 
+                    if (adapter.getItemViewType(position) == SearchResultsAdapter.ItemWrapper.TYPE_PACKAGE) {
+
+                        Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
+                        intent.putExtra(PackageDetailsActivity.PACKAGE_ID, packages.get(adapter.getOriginalIndex(position)).getNumber());
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+
+                    } else if (adapter.getItemViewType(position) == SearchResultsAdapter.ItemWrapper.TYPE_COMPANY) {
+
+                        Intent intent = new Intent(getContext(), CompanyDetailActivity.class);
+                        intent.putExtra(CompanyDetailActivity.COMPANY_ID, companies.get(adapter.getOriginalIndex(position)).getId());
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+
+                    }
                 }
             });
             recyclerView.setAdapter(adapter);

@@ -25,14 +25,13 @@ import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
 import io.github.marktony.espresso.realm.RealmHelper;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
-import io.github.marktony.espresso.util.PushUtils;
-import io.github.marktony.espresso.util.SettingsUtils;
+import io.github.marktony.espresso.util.NetworkUtil;
+import io.github.marktony.espresso.util.PushUtil;
+import io.github.marktony.espresso.util.SettingsUtil;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
-
-import static io.github.marktony.espresso.realm.RealmHelper.DATABASE_NAME;
 
 /**
  * Created by lizhaotailang on 2017/3/8.
@@ -74,12 +73,12 @@ public class ReminderService extends IntentService {
 
         Log.d(TAG, "onHandleIntent: ");
 
-        boolean isDisturbMode = preference.getBoolean(SettingsUtils.KEY_DO_NOT_DISTURB_MODE, true);
+        boolean isDisturbMode = preference.getBoolean(SettingsUtil.KEY_DO_NOT_DISTURB_MODE, true);
 
         // The alert mode is off
         // or DO-NOT-DISTURB-MODE is off
         // or time now is not in the DO-NOT-DISTURB-MODE range.
-        if (isDisturbMode && PushUtils.isInDisturbTime(this, Calendar.getInstance())) {
+        if (isDisturbMode && PushUtil.isInDisturbTime(this, Calendar.getInstance())) {
             return;
         }
 
@@ -96,7 +95,6 @@ public class ReminderService extends IntentService {
             // Avoid repeated pushing
             if (p.isPushable()) {
 
-
                 Realm realm = RealmHelper.newRealmInstance();
 
                 p.setPushable(false);
@@ -108,7 +106,7 @@ public class ReminderService extends IntentService {
                 realm.commitTransaction();
                 realm.close();
 
-            } else {
+            } else if (NetworkUtil.networkConnected(getApplicationContext())) {
                 refreshPackage(i, results.get(i));
             }
 

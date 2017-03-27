@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import io.github.marktony.espresso.BuildConfig;
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.customtabs.CustomTabsHelper;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -68,7 +69,7 @@ public class AboutFragment extends PreferenceFragmentCompat {
         prefThx1.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-
+                CustomTabsHelper.openUrl(getContext(), getString(R.string.thanks_1_desc));
                 return true;
             }
         });
@@ -77,7 +78,7 @@ public class AboutFragment extends PreferenceFragmentCompat {
         prefThx2.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-
+                CustomTabsHelper.openUrl(getContext(), getString(R.string.thanks_2_url));
                 return true;
             }
         });
@@ -86,7 +87,7 @@ public class AboutFragment extends PreferenceFragmentCompat {
         prefSourceCode.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-
+                CustomTabsHelper.openUrl(getContext(), getString(R.string.source_code_desc));
                 return true;
             }
         });

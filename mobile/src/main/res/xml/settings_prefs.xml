@@ -42,6 +42,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/browser">
+
+        <CheckBoxPreference
+            android:key="chrome_custom_tabs"
+            android:defaultValue="true"
+            android:title="@string/custom_tabs"
+            android:summary="@string/custom_tabs_desc" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/user_interface">
 
         <CheckBoxPreference

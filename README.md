@@ -1,7 +1,7 @@
 # Espresso Android App
 ![icon](https://github.com/TonnyL/Espresso/blob/master/mobile/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
 
-Espresso is an express delivery tracking app designed with Material Design style, built on MVP(Model-View-Presenter) architecture with RxJava2, Retrofit2 and Realm database.
+Espresso is an express delivery tracking app designed with Material Design style, built on MVP(Model-View-Presenter) architecture with RxJava2, Retrofit2, Realm database and ZXing.
 
 The source code in this repository reflects the app which supports mobile devices running Android 5.0+.
 
@@ -18,9 +18,9 @@ With this app, you can:
 + Send feedback on using experience from your devices.
 
 ### Screenshots
-![screenshot0](http://upload-images.jianshu.io/upload_images/2440049-649b96f3b8858cce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![screenshot0](https://github.com/TonnyL/Espresso/blob/master/art/screenshot0.png)
 
-![screenshot1](http://upload-images.jianshu.io/upload_images/2440049-d3c50d9e5ca6f0a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![screenshot1](https://github.com/TonnyL/Espresso/blob/master/art/screenshot1.png)
 
 ### How to Work with the Source
 I hope the source code for this app is useful for you as a reference or starting point for creating your own app. Here is some instructions to help you better build and run the code in Android Studio.
@@ -48,9 +48,9 @@ This project is still in progress. Here are the some features that I will finish
 - [x] Launcher app widgets.
 - [x] App Shortcuts on devices that running Android 7.1+.
 - [x] Material design app onboarding pages.
-- [ ] Chrome Custom Tabs.
+- [x] Chrome Custom Tabs.
 - [x] Alphabet indexing for companies list.
-- [ ] Search packages and companies.
+- [x] Search packages and companies.
 - [ ] Day and night mode.
 - [x] Service to build notifications.
 - [x] Settings and about page.

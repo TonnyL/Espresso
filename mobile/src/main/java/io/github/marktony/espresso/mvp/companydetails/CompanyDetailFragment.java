@@ -1,19 +1,29 @@
 package io.github.marktony.espresso.mvp.companydetails;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
+import android.text.style.URLSpan;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import io.github.marktony.espresso.R;
+import io.github.marktony.espresso.customtabs.CustomTabsHelper;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -27,9 +37,11 @@ public class CompanyDetailFragment extends Fragment
     private AppCompatTextView textViewCompanyName;
     private AppCompatTextView textViewTel;
     private AppCompatTextView textViewWebsite;
-    private View layoutTel, layoutWebsite;
 
     private CompanyDetailContract.Presenter presenter;
+
+    private String tel;
+    private String website;
 
     public CompanyDetailFragment() {}
 
@@ -52,15 +64,14 @@ public class CompanyDetailFragment extends Fragment
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                share();
             }
         });
 
-        layoutTel.setOnClickListener(new View.OnClickListener() {
+        textViewTel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String tel = textViewTel.getText().toString();
-                if (!tel.isEmpty()) {
+                if (tel != null && !tel.isEmpty()) {
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.parse("tel:" + tel));
                     getActivity().startActivity(intent);
@@ -68,12 +79,16 @@ public class CompanyDetailFragment extends Fragment
             }
         });
 
-        layoutWebsite.setOnClickListener(new View.OnClickListener() {
+        textViewWebsite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (website != null) {
+                    CustomTabsHelper.openUrl(getContext(), website);
+                }
             }
         });
+
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -91,6 +106,14 @@ public class CompanyDetailFragment extends Fragment
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().onBackPressed();
+        }
+        return true;
+    }
+
+    @Override
     public void initViews(View view) {
 
         CompanyDetailActivity activity = (CompanyDetailActivity) getActivity();
@@ -101,8 +124,6 @@ public class CompanyDetailFragment extends Fragment
         textViewCompanyName = (AppCompatTextView) view.findViewById(R.id.textViewCompany);
         textViewTel = (AppCompatTextView) view.findViewById(R.id.textViewCompanyPhoneNumber);
         textViewWebsite = (AppCompatTextView) view.findViewById(R.id.textViewCompanyWebsite);
-        layoutTel = view.findViewById(R.id.layoutCompanyPhoneNumber);
-        layoutWebsite = view.findViewById(R.id.layoutCompanyOfficialWebsite);
     }
 
     @Override
@@ -112,22 +133,51 @@ public class CompanyDetailFragment extends Fragment
 
     @Override
     public void setCompanyName(String name) {
-        textViewCompanyName.setText(name);
+        String companyName = getString(R.string.company_name) + "\n" + name;
+        Spannable spannable = new SpannableStringBuilder(companyName);
+        spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, companyName.length() - name.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new StyleSpan(Typeface.NORMAL), companyName.length() - name.length(), companyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textViewCompanyName.setText(spannable);
     }
 
     @Override
     public void setCompanyTel(String tel) {
-        textViewTel.setText(tel);
+        this.tel = tel;
+        String companyTel = getString(R.string.phone_number) + "\n" + tel;
+        Spannable spannable = new SpannableStringBuilder(companyTel);
+        spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, companyTel.length() - tel.length() - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new URLSpan(tel), companyTel.length() - tel.length(), companyTel.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textViewTel.setText(spannable);
     }
 
     @Override
     public void setCompanyWebsite(String website) {
-        textViewWebsite.setText(website);
+        this.website = website;
+        String ws = getString(R.string.official_website) + "\n" + website;
+        Spannable spannable = new SpannableStringBuilder(ws);
+        spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, ws.length() - website.length() - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new URLSpan(website), ws.length() - website.length(), ws.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textViewWebsite.setText(spannable);
     }
 
     @Override
     public void showErrorMsg() {
+        Snackbar.make(fab, R.string.something_wrong, Snackbar.LENGTH_SHORT).show();
+    }
 
+    public void share() {
+        String content = textViewCompanyName.getText().toString()
+                + "\n"
+                + textViewTel.getText().toString()
+                + "\n"
+                + textViewWebsite.getText().toString();
+        try {
+            Intent intent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, content);
+            startActivity(Intent.createChooser(intent, getString(R.string.share)));
+        } catch (ActivityNotFoundException e) {
+            Snackbar.make(fab, R.string.something_wrong, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
 }

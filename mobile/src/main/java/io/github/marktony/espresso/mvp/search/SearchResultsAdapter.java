@@ -4,10 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,14 +165,13 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         this.packages.clear();
         this.companies.clear();
         this.list.clear();
-        this.packages = packages;
-        this.companies = companies;
         this.list.add(new ItemWrapper(ItemWrapper.TYPE_CATEGORY));
         if (packages.size() > 0) {
             for (int i = 0; i < packages.size(); i++) {
                 ItemWrapper wrapper = new ItemWrapper(ItemWrapper.TYPE_PACKAGE);
                 wrapper.index = i;
                 list.add(wrapper);
+                this.packages.add(packages.get(i));
             }
         } else {
             list.add(new ItemWrapper(ItemWrapper.TYPE_EMPTY));
@@ -186,6 +183,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ItemWrapper wrapper = new ItemWrapper(ItemWrapper.TYPE_COMPANY);
                 wrapper.index = i;
                 list.add(wrapper);
+                this.companies.add(companies.get(i));
             }
         } else {
             list.add(new ItemWrapper(ItemWrapper.TYPE_EMPTY));
@@ -195,6 +193,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public int getOriginalIndex(int position) {
+        return list.get(position).index;
     }
 
     private class PackageHolder extends RecyclerView.ViewHolder
@@ -220,7 +222,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View v) {
             if (this.listener != null) {
-                listener.OnItemClick(v, list.get(getLayoutPosition()).index);
+                listener.OnItemClick(v, getLayoutPosition());
             }
         }
     }
@@ -268,7 +270,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View v) {
             if (listener != null) {
-                listener.OnItemClick(v, list.get(getLayoutPosition()).index);
+                listener.OnItemClick(v, getLayoutPosition());
             }
         }
     }

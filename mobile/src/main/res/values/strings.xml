@@ -94,6 +94,9 @@
     <string name="end_time">End time</string>
     <string name="end_time_desc">06:00</string>
     <string name="notification_interval">Notification interval</string>
+    <string name="browser">Browser</string>
+    <string name="custom_tabs">Chrome custom tabs</string>
+    <string name="custom_tabs_desc">Open links with Chrome Custom Tabs</string>
     <string name="user_interface">User interface</string>
     <string name="navigation_bar_tint">Navigation bar tint</string>
     <string name="navigation_bar_tint_desc">Color the navigation bar</string>
@@ -121,8 +124,10 @@
     <string name="thanks">Thanks</string>
     <string name="thanks_1">FengGo</string>
     <string name="thanks_1_desc">Package Tracker Project</string>
+    <string name="thanks_1_url">https://github.com/fython/PackageTracker</string>
     <string name="thanks_2">+Youlun Zhai</string>
     <string name="thanks_2_desc">Poster designer</string>
+    <string name="thanks_2_url">https://plus.google.com/+YoulunZhai</string>
     <string name="source_code">Source code</string>
     <string name="source_code_desc">https://github.com/TonnyL/Espresso</string>
     <string name="support">Support</string>
@@ -169,5 +174,8 @@
     <string name="item_loading">Loading…</string>
     <!--search end-->
 
+    <!--custom tabs-->
+    <string name="error_no_browser">No browser installed on the device.</string>
+    <!--custom tabs end-->
 
 </resources>

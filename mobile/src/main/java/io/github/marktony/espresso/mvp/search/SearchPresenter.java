@@ -34,6 +34,8 @@ public class SearchPresenter implements SearchContract.Presenter{
 
     private CompositeDisposable compositeDisposable;
 
+    private String queryWords = null;
+
     public SearchPresenter(@NonNull SearchContract.View view,
                            @NonNull PackagesRepository packagesRepository,
                            @NonNull CompaniesRepository companiesRepository) {
@@ -46,7 +48,7 @@ public class SearchPresenter implements SearchContract.Presenter{
 
     @Override
     public void subscribe() {
-
+        search(queryWords);
     }
 
     @Override
@@ -56,6 +58,12 @@ public class SearchPresenter implements SearchContract.Presenter{
 
     @Override
     public void search(String keyWords) {
+
+        if (keyWords == null || keyWords.isEmpty()) {
+            view.showResult(null, null);
+            return;
+        }
+        queryWords = keyWords;
 
         Observable<List<Company>> companyObservable = companiesRepository
                 .searchCompanies(keyWords)

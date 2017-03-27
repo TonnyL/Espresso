@@ -4,8 +4,7 @@ package io.github.marktony.espresso.util;
  * Created by lizhaotailang on 2017/3/23.
  */
 
-public class SettingsUtils {
-
+public class SettingsUtil {
 
     public static final String KEY_ALERT = "alert";
     public static final String KEY_DO_NOT_DISTURB_MODE = "do_not_disturb_mode";
@@ -16,4 +15,9 @@ public class SettingsUtils {
     public static final String KEY_NOTIFICATION_INTERVAL = "notification_interval";
 
     public static final String KEY_FIRST_LAUNCH = "first_launch";
+
+    public static final String KEY_CUSTOM_TABS = "chrome_custom_tabs";
+
+    public static final String  KEY_NIGHT_MODE = "night_mode";
+
 }

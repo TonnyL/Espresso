@@ -2,6 +2,8 @@ package io.github.marktony.espresso.mvp.packages;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Slide;
@@ -28,7 +31,8 @@ import io.github.marktony.espresso.mvp.companies.CompaniesPresenter;
 import io.github.marktony.espresso.data.source.local.PackagesLocalDataSource;
 import io.github.marktony.espresso.data.source.PackagesRepository;
 import io.github.marktony.espresso.ui.PrefsActivity;
-import io.github.marktony.espresso.util.PushUtils;
+import io.github.marktony.espresso.util.PushUtil;
+import io.github.marktony.espresso.util.SettingsUtil;
 
 /**
  * Created by lizhaotailang on 2017/2/10.
@@ -124,7 +128,7 @@ public class MainActivity extends AppCompatActivity
         // Show the default fragment.
         showPackagesFragment();
 
-        PushUtils.startReminderService(this);
+        PushUtil.startReminderService(this);
 
     }
 
@@ -166,6 +170,18 @@ public class MainActivity extends AppCompatActivity
             showCompaniesFragment();
 
         } else if (id == R.id.nav_switch_theme) {
+
+            /*SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                    == Configuration.UI_MODE_NIGHT_YES) {
+                sp.edit().putBoolean(SettingsUtil.KEY_NIGHT_MODE, false).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                sp.edit().putBoolean(SettingsUtil.KEY_NIGHT_MODE, true).apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+            getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
+            recreate();*/
 
         } else if (id == R.id.nav_settings) {
 

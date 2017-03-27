@@ -707,10 +707,13 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
         List<Company> results = rlm.copyFromRealm(
                 rlm.where(Company.class)
                         .like("name","*" + keyWords + "*", Case.INSENSITIVE)
-                        /*.contains("tel", "*" + keyWords + "*")
-                        .contains("website", "*" + keyWords + "*")
-                        .contains("alphabet", "*" + keyWords + "*")*/
-                        .findAll());
+                        .or()
+                        .like("tel", "*" + keyWords + "*", Case.INSENSITIVE)
+                        .or()
+                        .like("website", "*" + keyWords + "*", Case.INSENSITIVE)
+                        .or()
+                        .like("alphabet", "*" + keyWords + "*", Case.INSENSITIVE)
+                        .findAllSorted("alphabet", Sort.ASCENDING));
         return Observable.fromIterable(results)
                 .toList()
                 .toObservable();

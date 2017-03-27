@@ -21,7 +21,7 @@ import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.source.CompaniesRepository;
 import io.github.marktony.espresso.data.source.local.CompaniesLocalDataSource;
 import io.github.marktony.espresso.mvp.packages.MainActivity;
-import io.github.marktony.espresso.util.SettingsUtils;
+import io.github.marktony.espresso.util.SettingsUtil;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -42,7 +42,7 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sp.getBoolean(SettingsUtils.KEY_FIRST_LAUNCH, true)) {
+        if (sp.getBoolean(SettingsUtil.KEY_FIRST_LAUNCH, true)) {
 
             setContentView(R.layout.activity_onboarding);
 
@@ -80,7 +80,7 @@ public class OnboardingActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     SharedPreferences.Editor ed = sp.edit();
-                    ed.putBoolean(SettingsUtils.KEY_FIRST_LAUNCH, false);
+                    ed.putBoolean(SettingsUtil.KEY_FIRST_LAUNCH, false);
                     ed.apply();
                     navigateToMainActivity();
                 }
