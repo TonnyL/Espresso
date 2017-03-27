@@ -41,11 +41,6 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set the navigation bar color
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("navigation_bar_tint", true)) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        }
-
         final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (sp.getBoolean(SettingsUtils.KEY_FIRST_LAUNCH, true)) {
 
@@ -121,6 +116,7 @@ public class OnboardingActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(pagerAdapter);
         buttonFinish = (AppCompatButton) findViewById(R.id.buttonFinish);
+        buttonFinish.setText(R.string.onboarding_finish_button_description_wait);
         buttonFinish.setEnabled(false);
         buttonNext = (ImageButton) findViewById(R.id.imageButtonNext);
         buttonPre = (ImageButton) findViewById(R.id.imageButtonPre);
@@ -148,6 +144,7 @@ public class OnboardingActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_DATA_INSERT_FINISH:
+                    buttonFinish.setText(R.string.onboarding_finish_button_description);
                     buttonFinish.setEnabled(true);
                     break;
             }

@@ -22,6 +22,7 @@ import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.appwidget.AppWidgetProvider;
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.mvp.packagedetails.PackageDetailsActivity;
+import io.github.marktony.espresso.realm.RealmHelper;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.github.marktony.espresso.util.PushUtils;
@@ -30,7 +31,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 import static io.github.marktony.espresso.realm.RealmHelper.DATABASE_NAME;
 
@@ -83,10 +83,7 @@ public class ReminderService extends IntentService {
             return;
         }
 
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
 
         List<Package> results = rlm.copyFromRealm(
                 rlm.where(Package.class)
@@ -100,10 +97,7 @@ public class ReminderService extends IntentService {
             if (p.isPushable()) {
 
 
-                Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
-                        .deleteRealmIfMigrationNeeded()
-                        .name(DATABASE_NAME)
-                        .build());
+                Realm realm = RealmHelper.newRealmInstance();
 
                 p.setPushable(false);
 
@@ -225,10 +219,7 @@ public class ReminderService extends IntentService {
 
                         if (aPackage != null && aPackage.getData().size() > p.getData().size()) {
 
-                            Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                                    .deleteRealmIfMigrationNeeded()
-                                    .name(DATABASE_NAME)
-                                    .build());
+                            Realm rlm = RealmHelper.newRealmInstance();
 
                             p.setReadable(true);
                             p.setPushable(false);

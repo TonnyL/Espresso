@@ -11,7 +11,6 @@ import io.github.marktony.espresso.realm.RealmHelper;
 import io.reactivex.Observable;
 import io.realm.Case;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.Sort;
 
 /**
@@ -37,10 +36,7 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
 
     @Override
     public Observable<List<Company>> getCompanies() {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         return Observable
                 .fromIterable(rlm.copyFromRealm(rlm.where(Company.class).findAllSorted("alphabet", Sort.ASCENDING)))
                 .toList()
@@ -49,20 +45,14 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
 
     @Override
     public Observable<Company> getCompany(@NonNull String companyId) {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         return Observable
                 .just(rlm.copyFromRealm(rlm.where(Company.class).equalTo("id", companyId).findFirst()));
     }
 
     @Override
     public void initData() {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
 
         rlm.beginTransaction();
         rlm.createOrUpdateObjectFromJson(Company.class, "{'name':'申通快递','id':'shentong','tel':'95543','website':'http://www.sto.cn','alphabet':'shentongkuaidi','avatar':'#00BCD4'}");
@@ -713,10 +703,7 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
 
     @Override
     public Observable<List<Company>> searchCompanies(@NonNull String keyWords) {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         List<Company> results = rlm.copyFromRealm(
                 rlm.where(Company.class)
                         .like("name","*" + keyWords + "*", Case.INSENSITIVE)

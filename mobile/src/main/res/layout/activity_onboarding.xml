@@ -83,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
             android:text="@string/onboarding_finish_button_description"
+            android:contentDescription="@string/onboarding_finish_button_description"
             android:textColor="@android:color/white"
             android:visibility="gone" />
 

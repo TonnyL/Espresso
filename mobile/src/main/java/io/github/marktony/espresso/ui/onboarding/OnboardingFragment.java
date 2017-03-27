@@ -51,17 +51,19 @@ public class OnboardingFragment extends Fragment {
 
         switch (page) {
             case 0:
-                sectionImg.setBackgroundResource(R.drawable.ic_flight_black_24dp);
-                sectionLabel.setText("Section 1");
-                // set intro
+                sectionImg.setBackgroundResource(R.drawable.ic_beenhere_black_24dp);
+                sectionLabel.setText(R.string.onboarding_section_1);
+                sectionIntro.setText(R.string.onboarding_intro_1);
                 break;
             case 1:
-                sectionImg.setBackgroundResource(R.drawable.ic_local_shipping_black_24dp);
-                sectionLabel.setText("Section 2");
+                sectionImg.setBackgroundResource(R.drawable.ic_notifications_black_24dp);
+                sectionLabel.setText(R.string.onboarding_section_2);
+                sectionIntro.setText(R.string.onboarding_intro_2);
                 break;
             case 2:
                 sectionImg.setBackgroundResource(R.drawable.ic_watch_black_24dp);
-                sectionLabel.setText("Section 3");
+                sectionLabel.setText(R.string.onboarding_section_3);
+                sectionIntro.setText(R.string.onboarding_intro_3);
                 break;
             default:
                 break;

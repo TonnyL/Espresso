@@ -11,7 +11,6 @@ import io.github.marktony.espresso.realm.RealmHelper;
 import io.reactivex.Observable;
 import io.realm.Case;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -49,10 +48,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      */
     @Override
     public Observable<List<Package>> getPackages() {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
 
         return Observable.just(rlm.copyFromRealm(rlm.where(Package.class)
                 .findAllSorted("timestamp", Sort.DESCENDING)));
@@ -67,10 +63,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      */
     @Override
     public Observable<Package> getPackage(@NonNull String packNumber) {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         return Observable.just(rlm.copyFromRealm(rlm.where(Package.class)
                 .equalTo("number", packNumber)
                 .findFirst()));
@@ -82,10 +75,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      */
     @Override
     public void savePackage(@NonNull Package pack) {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         // DO NOT forget begin and commit the transaction.
         rlm.beginTransaction();
         rlm.copyToRealmOrUpdate(pack);
@@ -101,10 +91,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      */
     @Override
     public void deletePackage(@NonNull String packageId) {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         Package p = rlm.where(Package.class)
                 .equalTo("number", packageId)
                 .findFirst();
@@ -135,10 +122,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      */
     @Override
     public void setAllPackagesRead() {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         List<Package> results = rlm.copyFromRealm(rlm.where(Package.class).findAll());
 
         for (Package p : results) {
@@ -160,10 +144,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      */
     @Override
     public void setPackageReadable(@NonNull String packageId, boolean readable) {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         Package p = rlm.copyFromRealm(rlm.where(Package.class)
                 .equalTo("number", packageId)
                 .findFirst());
@@ -186,10 +167,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      */
     @Override
     public boolean isPackageExist(@NonNull String packageId) {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         RealmResults<Package> results = rlm.where(Package.class)
                 .equalTo("number", packageId)
                 .findAll();
@@ -198,10 +176,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     @Override
     public void updatePackageName(@NonNull String packageId, @NonNull String name) {
-        Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
+        Realm rlm = RealmHelper.newRealmInstance();
         Package p = rlm.where(Package.class)
                 .equalTo("number", packageId)
                 .findFirst();
@@ -216,7 +191,7 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     @Override
     public Observable<List<Package>> searchPackages(@NonNull String keyWords) {
-        Realm rlm = newRealmInstance();
+        Realm rlm = RealmHelper.newRealmInstance();
         return Observable.fromIterable(rlm.copyFromRealm(
                 rlm.where(Package.class)
                         .like("companyChineseName", "*" + keyWords + "*", Case.INSENSITIVE)
@@ -225,13 +200,6 @@ public class PackagesLocalDataSource implements PackagesDataSource {
                         .findAll()))
                 .toList()
                 .toObservable();
-    }
-
-    private Realm newRealmInstance() {
-        return Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(RealmHelper.DATABASE_NAME)
-                .build());
     }
 
 }

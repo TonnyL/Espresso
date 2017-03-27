@@ -15,7 +15,6 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:alpha="0.30"
-            android:background="@drawable/ic_flight_black_24dp"
             android:scaleType="fitCenter" />
 
     </FrameLayout>
@@ -32,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/section_label"
+            android:textAlignment="center"
             style="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@android:color/white"
             tools:text="Page One" />
@@ -44,7 +44,6 @@
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:alpha="0.7"
             android:gravity="center"
-            android:text="Add a long description here about your app's important feature."
             android:textColor="@android:color/white" />
 
     </LinearLayout>

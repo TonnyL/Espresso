@@ -152,6 +152,13 @@
     <string name="onboarding_next_button_description">Next</string>
     <string name="onboarding_finish_button_description">Finish</string>
     <string name="onboarding_pre_button_description">Pre</string>
+    <string name="onboarding_section_1">Add your packages quickly and easily</string>
+    <string name="onboarding_intro_1">Support 640+ express companies all over the world, but when you add packages, the companies will be recognized automatically.</string>
+    <string name="onboarding_section_2">Keep the delivery status updated</string>
+    <string name="onboarding_intro_2">Push notification when the delivery status is refreshed, so you can get the latest information.</string>
+    <string name="onboarding_section_3">Sync with your Android Wear devices</string>
+    <string name="onboarding_intro_3">You can make everything done on your watches.</string>
+    <string name="onboarding_finish_button_description_wait">Preparing, please wait…</string>
     <!--onboarding end-->
 
     <!--search-->
