@@ -1,3 +1,19 @@
+/*
+ *  Copyright(c) 2017 lizhaotailang
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.marktony.espresso.mvp.packages;
 
 import android.app.ActivityOptions;
@@ -45,15 +61,12 @@ import io.github.marktony.espresso.mvp.search.SearchActivity;
 public class PackagesFragment extends Fragment
         implements PackagesContract.View {
 
-
     // View references
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private LinearLayout emptyView;
     private SwipeRefreshLayout refreshLayout;
-
-    private View contentView;
 
     private PackagesAdapter adapter;
 
@@ -76,16 +89,15 @@ public class PackagesFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        contentView = inflater.inflate(R.layout.fragment_packages, container, false);
+        View contentView = inflater.inflate(R.layout.fragment_packages, container, false);
 
         initViews(contentView);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getContext(), AddPackageActivity.class),
-                        AddPackageActivity.REQUEST_ADD_PACKAGE,
-                        ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                        startActivity(new Intent(getContext(), AddPackageActivity.class),
+                            ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
             }
         });
 
@@ -123,7 +135,7 @@ public class PackagesFragment extends Fragment
             }
         });
 
-        // Set true to inflater the options menu.
+        // Set true to inflate the options menu.
         setHasOptionsMenu(true);
 
         return contentView;
@@ -153,7 +165,8 @@ public class PackagesFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            startActivity(new Intent(getContext(), SearchActivity.class));
+            startActivity(new Intent(getContext(), SearchActivity.class),
+                    ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
         } else if (id == R.id.action_mark_all_read) {
             presenter.markAllPacksRead();
         }

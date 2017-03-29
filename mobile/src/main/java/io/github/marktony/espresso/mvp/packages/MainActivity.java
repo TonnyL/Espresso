@@ -1,3 +1,19 @@
+/*
+ *  Copyright(c) 2017 lizhaotailang
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.marktony.espresso.mvp.packages;
 
 import android.app.ActivityOptions;
@@ -18,7 +34,9 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Slide;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
@@ -50,7 +68,10 @@ public class MainActivity extends AppCompatActivity
     private CompaniesFragment companiesFragment;
     private PackagesPresenter packagesPresenter;
 
+    private static final String KEY_NAV_ITEM = "CURRENT_NAV_ITEM";
     private static final String CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY";
+
+    private int selectedNavItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +100,7 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState != null) {
             packagesFragment = (PackagesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "PackagesFragment");
             companiesFragment = (CompaniesFragment) getSupportFragmentManager().getFragment(savedInstanceState, "CompaniesFragment");
+            selectedNavItem = savedInstanceState.getInt(KEY_NAV_ITEM);
         } else {
             packagesFragment = (PackagesFragment) getSupportFragmentManager().findFragmentById(R.id.content_main);
             if (packagesFragment == null) {
@@ -126,7 +148,11 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Show the default fragment.
-        showPackagesFragment();
+        if (selectedNavItem == 0) {
+            showPackagesFragment();
+        } else if (selectedNavItem == 1) {
+            showCompaniesFragment();
+        }
 
         PushUtil.startReminderService(this);
 
@@ -171,17 +197,37 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_switch_theme) {
 
-            /*SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                    == Configuration.UI_MODE_NIGHT_YES) {
-                sp.edit().putBoolean(SettingsUtil.KEY_NIGHT_MODE, false).apply();
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            } else {
-                sp.edit().putBoolean(SettingsUtil.KEY_NIGHT_MODE, true).apply();
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            }
-            getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
-            recreate();*/
+            drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                }
+
+                @Override
+                public void onDrawerOpened(View drawerView) {
+
+                }
+
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                            == Configuration.UI_MODE_NIGHT_YES) {
+                        sp.edit().putBoolean(SettingsUtil.KEY_NIGHT_MODE, false).apply();
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    } else {
+                        sp.edit().putBoolean(SettingsUtil.KEY_NIGHT_MODE, true).apply();
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    }
+                    getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
+                    recreate();
+                }
+
+                @Override
+                public void onDrawerStateChanged(int newState) {
+
+                }
+            });
 
         } else if (id == R.id.nav_settings) {
 
@@ -210,7 +256,12 @@ public class MainActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(CURRENT_FILTERING_KEY, packagesPresenter.getFiltering());
         super.onSaveInstanceState(outState);
-
+        Menu menu = navigationView.getMenu();
+        if (menu.findItem(R.id.nav_home).isChecked()) {
+            outState.putInt(KEY_NAV_ITEM, 0);
+        } else if (menu.findItem(R.id.nav_companies).isChecked()) {
+            outState.putInt(KEY_NAV_ITEM, 1);
+        }
         // Store the fragments' states.
         if (packagesFragment.isAdded()) {
             getSupportFragmentManager().putFragment(outState, "PackagesFragment", packagesFragment);

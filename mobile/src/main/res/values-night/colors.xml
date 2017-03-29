@@ -16,16 +16,16 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#448AFF</color>
-    <color name="colorPrimaryLight">#B2DFDB</color>
-    <color name="colorPrimaryText">#212121</color>
-    <color name="colorSecondaryText">#757575</color>
+    <color name="colorPrimary">#607d8b</color>
+    <color name="colorPrimaryDark">#485a66</color>
+    <color name="colorAccent">#546dfe</color>
+    <color name="colorPrimaryLight">#CFD8DC</color>
+    <color name="colorPrimaryText">#e4e4e4</color>
+    <color name="colorSecondaryText">#b5b5b5</color>
     <color name="colorDivider">#BDBDBD</color>
-    <color name="colorHeaderBackground">#ebebeb</color>
-    <color name="colorBottomBarBackground">@android:color/white</color>
-    <color name="colorNavItemUnselected">#757575</color>
+    <color name="colorHeaderBackground">#35464e</color>
+    <color name="colorBottomBarBackground">#222222</color>
+    <color name="colorNavItemUnselected">#a5a5a5</color>
 
     <color name="transparent_black">#33000000</color>
 
@@ -39,7 +39,7 @@
 
     <color name="deep_orange">#FF5722</color>
 
-    <color name="layout_background">#fafafa</color>
+    <color name="layout_background">#303030</color>
 
     <color name="gray_200">#EEEEEE</color>
 
