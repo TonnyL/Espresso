@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright(c) 2017 lizhaotailang
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">Espresso</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    
+    <string name="activity_package_details">包裹詳情</string>
+    <string name="activity_add_package">添加包裹</string>
+    <string name="activity_company_details">公司詳情</string>
+    <string name="activity_search">搜索</string>
+    <string name="activity_scan_code">掃描</string>
+    <!--activities end-->
+
+    <!--navigation drawer-->
+    <string name="nav_home">首頁</string>
+    <string name="nav_companies">快遞公司</string>
+    <string name="nav_switch_theme">日/夜間模式</string>
+    <string name="nav_settings">設置</string>
+    <string name="nav_about">關於</string>
+    <!--navigation drawer end-->
+
+    <!--package list page-->
+    <string name="all">全部</string>
+    <string name="on_the_way">運輸中</string>
+    <string name="delivered">已送達</string>
+    <string name="action_search">搜索</string>
+    <string name="mark_all_read">全部標記為已讀</string>
+    <string name="share">分享</string>
+    <string name="delete">刪除</string>
+    <string name="copy_code">複製運單號</string>
+    <string name="set_unread">標記為未讀</string>
+    <string name="set_read">標記為已讀</string>
+    <string name="remove">移除</string>
+    <string name="get_status_error">無法獲取物流信息。</string>
+    <string name="network_error">網路連接錯誤，請稍後重試。</string>
+    <string name="package_number_copied">運單號已複製到剪貼板。</string>
+    <string name="package_removed_msg">已被移除。</string>
+    <string name="undo">撤銷</string>
+    <string name="go_to_settings">去設置</string>
+    <string name="to_add_packages">點擊添加按鈕添加包裹。</string>
+    <string name="latest_status">最新狀態: </string>
+    <string-array name="package_status">
+        <item>運輸中</item>
+        <item>其他</item>
+        <item>錯誤</item>
+        <item>已送達</item>
+        <item>已退回</item>
+        <item>正在派送</item>
+        <item>退回中</item>
+    </string-array>
+    <!--package list page end-->
+
+    <!--package details-->
+    <string name="package_status">物流信息</string>
+    <string name="company_name">公司名稱</string>
+    <string name="package_number">運單號碼</string>
+    <string name="package_name">包裹名稱</string>
+    <string name="delete_package_massage">你將不再跟蹤這個包裹的物流信息。</string>
+    <string name="deliver_man">快遞員</string>
+    <string name="edit_name">編輯包裹名稱</string>
+    <string name="input_empty">包裹名稱不能為空!</string>
+    <string name="retry">重試</string>
+    <!--package details end-->
+
+    <!--add package-->
+    <string name="scan_code">掃描</string>
+    <string name="tint_package_name">名稱(可選)</string>
+    <string name="tint_package_number">運單號</string>
+    <string name="wrong_number_and_check">無效的運單號，請檢查後重試。</string>
+    <string name="require_permission">你需要授予相機許可權才能使用掃描功能。</string>
+    <string name="package_name_default_pre">包裹</string>
+    <string name="package_exist">運單號已經在你的列表裡了，請不要重複添加。</string>
+    <string name="permission_denied">許可權被拒絕</string>
+    <string name="error">錯誤</string>
+    <string name="something_wrong">發生了一些錯誤…</string>
+    <string name="unable_to_open_camera">無法打開相機，請檢查後重試。</string>
+    <!--add package end-->
+
+    <!--company details-->
+    <string name="phone_number">電話號碼</string>
+    <string name="official_website">官方網站</string>
+    <!--company details end-->
+
+    <!--Settings-->
+    <string name="notifications">通知</string>
+    <string name="alert">推送通知</string>
+    <string name="alert_desc">當包裹的物流信息更新後推送通知。</string>
+    <string name="do_not_disturb_mode">請勿打擾</string>
+    <string name="do_not_disturb_mode_desc">在設定時間內不推送通知。</string>
+    <string name="start_time">開始時間</string>
+    <string name="start_time_desc">23:00</string>
+    <string name="end_time">結束時間</string>
+    <string name="end_time_desc">06:00</string>
+    <string name="notification_interval">通知頻率</string>
+    <string name="browser">瀏覽器</string>
+    <string name="custom_tabs">Chrome custom tabs</string>
+    <string name="custom_tabs_desc">使用Chrome Custom Tabs打開應用內的鏈接。</string>
+    <string name="user_interface">用戶界面</string>
+    <string name="navigation_bar_tint">導航欄變色</string>
+    <string name="navigation_bar_tint_desc">為導航欄著色</string>
+    <string name="navigation_bar_restart_msg">重啟應用後生效。</string>
+    <string-array name="notification_interval">
+        <item>10 分鐘</item>
+        <item>30 分鐘</item>
+        <item>1 小時</item>
+        <item>1.5 小時</item>
+        <item>2 小時</item>
+    </string-array>
+    <string-array name="notification_interval_item">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <!--Settings end-->
+
+    <!--About-->
+    <string name="version">版本</string>
+    <string name="rate">評分</string>
+    <string name="rate_desc">如果你喜歡Espresso App, 請給她好評吧。</string>
+    <string name="licenses">開源代碼許可證</string>
+    <string name="thanks">致謝</string>
+    <string name="thanks_1">FengGo</string>
+    <string name="thanks_1_desc">水表助手項目</string>
+    <string name="thanks_1_url">https://github.com/fython/PackageTracker</string>
+    <string name="thanks_2">翟宅宅Jack</string>
+    <string name="thanks_2_desc">美工</string>
+    <string name="thanks_2_url">https://plus.google.com/+YoulunZhai</string>
+    <string name="source_code">GitHub源代碼</string>
+    <string name="source_code_desc">https://github.com/TonnyL/Espresso</string>
+    <string name="support">支持</string>
+    <string name="send_advices">發送建議</string>
+    <string name="mail_account">mailto:marktonymengyi@gmail.com</string>
+    <string name="mail_topic">Espresso Advices</string>
+    <string name="send_advices_desc">幫助我改進Espresso App</string>
+    <string name="donate">捐贈</string>
+    <string name="donate_account">marktonymengyi@gmail.com</string>
+    <string name="donate_desc">為我買一杯咖啡, 讓我在夜晚寫代碼時仍然保持清醒。</string>
+    <string name="donate_msg">支付寶賬號將被複制到剪貼板, 打開支付寶並粘貼賬號即可完成捐贈。感謝你的支持!</string>
+    <string name="set_end_time_error">開始與結束的時間不能相同。</string>
+    <string name="notification_new_message">\"包裹有一條新物流信息。\"</string>
+    <!--About end-->
+
+    <!--shortcuts-->
+    <string name="shortcut_label_add_package">手動添加</string>
+    <string name="shortcut_label_search">搜索</string>
+    <string name="shortcut_label_scan_code">掃描</string>
+    <!--shortcuts end-->
+
+    <!--widget-->
+    <string name="all_packages_are_delivered">所有包裹均已送達。</string>
+    <!--widget end-->
+
+    <!--onboarding-->
+    <string name="onboarding_next_button_description">下一步</string>
+    <string name="onboarding_finish_button_description">完成</string>
+    <string name="onboarding_pre_button_description">上一步</string>
+    <string name="onboarding_section_1">簡單快速地添加包裹</string>
+    <string name="onboarding_intro_1">支持全球640餘家快遞公司, 但當你添加包裹時, 快遞公司的識別將被自動完成。</string>
+    <string name="onboarding_section_2">保持你的物流信息為最新狀態</string>
+    <string name="onboarding_intro_2">當物流信息更新後, 你將收到通知提醒, 所以你的信息將保持最新。</string>
+    <string name="onboarding_section_3">和你的Android Wear設備保持同步</string>
+    <string name="onboarding_intro_3">你可以在Android Wear設備上完成一切操作。</string>
+    <string name="onboarding_finish_button_description_wait">準備中, 請稍後…</string>
+    <!--onboarding end-->
+
+    <!--search-->
+    <string name="no_result">無結果</string>
+    <string name="search_hint">包裹或公司…</string>
+    <string name="search_label_package">包裹</string>
+    <string name="search_label_company">快遞公司</string>
+    <string name="item_loading">載入中…</string>
+    <!--search end-->
+
+    <!--custom tabs-->
+    <string name="error_no_browser">設備上沒有安裝瀏覽器。</string>
+    <!--custom tabs end-->
+
+</resources>

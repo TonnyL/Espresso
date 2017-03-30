@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~  Copyright(c) 2017 lizhaotailang
   ~
@@ -20,66 +21,178 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="activity_package_details">包裹详情</string>
+    <!--activities-->
+    <string name="activity_package_details">包裹詳情</string>
     <string name="activity_add_package">添加包裹</string>
-    <string name="activity_company_details">公司详情</string>
+    <string name="activity_company_details">公司詳情</string>
+    <string name="activity_search">搜索</string>
+    <string name="activity_scan_code">掃描</string>
+    <!--activities end-->
 
+    <!--navigation drawer-->
+    <string name="nav_home">首頁</string>
+    <string name="nav_companies">快遞公司</string>
+    <string name="nav_switch_theme">日/夜間模式</string>
+    <string name="nav_settings">設置</string>
+    <string name="nav_about">關於</string>
+    <!--navigation drawer end-->
+
+    <!--package list page-->
+    <string name="all">全部</string>
+    <string name="on_the_way">運輸中</string>
+    <string name="delivered">已送達</string>
     <string name="action_search">搜索</string>
-    <string name="nav_home">首页</string>
-    <string name="nav_companies">公司</string>
-    <string name="nav_switch_theme">夜间模式</string>
-    <string name="nav_settings">设置</string>
-    <string name="nav_about">关于</string>
-    <string name="package_status">物流信息</string>
-    <string name="company_name">公司名称</string>
-    <string name="package_number">单号</string>
+    <string name="mark_all_read">全部标记为已读</string>
     <string name="share">分享</string>
     <string name="delete">删除</string>
     <string name="copy_code">复制运单号</string>
     <string name="set_unread">标记为未读</string>
     <string name="set_read">标记为已读</string>
-    <string name="scan_code">扫描运单号</string>
-
-    <string name="all">全部</string>
-    <string name="on_the_way">运输中</string>
-    <string name="delivered">已送达</string>
-
-    <string name="wrong_number_and_check">单号错误，请检查后重试</string>
-    <string name="require_permission">需要授予权限才能运行！</string>
-    <string name="go_to_settings">去设置</string>
-    <string name="phone_number">电话号码</string>
-    <string name="official_website">官方网站</string>
-    <string name="mark_all_read">全部标记为已读</string>
-    <string name="package_name_default_pre">快递</string>
-    <string name="package_name">快递名称</string>
-    <string name="get_status_error">无法获取最新状态</string>
     <string name="remove">移除</string>
-    <string name="package_number_copied">单号已复制到剪贴板</string>
-    <string name="latest_status">最新状态:&#160;</string>
-    <string name="something_wrong">发生了一些错误…</string>
+    <string name="get_status_error">无法获取物流信息。</string>
+    <string name="network_error">网络连接错误，请稍后重试。</string>
+    <string name="package_number_copied">运单号已复制到剪贴板。</string>
+    <string name="package_removed_msg">已被移除。</string>
     <string name="undo">撤销</string>
-    <string name="package_removed_msg">删除成功</string>
-    <string name="package_exist">运单已存在</string>
-    <string name="permission_denied">权限被拒绝</string>
-    <string name="deliver_man">快递员</string>
-    <string name="error">出错了</string>
-    <string name="unable_to_open_camera">相机打开出错，请稍后重试</string>
-    <string name="all_packages_are_delivered">所有包裹均已送达。</string>
-    <string name="to_add_packages">点击"添加"按钮新建包裹。</string>
-    <string name="delete_package_massage">你将不再跟踪这个包裹的物流信息。</string>
-    <string name="edit_name">编辑名称</string>
-    <string name="input_empty">包裹名称不能为空！</string>
-    <string name="network_error">Network error, try again later.</string>
-    <string name="retry">RETRY</string>
-
+    <string name="go_to_settings">去设置</string>
+    <string name="to_add_packages">点击添加按钮添加包裹。</string>
+    <string name="latest_status">最新状态:&#160;</string>
     <string-array name="package_status">
         <item>运输中</item>
-        <item>其它</item>
+        <item>其他</item>
         <item>错误</item>
         <item>已送达</item>
         <item>已退回</item>
-        <item>派送中</item>
+        <item>正在派送</item>
         <item>退回中</item>
     </string-array>
+    <!--package list page end-->
+
+    <!--package details-->
+    <string name="package_status">物流信息</string>
+    <string name="company_name">公司名称</string>
+    <string name="package_number">运单号码</string>
+    <string name="package_name">包裹名称</string>
+    <string name="delete_package_massage">你将不再跟踪这个包裹的物流信息。</string>
+    <string name="deliver_man">快递员</string>
+    <string name="edit_name">编辑包裹名称</string>
+    <string name="input_empty">包裹名称不能为空!</string>
+    <string name="retry">重试</string>
+    <!--package details end-->
+
+    <!--add package-->
+    <string name="scan_code">扫描</string>
+    <string name="tint_package_name">名称(可选)</string>
+    <string name="tint_package_number">运单号</string>
+    <string name="wrong_number_and_check">无效的运单号，请检查后重试。</string>
+    <string name="require_permission">你需要授予相机权限才能使用扫描功能。</string>
+    <string name="package_name_default_pre">包裹</string>
+    <string name="package_exist">运单号已经在你的列表里了，请不要重复添加。</string>
+    <string name="permission_denied">权限被拒绝</string>
+    <string name="error">错误</string>
+    <string name="something_wrong">发生了一些错误…</string>
+    <string name="unable_to_open_camera">无法打开相机，请检查后重试。</string>
+    <!--add package end-->
+
+    <!--company details-->
+    <string name="phone_number">电话号码</string>
+    <string name="official_website">官方网站</string>
+    <!--company details end-->
+
+    <!--Settings-->
+    <string name="notifications">通知</string>
+    <string name="alert">推送通知</string>
+    <string name="alert_desc">当包裹的物流信息更新后推送通知。</string>
+    <string name="do_not_disturb_mode">请勿打扰</string>
+    <string name="do_not_disturb_mode_desc">在设定时间内不推送通知。</string>
+    <string name="start_time">开始时间</string>
+    <string name="start_time_desc">23:00</string>
+    <string name="end_time">结束时间</string>
+    <string name="end_time_desc">06:00</string>
+    <string name="notification_interval">通知频率</string>
+    <string name="browser">浏览器</string>
+    <string name="custom_tabs">Chrome custom tabs</string>
+    <string name="custom_tabs_desc">使用Chrome Custom Tabs打开应用内的链接。</string>
+    <string name="user_interface">用户界面</string>
+    <string name="navigation_bar_tint">导航栏变色</string>
+    <string name="navigation_bar_tint_desc">为导航栏着色</string>
+    <string name="navigation_bar_restart_msg">重启应用后生效。</string>
+    <string-array name="notification_interval">
+        <item>10 分钟</item>
+        <item>30 分钟</item>
+        <item>1 小时</item>
+        <item>1.5 小时</item>
+        <item>2 小时</item>
+    </string-array>
+    <string-array name="notification_interval_item">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <!--Settings end-->
+
+    <!--About-->
+    <string name="version">版本</string>
+    <string name="rate">评分</string>
+    <string name="rate_desc">如果你喜欢Espresso App, 请给她好评吧。</string>
+    <string name="licenses">开源代码许可证</string>
+    <string name="thanks">致谢</string>
+    <string name="thanks_1">FengGo</string>
+    <string name="thanks_1_desc">水表助手项目</string>
+    <string name="thanks_1_url">https://github.com/fython/PackageTracker</string>
+    <string name="thanks_2">翟宅宅Jack</string>
+    <string name="thanks_2_desc">美工</string>
+    <string name="thanks_2_url">https://plus.google.com/+YoulunZhai</string>
+    <string name="source_code">GitHub源代码</string>
+    <string name="source_code_desc">https://github.com/TonnyL/Espresso</string>
+    <string name="support">支持</string>
+    <string name="send_advices">发送建议</string>
+    <string name="mail_account">mailto:marktonymengyi@gmail.com</string>
+    <string name="mail_topic">Espresso Advices</string>
+    <string name="send_advices_desc">帮助我改进Espresso App</string>
+    <string name="donate">捐赠</string>
+    <string name="donate_account">marktonymengyi@gmail.com</string>
+    <string name="donate_desc">为我买一杯咖啡, 让我在夜晚写代码时仍然保持清醒。</string>
+    <string name="donate_msg">支付宝账号将被复制到剪贴板, 打开支付宝并粘贴账号即可完成捐赠。感谢你的支持!</string>
+    <string name="set_end_time_error">开始与结束的时间不能相同。</string>
+    <string name="notification_new_message">\"包裹有一条新物流信息。\"</string>
+    <!--About end-->
+
+    <!--shortcuts-->
+    <string name="shortcut_label_add_package">手动添加</string>
+    <string name="shortcut_label_search">搜索</string>
+    <string name="shortcut_label_scan_code">扫描</string>
+    <!--shortcuts end-->
+
+    <!--widget-->
+    <string name="all_packages_are_delivered">所有包裹均已送达。</string>
+    <!--widget end-->
+
+    <!--onboarding-->
+    <string name="onboarding_next_button_description">下一步</string>
+    <string name="onboarding_finish_button_description">完成</string>
+    <string name="onboarding_pre_button_description">上一步</string>
+    <string name="onboarding_section_1">简单快速地添加包裹</string>
+    <string name="onboarding_intro_1">支持全球640余家快递公司, 但当你添加包裹时, 快递公司的识别将被自动完成。</string>
+    <string name="onboarding_section_2">保持你的物流信息为最新状态</string>
+    <string name="onboarding_intro_2">当物流信息更新后, 你将收到通知提醒, 所以你的信息将保持最新。</string>
+    <string name="onboarding_section_3">和你的Android Wear设备保持同步</string>
+    <string name="onboarding_intro_3">你可以在Android Wear设备上完成一切操作。</string>
+    <string name="onboarding_finish_button_description_wait">准备中, 请稍后…</string>
+    <!--onboarding end-->
+
+    <!--search-->
+    <string name="no_result">无结果</string>
+    <string name="search_hint">包裹或公司…</string>
+    <string name="search_label_package">包裹</string>
+    <string name="search_label_company">快递公司</string>
+    <string name="item_loading">加载中…</string>
+    <!--search end-->
+
+    <!--custom tabs-->
+    <string name="error_no_browser">设备上没有安装浏览器。</string>
+    <!--custom tabs end-->
 
 </resources>

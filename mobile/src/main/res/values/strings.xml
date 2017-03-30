@@ -51,8 +51,8 @@
     <string name="remove">REMOVE</string>
     <string name="get_status_error">Unable to get the latest status.</string>
     <string name="network_error">Network error, try again later.</string>
-    <string name="package_number_copied">Package number has been copied successfully</string>
-    <string name="package_removed_msg">has been removed</string>
+    <string name="package_number_copied">Package number has been copied successfully.</string>
+    <string name="package_removed_msg">has been removed.</string>
     <string name="undo">UNDO</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="to_add_packages">Click the Add button to add packages.</string>
@@ -87,7 +87,7 @@
     <string name="wrong_number_and_check">Invalid number, check it and retry.</string>
     <string name="require_permission">To support barcode scan, you need to grant camera permission.</string>
     <string name="package_name_default_pre">Package</string>
-    <string name="package_exist">The package is in your list</string>
+    <string name="package_exist">The package is in your list.</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="error">Error</string>
     <string name="something_wrong">Something wrong…</string>
@@ -102,9 +102,9 @@
     <!--Settings-->
     <string name="notifications">Notifications</string>
     <string name="alert">Alert</string>
-    <string name="alert_desc">Send notifications when packages get updated</string>
+    <string name="alert_desc">Send notifications when packages get updated.</string>
     <string name="do_not_disturb_mode">Do not disturb mode</string>
-    <string name="do_not_disturb_mode_desc">Don\'t send notifications during the hours set</string>
+    <string name="do_not_disturb_mode_desc">Don\'t send notifications during the hours set.</string>
     <string name="start_time">Start time</string>
     <string name="start_time_desc">23:00</string>
     <string name="end_time">End time</string>
@@ -112,10 +112,10 @@
     <string name="notification_interval">Notification interval</string>
     <string name="browser">Browser</string>
     <string name="custom_tabs">Chrome custom tabs</string>
-    <string name="custom_tabs_desc">Open links with Chrome Custom Tabs</string>
+    <string name="custom_tabs_desc">Open links with Chrome Custom Tabs.</string>
     <string name="user_interface">User interface</string>
     <string name="navigation_bar_tint">Navigation bar tint</string>
-    <string name="navigation_bar_tint_desc">Color the navigation bar</string>
+    <string name="navigation_bar_tint_desc">Color the navigation bar.</string>
     <string name="navigation_bar_restart_msg">Changes will be applied after restarting app.</string>
     <string-array name="notification_interval">
         <item>10 minutes</item>
@@ -136,7 +136,7 @@
     <!--About-->
     <string name="version">Version</string>
     <string name="rate">Rate</string>
-    <string name="rate_desc">If you like the Espresso app, please do rate it</string>
+    <string name="rate_desc">If you like the Espresso app, please do rate it.</string>
     <string name="licenses">Licenses</string>
     <string name="thanks">Thanks</string>
     <string name="thanks_1">FengGo</string>
@@ -145,7 +145,7 @@
     <string name="thanks_2">+Youlun Zhai</string>
     <string name="thanks_2_desc">Poster designer</string>
     <string name="thanks_2_url">https://plus.google.com/+YoulunZhai</string>
-    <string name="source_code">Source code</string>
+    <string name="source_code">GitHub Source code</string>
     <string name="source_code_desc">https://github.com/TonnyL/Espresso</string>
     <string name="support">Support</string>
     <string name="send_advices">Send advices</string>
@@ -156,7 +156,7 @@
     <string name="donate_account">marktonymengyi@gmail.com</string>
     <string name="donate_desc">Buy me a cup of coffee to keep me awake during my night coding sessions.</string>
     <string name="donate_msg">Alipay account will be copied to clipboard. Launch Alipay and paste it to finish donating. Thanks for support!</string>
-    <string name="set_end_time_error">Start time can not be same as end time</string>
+    <string name="set_end_time_error">Start time can not be same as end time.</string>
     <string name="notification_new_message">\"The package has a new message\"</string>
     <!--About end-->
 

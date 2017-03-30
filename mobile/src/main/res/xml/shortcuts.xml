@@ -19,7 +19,7 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_shortcut_add"
         android:shortcutId="shortcut_add_package"
         android:shortcutShortLabel="@string/shortcut_label_add_package"
         android:shortcutLongLabel="@string/shortcut_label_add_package">
@@ -35,7 +35,7 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_scan_code"
+        android:icon="@drawable/ic_shortcut_filter_center_focus"
         android:shortcutId="shortcut_scan_code"
         android:shortcutShortLabel="@string/shortcut_label_scan_code"
         android:shortcutLongLabel="@string/shortcut_label_scan_code">
@@ -51,7 +51,7 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_shortcut_search"
         android:shortcutId="shortcut_search"
         android:shortcutShortLabel="@string/shortcut_label_search"
         android:shortcutLongLabel="@string/shortcut_label_search">
