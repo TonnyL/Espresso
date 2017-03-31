@@ -79,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textViewPackageName"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/colorPrimaryText"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 

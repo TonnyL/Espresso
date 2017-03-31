@@ -53,26 +53,26 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/app_bar_height" >
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:scrollbars="vertical"
+        android:scrollbarFadeDuration="1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fadeScrollbars="true">
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:visibility="gone"
-            android:indeterminate="true" />
+            android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/scrollView"
-            android:scrollbars="vertical"
-            android:scrollbarFadeDuration="1"
-            android:fadeScrollbars="true">
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:indeterminate="true" />
 
 
             <LinearLayout
@@ -130,9 +130,9 @@
 
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </FrameLayout>
 
-    </FrameLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
