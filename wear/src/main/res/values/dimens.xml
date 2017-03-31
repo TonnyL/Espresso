@@ -20,4 +20,8 @@
     <dimen name="activity_vertical_margin">8dp</dimen>
     <dimen name="activity_horizontal_margin">8dp</dimen>
 
+    <dimen name="big_char_size">24sp</dimen>
+    <dimen name="primary_text_size">14sp</dimen>
+    <dimen name="secondary_text_size">10sp</dimen>
+
 </resources>

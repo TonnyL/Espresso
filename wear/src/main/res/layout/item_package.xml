@@ -20,30 +20,32 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin">
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <android.support.wearable.view.CircledImageView
+            android:id="@+id/avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/avatar"
-            android:src="@android:color/holo_blue_light"
-            app:circle_color="@android:color/holo_blue_light"
-            app:circle_border_width="2dp"
-            app:circle_radius_pressed="40dp"/>
+            android:layout_gravity="center"
+            app:circle_color="@color/blue"
+            app:circle_radius="24dp"
+            app:circle_radius_pressed="24dp"
+            app:circle_padding="2dp"
+            app:circle_border_width="0dp"
+            app:circle_border_color="@color/white"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewAvatar"
             android:textColor="@android:color/white"
-            android:text="P"
             android:layout_gravity="center"
-            android:textSize="24sp"/>
+            android:textSize="@dimen/big_char_size"/>
 
     </FrameLayout>
 
@@ -60,15 +62,14 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:textColor="@color/primary_text_dark"
-            android:text="Package2456" />
+            android:textSize="@dimen/primary_text_size" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewStatus"
             android:textColor="@color/primary_text_dark"
-            android:textSize="12sp"
-            android:text="已到达：长沙理工大学"/>
+            android:textSize="@dimen/secondary_text_size" />
 
     </LinearLayout>
 
