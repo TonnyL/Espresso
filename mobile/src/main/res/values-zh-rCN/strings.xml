@@ -22,25 +22,25 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!--activities-->
-    <string name="activity_package_details">包裹詳情</string>
+    <string name="activity_package_details">包裹详情</string>
     <string name="activity_add_package">添加包裹</string>
-    <string name="activity_company_details">公司詳情</string>
+    <string name="activity_company_details">公司详情</string>
     <string name="activity_search">搜索</string>
-    <string name="activity_scan_code">掃描</string>
+    <string name="activity_scan_code">扫描</string>
     <!--activities end-->
 
     <!--navigation drawer-->
     <string name="nav_home">首頁</string>
-    <string name="nav_companies">快遞公司</string>
-    <string name="nav_switch_theme">日/夜間模式</string>
-    <string name="nav_settings">設置</string>
-    <string name="nav_about">關於</string>
+    <string name="nav_companies">快递公司</string>
+    <string name="nav_switch_theme">日/夜间模式</string>
+    <string name="nav_settings">设置</string>
+    <string name="nav_about">关于</string>
     <!--navigation drawer end-->
 
     <!--package list page-->
     <string name="all">全部</string>
-    <string name="on_the_way">運輸中</string>
-    <string name="delivered">已送達</string>
+    <string name="on_the_way">运输中</string>
+    <string name="delivered">已送达</string>
     <string name="action_search">搜索</string>
     <string name="mark_all_read">全部标记为已读</string>
     <string name="share">分享</string>
