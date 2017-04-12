@@ -57,15 +57,13 @@ public class PackagesRepository implements PackagesDataSource {
     private Map<String, Package> cachedPackages;
 
     // Prevent direct instantiation
-    private PackagesRepository(@NonNull PackagesDataSource packagesRemoteDataSource,
-                               @NonNull PackagesDataSource packagesLocalDataSource) {
+    private PackagesRepository(@NonNull PackagesDataSource packagesRemoteDataSource, @NonNull PackagesDataSource packagesLocalDataSource) {
         this.packagesRemoteDataSource = packagesRemoteDataSource;
         this.packagesLocalDataSource = packagesLocalDataSource;
     }
 
     // The access for other classes.
-    public static PackagesRepository getInstance(@NonNull PackagesDataSource packagesRemoteDataSource,
-                                                 @NonNull PackagesDataSource packagesLocalDataSource) {
+    public static PackagesRepository getInstance(@NonNull PackagesDataSource packagesRemoteDataSource, @NonNull PackagesDataSource packagesLocalDataSource) {
         if (INSTANCE == null) {
             INSTANCE = new PackagesRepository(packagesRemoteDataSource, packagesLocalDataSource);
         }
@@ -83,6 +81,7 @@ public class PackagesRepository implements PackagesDataSource {
      * when user enter the app every time because we run a service in backyard.
      * So we just return the data from database.
      * But in future, it may change.
+     *
      * @return Packages from {@link io.github.marktony.espresso.data.source.local.PackagesLocalDataSource}.
      */
     @Override
@@ -96,12 +95,16 @@ public class PackagesRepository implements PackagesDataSource {
                     Collections.sort(arrayList, new Comparator<Package>() {
                         @Override
                         public int compare(Package o1, Package o2) {
+                            return o1.getTimestamp() > o2.getTimestamp()
+                                   ? -1
+                                   : (o1.getTimestamp() < o2.getTimestamp() ? 1 : 0);
+/*
                             if (o1.getTimestamp() > o2.getTimestamp()) {
                                 return -1;
                             } else if (o1.getTimestamp() < o2.getTimestamp()) {
                                 return 1;
                             }
-                            return 0;
+                            return 0;*/
                         }
                     });
                     return arrayList;
@@ -112,34 +115,36 @@ public class PackagesRepository implements PackagesDataSource {
             cachedPackages = new LinkedHashMap<>();
 
             // Return the cached packages.
-            return packagesLocalDataSource
-                    .getPackages()
-                    .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
-                        @Override
-                        public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
-                            return Observable
-                                    .fromIterable(packages)
-                                    .doOnNext(new Consumer<Package>() {
-                                        @Override
-                                        public void accept(Package aPackage) throws Exception {
-                                            cachedPackages.put(aPackage.getNumber(), aPackage);
-                                        }
-                                    })
-                                    .toList()
-                                    .toObservable();
-                        }
-                    });
+            return packagesLocalDataSource.getPackages()
+                                          .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
+                                              @Override
+                                              public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
+                                                  return Observable.fromIterable(packages)
+                                                                   .doOnNext(new Consumer<Package>() {
+                                                                       @Override
+                                                                       public void accept(Package aPackage) throws Exception {
+                                                                           cachedPackages.put(
+                                                                                   aPackage.getNumber(),
+                                                                                   aPackage);
+                                                                       }
+                                                                   })
+                                                                   .toList()
+                                                                   .toObservable();
+                                              }
+                                          });
         }
 
     }
 
     /**
      * Get a package of specific number from data source.
+     *
      * @param packNumber The primary key or the package id. See {@link Package}.
      * @return The package.
      */
     @Override
-    public Observable<Package> getPackage(@NonNull final String packNumber) {
+    public Observable<Package> getPackage(@NonNull
+                                          final String packNumber) {
         Package cachedPackage = getPackageWithNumber(packNumber);
         if (cachedPackage != null) {
             return Observable.just(cachedPackage);
@@ -152,6 +157,7 @@ public class PackagesRepository implements PackagesDataSource {
      * It is supposed to save it to database and network too.
      * But we have no cloud(The account system) yet.
      * It may change either.
+     *
      * @param pack The package to save. See more @{@link Package}.
      */
     @Override
@@ -167,6 +173,7 @@ public class PackagesRepository implements PackagesDataSource {
 
     /**
      * Delete a package from data source and cache.
+     *
      * @param packageId The primary id or in another words, the package number.
      *                  See more @{@link Package#number}.
      */
@@ -179,63 +186,58 @@ public class PackagesRepository implements PackagesDataSource {
     /**
      * Refresh the packages.
      * Just call the remote data source and it will make everything done.
+     *
      * @return The observable packages.
      */
     @Override
     public Observable<List<Package>> refreshPackages() {
-        return packagesRemoteDataSource
-                .refreshPackages()
-                .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
-                    @Override
-                    public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
+        return packagesRemoteDataSource.refreshPackages()
+                                       .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
+                                           @Override
+                                           public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
 
-                        return Observable
-                                .fromIterable(packages)
-                                .doOnNext(new Consumer<Package>() {
-                                    @Override
-                                    public void accept(Package aPackage) throws Exception {
-                                        Package p = cachedPackages.get(aPackage.getNumber());
-                                        if (p != null) {
-                                            p.setData(aPackage.getData());
-                                            p.setPushable(true);
-                                            p.setReadable(true);
-                                        }
-                                    }
-                                })
-                                .toList()
-                                .toObservable();
-                    }
-                });
+                                               return Observable.fromIterable(packages)
+                                                                .doOnNext(new Consumer<Package>() {
+                                                                    @Override
+                                                                    public void accept(Package aPackage) throws Exception {
+                                                                        Package p = cachedPackages.get(
+                                                                                aPackage.getNumber());
+                                                                        if (p != null) {
+                                                                            p.setData(aPackage.getData());
+                                                                            p.setPushable(true);
+                                                                            p.setReadable(true);
+                                                                        }
+                                                                    }
+                                                                })
+                                                                .toList()
+                                                                .toObservable();
+                                           }
+                                       });
     }
 
     /**
      * Refresh one package.
      * Just call the remote data source and it will make everything done.
+     *
      * @param packageId The primary key(The package number).
      *                  See more @{@link Package#number}.
      * @return The observable package.
      */
     @Override
-    public Observable<Package> refreshPackage(@NonNull final String packageId) {
-        return packagesRemoteDataSource
-                .refreshPackage(packageId)
-                .flatMap(new Function<Package, ObservableSource<Package>>() {
-                    @Override
-                    public ObservableSource<Package> apply(Package p) throws Exception {
-                        return Observable
-                                .just(p)
-                                .doOnNext(new Consumer<Package>() {
-                                    @Override
-                                    public void accept(Package aPackage) throws Exception {
-                                        Package pkg = cachedPackages.get(aPackage.getNumber());
-                                        if (pkg != null) {
-                                            pkg.setData(aPackage.getData());
-                                            pkg.setReadable(true);
-                                        }
-                                    }
-                                });
-                    }
-                });
+    public Observable<Package> refreshPackage(@NonNull
+                                              final String packageId) {
+        return packagesRemoteDataSource.refreshPackage(packageId)
+                                       .doOnNext(new Consumer<Package>() {
+                                           @Override
+                                           public void accept(Package aPackage) throws Exception {
+                                               Package pkg = cachedPackages.get(aPackage.getNumber());
+                                               if (pkg != null) {
+                                                   pkg.setData(aPackage.getData());
+                                                   pkg.setReadable(true);
+                                               }
+                                           }
+
+                                       });
     }
 
     /**
@@ -258,9 +260,10 @@ public class PackagesRepository implements PackagesDataSource {
     /**
      * Set a package with specific number read or unread new
      * in both data source and cache.
+     *
      * @param packageId The primary key (The package number).
      *                  See more @{@link Package#number}.
-     * @param readable Unread new or read.
+     * @param readable  Unread new or read.
      */
     @Override
     public void setPackageReadable(@NonNull String packageId, boolean readable) {
@@ -272,6 +275,7 @@ public class PackagesRepository implements PackagesDataSource {
 
     /**
      * Checkout out the existence of a package with specific number.
+     *
      * @param packageId The primary key or in another words, the package number.
      *                  See more @{@link Package#number}.
      * @return Whether the package exists.
@@ -297,6 +301,7 @@ public class PackagesRepository implements PackagesDataSource {
 
     /**
      * Get a package with package number.
+     *
      * @param packNumber The package id(number). See more @{@link Package#number}.
      * @return The package with specific number.
      */
@@ -311,22 +316,22 @@ public class PackagesRepository implements PackagesDataSource {
 
     /**
      * As the function name says, get a package from local repository.
+     *
      * @param packNumber The package number.
      * @return The package.
      */
     @Nullable
-    private Observable<Package> getPackageWithNumberFromLocalRepository(@NonNull final String packNumber) {
-        return packagesLocalDataSource
-                .getPackage(packNumber)
-                .doOnNext(new Consumer<Package>() {
-                    @Override
-                    public void accept(Package aPackage) throws Exception {
-                        if (cachedPackages == null) {
-                            cachedPackages = new LinkedHashMap<>();
-                        }
-                        cachedPackages.put(packNumber, aPackage);
-                    }
-                });
+    private Observable<Package> getPackageWithNumberFromLocalRepository(@NonNull
+                                                                        final String packNumber) {
+        return packagesLocalDataSource.getPackage(packNumber).doOnNext(new Consumer<Package>() {
+            @Override
+            public void accept(Package aPackage) throws Exception {
+                if (cachedPackages == null) {
+                    cachedPackages = new LinkedHashMap<>();
+                }
+                cachedPackages.put(packNumber, aPackage);
+            }
+        });
     }
 
 }
