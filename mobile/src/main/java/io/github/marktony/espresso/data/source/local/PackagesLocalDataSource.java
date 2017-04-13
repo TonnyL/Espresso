@@ -61,12 +61,10 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     /**
      * Get the packages in database and sort them in timestamp descending.
-     *
      * @return The observable packages from database.
      */
     @Override
     public Observable<List<Package>> getPackages() {
-
         return Observable.fromCallable(new Callable<List<Package>>() {
             @Override
             public List<Package> call() throws Exception {
@@ -79,20 +77,17 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     /**
      * Get a package in database of specific number.
-     *
      * @param packNumber The primary key
      *                   or in another words, the package id.
      *                   See {@link Package#number}
      * @return The observable package from database.
      */
     @Override
-    public Observable<Package> getPackage(@NonNull
-                                          final String packNumber) {
+    public Observable<Package> getPackage(@NonNull final String packNumber) {
         return Observable.fromCallable(new Callable<Package>() {
             @Override
             public Package call() throws Exception {
                 Realm rlm = RealmHelper.newRealmInstance();
-
                 return rlm.copyFromRealm(rlm.where(Package.class)
                                             .equalTo("number", packNumber)
                                             .findFirst());
@@ -102,7 +97,6 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     /**
      * Save a package to database.
-     *
      * @param pack The package to save. See {@link Package}
      */
     @Override
@@ -117,7 +111,6 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     /**
      * Delete a package with specific id from database.
-     *
      * @param packageId The primary key of a package
      *                  or in another words, the package id.
      *                  See {@link Package#number}
@@ -125,7 +118,9 @@ public class PackagesLocalDataSource implements PackagesDataSource {
     @Override
     public void deletePackage(@NonNull String packageId) {
         Realm rlm = RealmHelper.newRealmInstance();
-        Package p = rlm.where(Package.class).equalTo("number", packageId).findFirst();
+        Package p = rlm.where(Package.class)
+                .equalTo("number", packageId)
+                .findFirst();
         if (p != null) {
             rlm.beginTransaction();
             p.deleteFromRealm();
@@ -168,18 +163,17 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     /**
      * Set a package of specific number read or unread new.
-     *
      * @param packageId The primary key or the package id.
      *                  See {@link Package#number}
-     * @param readable  Read or unread new.
-     *                  See {@link Package#readable}
+     * @param readable Read or unread new.
+     *                 See {@link Package#readable}
      */
     @Override
     public void setPackageReadable(@NonNull String packageId, boolean readable) {
         Realm rlm = RealmHelper.newRealmInstance();
         Package p = rlm.copyFromRealm(rlm.where(Package.class)
-                                         .equalTo("number", packageId)
-                                         .findFirst());
+                .equalTo("number", packageId)
+                .findFirst());
         if (p != null) {
             rlm.beginTransaction();
             p.setReadable(readable);
@@ -193,7 +187,6 @@ public class PackagesLocalDataSource implements PackagesDataSource {
 
     /**
      * Query the existence of a specific number.
-     *
      * @param packageId the package number to query.
      *                  See {@link Package#number}
      * @return whether the number is in the database.
@@ -202,15 +195,17 @@ public class PackagesLocalDataSource implements PackagesDataSource {
     public boolean isPackageExist(@NonNull String packageId) {
         Realm rlm = RealmHelper.newRealmInstance();
         RealmResults<Package> results = rlm.where(Package.class)
-                                           .equalTo("number", packageId)
-                                           .findAll();
+                .equalTo("number", packageId)
+                .findAll();
         return (results != null) && (!results.isEmpty());
     }
 
     @Override
     public void updatePackageName(@NonNull String packageId, @NonNull String name) {
         Realm rlm = RealmHelper.newRealmInstance();
-        Package p = rlm.where(Package.class).equalTo("number", packageId).findFirst();
+        Package p = rlm.where(Package.class)
+                .equalTo("number", packageId)
+                .findFirst();
         if (p != null) {
             rlm.beginTransaction();
             p.setName(name);
