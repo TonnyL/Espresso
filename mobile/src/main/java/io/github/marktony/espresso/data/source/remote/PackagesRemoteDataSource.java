@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesDataSource;
@@ -98,22 +99,33 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
     public Observable<List<Package>> refreshPackages() {
         // It is necessary to build a new realm instance
         // in a different thread.
-        Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(DATABASE_NAME)
-                .build());
 
-        return Observable.fromIterable(realm.copyFromRealm(realm.where(Package.class).findAll()))
-                .subscribeOn(Schedulers.io())
-                .flatMap(new Function<Package, ObservableSource<Package>>() {
+        return Observable.fromCallable(new Callable<List<Package>>() {
+            @Override
+            public List<Package> call() throws Exception {
+                Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
+                                                        .deleteRealmIfMigrationNeeded()
+                                                        .name(DATABASE_NAME)
+                                                        .build());
+                return realm.copyFromRealm(realm.where(Package.class).findAll());
+            }
+        }).publish(new Function<Observable<List<Package>>, ObservableSource<List<Package>>>() {
+            @Override
+            public ObservableSource<List<Package>> apply(Observable<List<Package>> listObservable) throws Exception {
+                listObservable.flatMapIterable(new Function<List<Package>, Iterable<Package>>() {
                     @Override
-                    public ObservableSource<Package> apply(Package aPackage) throws Exception {
-                        // A nested request.
-                        return refreshPackage(aPackage.getNumber());
+                    public Iterable<Package> apply(List<Package> packages) throws Exception {
+                        return packages;
                     }
-                })
-                .toList()
-                .toObservable();
+                }).subscribe(new Consumer<Package>() {
+                    @Override
+                    public void accept(Package aPackage) throws Exception {
+                        refreshPackage(aPackage.getNumber());
+                    }
+                });
+                return listObservable;
+            }
+        });
     }
 
     /**
@@ -122,7 +134,8 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
      * @return The observable package of latest status.
      */
     @Override
-    public Observable<Package> refreshPackage(@NonNull String packageId) {
+    public Observable<Package> refreshPackage(@NonNull
+                                              final String packageId) {
         // It is necessary to build a new realm instance
         // in a different thread.
         Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
@@ -145,37 +158,43 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                     }
                 })
                 .subscribeOn(Schedulers.io())
-                .doOnNext(new Consumer<Package>() {
+                .publish(new Function<Observable<Package>, ObservableSource<Package>>() {
                     @Override
-                    public void accept(Package aPackage) throws Exception {
+                    public ObservableSource<Package> apply(Observable<Package> packageObservable) throws Exception {
+                        packageObservable.subscribe(new Consumer<Package>() {
+                            @Override
+                            public void accept(Package aPackage) throws Exception {
 
-                        // To avoid the server error or other problems
-                        // making the data in database being dirty.
-                        if (aPackage != null && aPackage.getData() != null) {
-                            // It is necessary to build a new realm instance
-                            // in a different thread.
-                            Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                                    .deleteRealmIfMigrationNeeded()
-                                    .name(DATABASE_NAME)
-                                    .build());
+                                // To avoid the server error or other problems
+                                // making the data in database being dirty.
+                                if (aPackage != null && aPackage.getData() != null) {
+                                    // It is necessary to build a new realm instance
+                                    // in a different thread.
+                                    Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
+                                                                          .deleteRealmIfMigrationNeeded()
+                                                                          .name(DATABASE_NAME)
+                                                                          .build());
 
-                            // Only when the origin data is null or the origin
-                            // data's size is less than the latest data's size
-                            // set the package unread new(readable = true).
-                            if (p.getData() == null || aPackage.getData().size() > p.getData().size()) {
-                                p.setReadable(true);
-                                p.setPushable(true);
-                                p.setState(aPackage.getState());
+                                    // Only when the origin data is null or the origin
+                                    // data's size is less than the latest data's size
+                                    // set the package unread new(readable = true).
+                                    if (p.getData() == null || aPackage.getData().size() > p.getData().size()) {
+                                        p.setReadable(true);
+                                        p.setPushable(true);
+                                        p.setState(aPackage.getState());
+                                    }
+
+                                    p.setData(aPackage.getData());
+                                    // DO NOT forget to begin a transaction.
+                                    rlm.beginTransaction();
+                                    rlm.copyToRealmOrUpdate(p);
+                                    rlm.commitTransaction();
+
+                                    rlm.close();
+                                }
                             }
-
-                            p.setData(aPackage.getData());
-                            // DO NOT forget to begin a transaction.
-                            rlm.beginTransaction();
-                            rlm.copyToRealmOrUpdate(p);
-                            rlm.commitTransaction();
-
-                            rlm.close();
-                        }
+                        });
+                        return packageObservable;
                     }
                 });
     }
