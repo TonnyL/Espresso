@@ -217,25 +217,18 @@ public class PackagesRepository implements PackagesDataSource {
      */
     @Override
     public Observable<Package> refreshPackage(@NonNull final String packageId) {
-        return packagesRemoteDataSource
-                .refreshPackage(packageId)
-                .flatMap(new Function<Package, ObservableSource<Package>>() {
-                    @Override
-                    public ObservableSource<Package> apply(Package p) throws Exception {
-                        return Observable
-                                .just(p)
-                                .doOnNext(new Consumer<Package>() {
-                                    @Override
-                                    public void accept(Package aPackage) throws Exception {
-                                        Package pkg = cachedPackages.get(aPackage.getNumber());
-                                        if (pkg != null) {
-                                            pkg.setData(aPackage.getData());
-                                            pkg.setReadable(true);
-                                        }
-                                    }
-                                });
-                    }
-                });
+        return packagesRemoteDataSource.refreshPackage(packageId)
+                                       .doOnNext(new Consumer<Package>() {
+                                           @Override
+                                           public void accept(Package aPackage) throws Exception {
+                                               Package pkg = cachedPackages.get(aPackage.getNumber());
+                                               if (pkg != null) {
+                                                   pkg.setData(aPackage.getData());
+                                                   pkg.setReadable(true);
+                                               }
+                                           }
+
+                                       });
     }
 
     /**

@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesDataSource;
@@ -64,10 +65,14 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      */
     @Override
     public Observable<List<Package>> getPackages() {
-        Realm rlm = RealmHelper.newRealmInstance();
-
-        return Observable.just(rlm.copyFromRealm(rlm.where(Package.class)
-                .findAllSorted("timestamp", Sort.DESCENDING)));
+        return Observable.fromCallable(new Callable<List<Package>>() {
+            @Override
+            public List<Package> call() throws Exception {
+                Realm rlm = RealmHelper.newRealmInstance();
+                return rlm.copyFromRealm(rlm.where(Package.class)
+                                            .findAllSorted("timestamp", Sort.DESCENDING));
+            }
+        });
     }
 
     /**
@@ -78,11 +83,16 @@ public class PackagesLocalDataSource implements PackagesDataSource {
      * @return The observable package from database.
      */
     @Override
-    public Observable<Package> getPackage(@NonNull String packNumber) {
-        Realm rlm = RealmHelper.newRealmInstance();
-        return Observable.just(rlm.copyFromRealm(rlm.where(Package.class)
-                .equalTo("number", packNumber)
-                .findFirst()));
+    public Observable<Package> getPackage(@NonNull final String packNumber) {
+        return Observable.fromCallable(new Callable<Package>() {
+            @Override
+            public Package call() throws Exception {
+                Realm rlm = RealmHelper.newRealmInstance();
+                return rlm.copyFromRealm(rlm.where(Package.class)
+                                            .equalTo("number", packNumber)
+                                            .findFirst());
+            }
+        });
     }
 
     /**
@@ -206,20 +216,26 @@ public class PackagesLocalDataSource implements PackagesDataSource {
     }
 
     @Override
-    public Observable<List<Package>> searchPackages(@NonNull String keyWords) {
-        Realm rlm = RealmHelper.newRealmInstance();
-        return Observable.fromIterable(rlm.copyFromRealm(
-                rlm.where(Package.class)
-                        .like("name", "*" + keyWords + "*", Case.INSENSITIVE)
-                        .or()
-                        .like("companyChineseName", "*" + keyWords + "*", Case.INSENSITIVE)
-                        .or()
-                        .like("company", "*" + keyWords + "*", Case.INSENSITIVE)
-                        .or()
-                        .like("number", "*" + keyWords + "*", Case.INSENSITIVE)
-                        .findAll()))
-                .toList()
-                .toObservable();
+    public Observable<List<Package>> searchPackages(@NonNull
+                                                    final String keyWords) {
+
+        return Observable.fromCallable(new Callable<List<Package>>() {
+            @Override
+            public List<Package> call() throws Exception {
+                Realm rlm = RealmHelper.newRealmInstance();
+                return rlm.copyFromRealm(rlm.where(Package.class)
+                                            .like("name", "*" + keyWords + "*", Case.INSENSITIVE)
+                                            .or()
+                                            .like("companyChineseName",
+                                                    "*" + keyWords + "*",
+                                                    Case.INSENSITIVE)
+                                            .or()
+                                            .like("company", "*" + keyWords + "*", Case.INSENSITIVE)
+                                            .or()
+                                            .like("number", "*" + keyWords + "*", Case.INSENSITIVE)
+                                            .findAll());
+            }
+        });
     }
 
 }
