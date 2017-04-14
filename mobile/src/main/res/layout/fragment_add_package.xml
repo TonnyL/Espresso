@@ -88,15 +88,19 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/inputLayoutNumber"
                     app:counterEnabled="true"
+                    app:counterTextAppearance="@style/InputTextLayoutCounterStyle"
                     app:counterMaxLength="24"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:textColorHint="@color/colorSecondaryText">
 
                     <android.support.design.widget.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/editTextNumber"
                         android:drawableStart="@drawable/ic_dialpad_black_24dp"
+                        android:drawableTint="@color/colorPrimaryText"
                         android:drawablePadding="16dp"
+                        android:textColor="@color/colorPrimaryText"
                         android:hint="@string/tint_package_number"
                         android:inputType="textVisiblePassword"/>
 
@@ -116,13 +120,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/inputLayoutName"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:textColorHint="@color/colorSecondaryText">
 
                     <android.support.design.widget.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/editTextName"
+                        android:textColorHint="@color/colorSecondaryText"
                         android:drawableStart="@drawable/ic_assignment_black_24dp"
+                        android:drawableTint="@color/colorPrimaryText"
+                        android:textColor="@color/colorPrimaryText"
                         android:drawablePadding="16dp"
                         android:hint="@string/tint_package_name"/>
 

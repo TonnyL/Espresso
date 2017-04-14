@@ -1,19 +1,3 @@
-/*
- *  Copyright(c) 2017 lizhaotailang
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.github.marktony.espresso.data.source;
 
 import android.support.annotation.NonNull;
@@ -55,6 +39,8 @@ public class PackagesRepository implements PackagesDataSource {
     private final PackagesDataSource packagesLocalDataSource;
 
     private Map<String, Package> cachedPackages;
+
+    private Package cachePackage = null;
 
     // Prevent direct instantiation
     private PackagesRepository(@NonNull PackagesDataSource packagesRemoteDataSource,
@@ -114,21 +100,19 @@ public class PackagesRepository implements PackagesDataSource {
             // Return the cached packages.
             return packagesLocalDataSource
                     .getPackages()
-                    .publish(new Function<Observable<List<Package>>, ObservableSource<List<Package>>>() {
+                    .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
                         @Override
-                        public ObservableSource<List<Package>> apply(Observable<List<Package>> listObservable) throws Exception {
-                            listObservable.flatMapIterable(new Function<List<Package>, Iterable<Package>>() {
-                                @Override
-                                public Iterable<Package> apply(List<Package> packages) throws Exception {
-                                    return packages;
-                                }
-                            }).subscribe(new Consumer<Package>() {
-                                @Override
-                                public void accept(Package aPackage) throws Exception {
-                                    cachedPackages.put(aPackage.getNumber(), aPackage);
-                                }
-                            });
-                            return listObservable;
+                        public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
+                            return Observable
+                                    .fromIterable(packages)
+                                    .doOnNext(new Consumer<Package>() {
+                                        @Override
+                                        public void accept(Package aPackage) throws Exception {
+                                            cachedPackages.put(aPackage.getNumber(), aPackage);
+                                        }
+                                    })
+                                    .toList()
+                                    .toObservable();
                         }
                     });
         }
@@ -174,6 +158,7 @@ public class PackagesRepository implements PackagesDataSource {
      */
     @Override
     public void deletePackage(@NonNull String packageId) {
+        cachePackage = getPackageWithNumber(packageId);
         packagesLocalDataSource.deletePackage(packageId);
         cachedPackages.remove(packageId);
     }
@@ -187,16 +172,13 @@ public class PackagesRepository implements PackagesDataSource {
     public Observable<List<Package>> refreshPackages() {
         return packagesRemoteDataSource
                 .refreshPackages()
-                .publish(new Function<Observable<List<Package>>, ObservableSource<List<Package>>>() {
-                            @Override
-                            public ObservableSource<List<Package>> apply(Observable<List<Package>> listObservable) throws Exception {
-                                listObservable.flatMapIterable(new Function<List<Package>, Iterable<Package>>() {
-                                    @Override
-                                    public Iterable<Package> apply(List<Package> packages) throws Exception {
-                                        return packages;
-                                         }
-                                })
-                                              .subscribe(new Consumer<Package>() {
+                .flatMap(new Function<List<Package>, ObservableSource<List<Package>>>() {
+                    @Override
+                    public ObservableSource<List<Package>> apply(List<Package> packages) throws Exception {
+
+                        return Observable
+                                .fromIterable(packages)
+                                .doOnNext(new Consumer<Package>() {
                                     @Override
                                     public void accept(Package aPackage) throws Exception {
                                         Package p = cachedPackages.get(aPackage.getNumber());
@@ -206,10 +188,11 @@ public class PackagesRepository implements PackagesDataSource {
                                             p.setReadable(true);
                                         }
                                     }
-                                });
-                                return listObservable;
-                            }
-                        });
+                                })
+                                .toList()
+                                .toObservable();
+                    }
+                });
     }
 
     /**
@@ -221,24 +204,25 @@ public class PackagesRepository implements PackagesDataSource {
      */
     @Override
     public Observable<Package> refreshPackage(@NonNull final String packageId) {
-        return packagesRemoteDataSource.refreshPackage(packageId)
-                                       .publish(new Function<Observable<Package>, ObservableSource<Package>>() {
-                                           @Override
-                                           public ObservableSource<Package> apply(Observable<Package> packageObservable) throws Exception {
-                                               packageObservable.subscribe(new Consumer<Package>() {
-                                                   @Override
-                                                   public void accept(Package aPackage) throws Exception {
-                                                       Package pkg = cachedPackages.get(aPackage.getNumber());
-                                                       if (pkg != null) {
-                                                           pkg.setData(aPackage.getData());
-                                                           pkg.setReadable(true);
-                                                       }
-                                                   }
-
-                                               });
-                                               return packageObservable;
-                                           }
-                                       });
+        return packagesRemoteDataSource
+                .refreshPackage(packageId)
+                .flatMap(new Function<Package, ObservableSource<Package>>() {
+                    @Override
+                    public ObservableSource<Package> apply(Package p) throws Exception {
+                        return Observable
+                                .just(p)
+                                .doOnNext(new Consumer<Package>() {
+                                    @Override
+                                    public void accept(Package aPackage) throws Exception {
+                                        Package pkg = cachedPackages.get(aPackage.getNumber());
+                                        if (pkg != null) {
+                                            pkg.setData(aPackage.getData());
+                                            pkg.setReadable(true);
+                                        }
+                                    }
+                                });
+                    }
+                });
     }
 
     /**
@@ -321,19 +305,13 @@ public class PackagesRepository implements PackagesDataSource {
     private Observable<Package> getPackageWithNumberFromLocalRepository(@NonNull final String packNumber) {
         return packagesLocalDataSource
                 .getPackage(packNumber)
-                .publish(new Function<Observable<Package>, ObservableSource<Package>>() {
+                .doOnNext(new Consumer<Package>() {
                     @Override
-                    public ObservableSource<Package> apply(Observable<Package> packageObservable) throws Exception {
-                        packageObservable.subscribe(new Consumer<Package>() {
-                            @Override
-                            public void accept(Package aPackage) throws Exception {
-                                if (cachedPackages == null) {
-                                    cachedPackages = new LinkedHashMap<>();
-                                }
-                                cachedPackages.put(packNumber, aPackage);
-                            }
-                        });
-                        return packageObservable;
+                    public void accept(Package aPackage) throws Exception {
+                        if (cachedPackages == null) {
+                            cachedPackages = new LinkedHashMap<>();
+                        }
+                        cachedPackages.put(packNumber, aPackage);
                     }
                 });
     }

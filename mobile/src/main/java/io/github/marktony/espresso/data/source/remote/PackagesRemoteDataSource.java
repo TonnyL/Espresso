@@ -1,29 +1,13 @@
-/*
- *  Copyright(c) 2017 lizhaotailang
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.github.marktony.espresso.data.source.remote;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesDataSource;
+import io.github.marktony.espresso.realm.RealmHelper;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.reactivex.Observable;
@@ -34,8 +18,6 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-
-import static io.github.marktony.espresso.realm.RealmHelper.DATABASE_NAME;
 
 /**
  * Created by lizhaotailang on 2017/3/7.
@@ -99,33 +81,19 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
     public Observable<List<Package>> refreshPackages() {
         // It is necessary to build a new realm instance
         // in a different thread.
+        Realm realm = RealmHelper.newRealmInstance();
 
-        return Observable.fromCallable(new Callable<List<Package>>() {
-            @Override
-            public List<Package> call() throws Exception {
-                Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
-                                                        .deleteRealmIfMigrationNeeded()
-                                                        .name(DATABASE_NAME)
-                                                        .build());
-                return realm.copyFromRealm(realm.where(Package.class).findAll());
-            }
-        }).publish(new Function<Observable<List<Package>>, ObservableSource<List<Package>>>() {
-            @Override
-            public ObservableSource<List<Package>> apply(Observable<List<Package>> listObservable) throws Exception {
-                listObservable.flatMapIterable(new Function<List<Package>, Iterable<Package>>() {
+        return Observable.fromIterable(realm.copyFromRealm(realm.where(Package.class).findAll()))
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Function<Package, ObservableSource<Package>>() {
                     @Override
-                    public Iterable<Package> apply(List<Package> packages) throws Exception {
-                        return packages;
+                    public ObservableSource<Package> apply(Package aPackage) throws Exception {
+                        // A nested request.
+                        return refreshPackage(aPackage.getNumber());
                     }
-                }).subscribe(new Consumer<Package>() {
-                    @Override
-                    public void accept(Package aPackage) throws Exception {
-                        refreshPackage(aPackage.getNumber());
-                    }
-                });
-                return listObservable;
-            }
-        });
+                })
+                .toList()
+                .toObservable();
     }
 
     /**
@@ -134,14 +102,10 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
      * @return The observable package of latest status.
      */
     @Override
-    public Observable<Package> refreshPackage(@NonNull
-                                              final String packageId) {
+    public Observable<Package> refreshPackage(@NonNull String packageId) {
         // It is necessary to build a new realm instance
         // in a different thread.
-        Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(DATABASE_NAME)
-                .build());
+        Realm realm = RealmHelper.newRealmInstance();
         // Set a copy rather than use the raw data.
         final Package p = realm.copyFromRealm(realm.where(Package.class)
                 .equalTo("number", packageId)
@@ -158,43 +122,34 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                     }
                 })
                 .subscribeOn(Schedulers.io())
-                .publish(new Function<Observable<Package>, ObservableSource<Package>>() {
+                .doOnNext(new Consumer<Package>() {
                     @Override
-                    public ObservableSource<Package> apply(Observable<Package> packageObservable) throws Exception {
-                        packageObservable.subscribe(new Consumer<Package>() {
-                            @Override
-                            public void accept(Package aPackage) throws Exception {
+                    public void accept(Package aPackage) throws Exception {
 
-                                // To avoid the server error or other problems
-                                // making the data in database being dirty.
-                                if (aPackage != null && aPackage.getData() != null) {
-                                    // It is necessary to build a new realm instance
-                                    // in a different thread.
-                                    Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
-                                                                          .deleteRealmIfMigrationNeeded()
-                                                                          .name(DATABASE_NAME)
-                                                                          .build());
+                        // To avoid the server error or other problems
+                        // making the data in database being dirty.
+                        if (aPackage != null && aPackage.getData() != null) {
+                            // It is necessary to build a new realm instance
+                            // in a different thread.
+                            Realm rlm = RealmHelper.newRealmInstance();
 
-                                    // Only when the origin data is null or the origin
-                                    // data's size is less than the latest data's size
-                                    // set the package unread new(readable = true).
-                                    if (p.getData() == null || aPackage.getData().size() > p.getData().size()) {
-                                        p.setReadable(true);
-                                        p.setPushable(true);
-                                        p.setState(aPackage.getState());
-                                    }
-
-                                    p.setData(aPackage.getData());
-                                    // DO NOT forget to begin a transaction.
-                                    rlm.beginTransaction();
-                                    rlm.copyToRealmOrUpdate(p);
-                                    rlm.commitTransaction();
-
-                                    rlm.close();
-                                }
+                            // Only when the origin data is null or the origin
+                            // data's size is less than the latest data's size
+                            // set the package unread new(readable = true).
+                            if (p.getData() == null || aPackage.getData().size() > p.getData().size()) {
+                                p.setReadable(true);
+                                p.setPushable(true);
+                                p.setState(aPackage.getState());
                             }
-                        });
-                        return packageObservable;
+
+                            p.setData(aPackage.getData());
+                            // DO NOT forget to begin a transaction.
+                            rlm.beginTransaction();
+                            rlm.copyToRealmOrUpdate(p);
+                            rlm.commitTransaction();
+
+                            rlm.close();
+                        }
                     }
                 });
     }

@@ -1,33 +1,14 @@
-/*
- *  Copyright(c) 2017 lizhaotailang
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.github.marktony.espresso.data.source.local;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.github.marktony.espresso.data.Company;
 import io.github.marktony.espresso.data.source.CompaniesDataSource;
 import io.github.marktony.espresso.realm.RealmHelper;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
 import io.realm.Case;
 import io.realm.Realm;
 import io.realm.Sort;
@@ -55,27 +36,18 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
 
     @Override
     public Observable<List<Company>> getCompanies() {
-        return Observable.fromCallable(new Callable<List<Company>>() {
-            @Override
-            public List<Company> call() throws Exception {
-                Realm rlm = RealmHelper.newRealmInstance();
-                return rlm.copyFromRealm(rlm.where(Company.class)
-                                            .findAllSorted("alphabet", Sort.ASCENDING));
-            }
-        });
+        Realm rlm = RealmHelper.newRealmInstance();
+        return Observable
+                .fromIterable(rlm.copyFromRealm(rlm.where(Company.class).findAllSorted("alphabet", Sort.ASCENDING)))
+                .toList()
+                .toObservable();
     }
 
     @Override
-    public Observable<Company> getCompany(@NonNull final String companyId) {
-        return Observable.fromCallable(new Callable<Company>() {
-            @Override
-            public Company call() throws Exception {
-                Realm rlm = RealmHelper.newRealmInstance();
-                return rlm.copyFromRealm(rlm.where(Company.class)
-                                            .equalTo("id", companyId)
-                                            .findFirst());
-            }
-        });
+    public Observable<Company> getCompany(@NonNull String companyId) {
+        Realm rlm = RealmHelper.newRealmInstance();
+        return Observable
+                .just(rlm.copyFromRealm(rlm.where(Company.class).equalTo("id", companyId).findFirst()));
     }
 
     @Override
@@ -730,25 +702,21 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
     }
 
     @Override
-    public Observable<List<Company>> searchCompanies(@NonNull final String keyWords) {
-
-        return Observable.fromCallable(new Callable<List<Company>>() {
-            @Override
-            public List<Company> call() throws Exception {
-                Realm rlm = RealmHelper.newRealmInstance();
-                return rlm.copyFromRealm(rlm.where(Company.class)
-                                            .like("name", "*" + keyWords + "*", Case.INSENSITIVE)
-                                            .or()
-                                            .like("tel", "*" + keyWords + "*", Case.INSENSITIVE)
-                                            .or()
-                                            .like("website", "*" + keyWords + "*", Case.INSENSITIVE)
-                                            .or()
-                                            .like("alphabet",
-                                                    "*" + keyWords + "*",
-                                                    Case.INSENSITIVE)
-                                            .findAllSorted("alphabet", Sort.ASCENDING));
-            }
-        });
+    public Observable<List<Company>> searchCompanies(@NonNull String keyWords) {
+        Realm rlm = RealmHelper.newRealmInstance();
+        List<Company> results = rlm.copyFromRealm(
+                rlm.where(Company.class)
+                        .like("name","*" + keyWords + "*", Case.INSENSITIVE)
+                        .or()
+                        .like("tel", "*" + keyWords + "*", Case.INSENSITIVE)
+                        .or()
+                        .like("website", "*" + keyWords + "*", Case.INSENSITIVE)
+                        .or()
+                        .like("alphabet", "*" + keyWords + "*", Case.INSENSITIVE)
+                        .findAllSorted("alphabet", Sort.ASCENDING));
+        return Observable.fromIterable(results)
+                .toList()
+                .toObservable();
     }
 
 }

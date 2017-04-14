@@ -59,6 +59,7 @@
             android:id="@+id/contactCard"
             android:stateListAnimator="@animator/lift_on_touch"
             android:visibility="gone"
+            app:cardBackgroundColor="@color/layout_background"
             app:cardElevation="2dp"
             app:cardCornerRadius="2dp"
             app:cardUseCompatPadding="true">
@@ -107,6 +108,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_phone_black_24dp"
+                    android:tint="@color/colorPrimaryText"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="8dp"/>
 
