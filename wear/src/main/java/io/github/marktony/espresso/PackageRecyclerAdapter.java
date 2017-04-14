@@ -57,7 +57,7 @@ public class PackageRecyclerAdapter extends WearableRecyclerView.Adapter<Recycle
             if (p.getData() != null && p.getData().size() > 0) {
                 vh.textViewStatus.setText(p.getData().get(0).getContext());
             } else {
-                vh.textViewStatus.setText("Electronic Notification Received: Your order has been processed and tracking will be updated soon.");
+                vh.textViewStatus.setText("Can not get the latest status.");
             }
         }
     }
