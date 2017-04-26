@@ -17,6 +17,7 @@
 package io.github.marktony.espresso.mvp.search;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
 
@@ -106,6 +108,7 @@ public class SearchFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            hideImm();
             getActivity().onBackPressed();
         }
         return true;
@@ -159,4 +162,15 @@ public class SearchFragment extends Fragment
             adapter.updateData(packages, companies);
         }
     }
+
+    /**
+     * Hide the input method like soft keyboard, etc... when they are active.
+     */
+    private void hideImm() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        }
+    }
+
 }

@@ -19,12 +19,10 @@
     <color name="colorPrimary">#607d8b</color>
     <color name="colorPrimaryDark">#485a66</color>
     <color name="colorAccent">#546dfe</color>
-    <color name="colorPrimaryLight">#CFD8DC</color>
     <color name="colorPrimaryText">#e4e4e4</color>
     <color name="colorSecondaryText">#b5b5b5</color>
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorHeaderBackground">#35464e</color>
-    <color name="colorBottomBarBackground">#222222</color>
     <color name="colorNavItemUnselected">#a5a5a5</color>
 
     <color name="transparent_black">#33000000</color>

@@ -77,7 +77,6 @@
     <string name="deliver_man">快遞員</string>
     <string name="edit_name">編輯包裹名稱</string>
     <string name="input_empty">包裹名稱不能為空!</string>
-    <string name="retry">重試</string>
     <!--package details end-->
 
     <!--add package-->

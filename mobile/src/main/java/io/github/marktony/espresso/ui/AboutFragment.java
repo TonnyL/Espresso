@@ -85,7 +85,7 @@ public class AboutFragment extends PreferenceFragmentCompat {
         prefThx1.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                CustomTabsHelper.openUrl(getContext(), getString(R.string.thanks_1_desc));
+                CustomTabsHelper.openUrl(getContext(), getString(R.string.thanks_1_url));
                 return true;
             }
         });

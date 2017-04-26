@@ -19,12 +19,10 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#448AFF</color>
-    <color name="colorPrimaryLight">#B2DFDB</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorHeaderBackground">#ebebeb</color>
-    <color name="colorBottomBarBackground">@android:color/white</color>
     <color name="colorNavItemUnselected">#757575</color>
 
     <color name="transparent_black">#33000000</color>

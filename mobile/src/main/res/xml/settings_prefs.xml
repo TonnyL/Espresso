@@ -37,7 +37,7 @@
         <Preference
             android:key="do_not_disturb_mode_start"
             android:title="@string/start_time"
-            android:summary="%s"
+            android:summary="@string/start_time_desc"
             android:dependency="do_not_disturb_mode"/>
 
         <Preference

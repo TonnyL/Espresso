@@ -77,7 +77,6 @@
     <string name="deliver_man">Deliver man</string>
     <string name="edit_name">Edit Name</string>
     <string name="input_empty">The package name can not be empty!</string>
-    <string name="retry">RETRY</string>
     <!--package details end-->
 
     <!--add package-->
