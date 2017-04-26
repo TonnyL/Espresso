@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -33,6 +34,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
@@ -40,6 +42,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
@@ -67,6 +70,7 @@ public class AddPackageFragment extends Fragment
     private AppCompatTextView textViewScanCode;
     private FloatingActionButton fab;
     private ProgressBar progressBar;
+    private NestedScrollView scrollView;
 
     private AddPackageContract.Presenter presenter;
 
@@ -94,6 +98,8 @@ public class AddPackageFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_add_package, container, false);
 
         initViews(view);
+
+        addLayoutListener(scrollView, editTextName);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +166,32 @@ public class AddPackageFragment extends Fragment
         presenter.unsubscribe();
     }
 
+    /**
+     * Scroll the screen to avoid edit text being covered by imm such as the soft keyboard.
+     * It is better to set the height as 150 because some devices
+     * has the navigation bar. The height 100 might not trigger the scrolling action.
+     * @param main The scroll view.
+     * @param scroll The view to show.
+     */
+    private void addLayoutListener(final View main, final View scroll) {
+        main.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect rect = new Rect();
+                main.getWindowVisibleDisplayFrame(rect);
+                int mainInvisibleHeight = main.getRootView().getHeight() - rect.bottom;
+                if (mainInvisibleHeight > 150) {
+                    int[] location = new int[2];
+                    scroll.getLocationInWindow(location);
+                    int scrollHeight = (location[1] + scroll.getHeight()) - rect.bottom;
+                    main.scrollTo(0, scrollHeight);
+                } else {
+                    main.scrollTo(0, 0);
+                }
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -185,6 +217,8 @@ public class AddPackageFragment extends Fragment
         textViewScanCode = (AppCompatTextView) view.findViewById(R.id.textViewScanCode);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
+
     }
 
     /**

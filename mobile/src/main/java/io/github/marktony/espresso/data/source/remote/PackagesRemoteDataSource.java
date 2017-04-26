@@ -1,3 +1,19 @@
+/*
+ *  Copyright(c) 2017 lizhaotailang
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.marktony.espresso.data.source.remote;
 
 import android.support.annotation.NonNull;
@@ -7,7 +23,6 @@ import java.util.List;
 
 import io.github.marktony.espresso.data.Package;
 import io.github.marktony.espresso.data.source.PackagesDataSource;
-import io.github.marktony.espresso.realm.RealmHelper;
 import io.github.marktony.espresso.retrofit.RetrofitClient;
 import io.github.marktony.espresso.retrofit.RetrofitService;
 import io.reactivex.Observable;
@@ -18,6 +33,8 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+
+import static io.github.marktony.espresso.realm.RealmHelper.DATABASE_NAME;
 
 /**
  * Created by lizhaotailang on 2017/3/7.
@@ -81,7 +98,10 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
     public Observable<List<Package>> refreshPackages() {
         // It is necessary to build a new realm instance
         // in a different thread.
-        Realm realm = RealmHelper.newRealmInstance();
+        Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .name(DATABASE_NAME)
+                .build());
 
         return Observable.fromIterable(realm.copyFromRealm(realm.where(Package.class).findAll()))
                 .subscribeOn(Schedulers.io())
@@ -105,7 +125,10 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
     public Observable<Package> refreshPackage(@NonNull String packageId) {
         // It is necessary to build a new realm instance
         // in a different thread.
-        Realm realm = RealmHelper.newRealmInstance();
+        Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .name(DATABASE_NAME)
+                .build());
         // Set a copy rather than use the raw data.
         final Package p = realm.copyFromRealm(realm.where(Package.class)
                 .equalTo("number", packageId)
@@ -131,7 +154,10 @@ public class PackagesRemoteDataSource implements PackagesDataSource {
                         if (aPackage != null && aPackage.getData() != null) {
                             // It is necessary to build a new realm instance
                             // in a different thread.
-                            Realm rlm = RealmHelper.newRealmInstance();
+                            Realm rlm = Realm.getInstance(new RealmConfiguration.Builder()
+                                    .deleteRealmIfMigrationNeeded()
+                                    .name(DATABASE_NAME)
+                                    .build());
 
                             // Only when the origin data is null or the origin
                             // data's size is less than the latest data's size

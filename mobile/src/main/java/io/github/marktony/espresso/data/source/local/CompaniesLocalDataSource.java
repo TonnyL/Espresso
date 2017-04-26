@@ -20,14 +20,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.github.marktony.espresso.data.Company;
 import io.github.marktony.espresso.data.source.CompaniesDataSource;
 import io.github.marktony.espresso.realm.RealmHelper;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
 import io.realm.Case;
 import io.realm.Realm;
 import io.realm.Sort;
@@ -55,31 +52,18 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
 
     @Override
     public Observable<List<Company>> getCompanies() {
-        return Observable.fromCallable(new Callable<List<Company>>() {
-            @Override
-            public List<Company> call() throws Exception {
-                Realm rlm = RealmHelper.newRealmInstance();
-                List<Company> companyList = rlm.copyFromRealm(rlm.where(Company.class)
-                        .findAllSorted("alphabet", Sort.ASCENDING));
-                rlm.close();
-                return companyList;
-            }
-        });
+        Realm rlm = RealmHelper.newRealmInstance();
+        return Observable
+                .fromIterable(rlm.copyFromRealm(rlm.where(Company.class).findAllSorted("alphabet", Sort.ASCENDING)))
+                .toList()
+                .toObservable();
     }
 
     @Override
-    public Observable<Company> getCompany(@NonNull final String companyId) {
-        return Observable.fromCallable(new Callable<Company>() {
-            @Override
-            public Company call() throws Exception {
-                Realm rlm = RealmHelper.newRealmInstance();
-                Company company = rlm.copyFromRealm(rlm.where(Company.class)
-                        .equalTo("id", companyId)
-                        .findFirst());
-                rlm.close();
-                return company;
-            }
-        });
+    public Observable<Company> getCompany(@NonNull String companyId) {
+        Realm rlm = RealmHelper.newRealmInstance();
+        return Observable
+                .just(rlm.copyFromRealm(rlm.where(Company.class).equalTo("id", companyId).findFirst()));
     }
 
     @Override
@@ -734,17 +718,11 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
     }
 
     @Override
-    public Observable<List<Company>> searchCompanies(@NonNull final String keyWords) {
-
-        return Observable.fromCallable(new Callable<List<Company>>() {
-            @Override
-            public List<Company> call() throws Exception {
-                Realm rlm = RealmHelper.newRealmInstance();
-                List<Company> companies = rlm.copyFromRealm(rlm.where(Company.class)
-                        .like(
-                                "name",
-                                "*" + keyWords + "*",
-                                Case.INSENSITIVE)
+    public Observable<List<Company>> searchCompanies(@NonNull String keyWords) {
+        Realm rlm = RealmHelper.newRealmInstance();
+        List<Company> results = rlm.copyFromRealm(
+                rlm.where(Company.class)
+                        .like("name","*" + keyWords + "*", Case.INSENSITIVE)
                         .or()
                         .like("tel", "*" + keyWords + "*", Case.INSENSITIVE)
                         .or()
@@ -752,10 +730,9 @@ public class CompaniesLocalDataSource implements CompaniesDataSource {
                         .or()
                         .like("alphabet", "*" + keyWords + "*", Case.INSENSITIVE)
                         .findAllSorted("alphabet", Sort.ASCENDING));
-                rlm.close();
-                return companies;
-            }
-        });
+        return Observable.fromIterable(results)
+                .toList()
+                .toObservable();
     }
 
 }
