@@ -1,4 +1,7 @@
 # Espresso Android App
+
+[![Build Status](https://travis-ci.org/TonnyL/Espresso.svg?branch=master)](https://travis-ci.org/TonnyL/Espresso)
+
 ![icon](https://github.com/TonnyL/Espresso/blob/master/mobile/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
 
 Espresso is an express delivery tracking app designed with Material Design style, built on MVP(Model-View-Presenter) architecture with RxJava2, Retrofit2, Realm database and ZXing.
