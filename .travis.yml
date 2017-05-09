@@ -6,13 +6,7 @@ android:
     - platform-tools
     - build-tools-25.0.2
     - android-25
-    - extra-google-google_play_services
     - extra-android-m2repository
-    - addon-google_apis-google-25
-  licenses:
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
 
 jdk:
   - oraclejdk8
@@ -20,4 +14,5 @@ jdk:
 notifications:
   email: false
 
-script: ./gradlew assemble check
+script:
+  - ./gradlew assemble check

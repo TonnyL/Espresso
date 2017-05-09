@@ -57,7 +57,6 @@ This project is still in progress. Here are the some features that I will finish
 - [x] Day and night mode.
 - [x] Service to build notifications.
 - [x] Settings and about page.
-- [ ] Supporting Android Wear.
 - [ ] UI test and unit test.
 
 ### Help Me Improve This App

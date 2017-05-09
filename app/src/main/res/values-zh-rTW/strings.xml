@@ -21,7 +21,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!--activities-->
+    
     <string name="activity_package_details">包裹詳情</string>
     <string name="activity_add_package">添加包裹</string>
     <string name="activity_company_details">公司詳情</string>
@@ -50,13 +50,13 @@
     <string name="set_read">標記為已讀</string>
     <string name="remove">移除</string>
     <string name="get_status_error">無法獲取物流信息。</string>
-    <string name="network_error">網絡連接錯誤，請稍後重試。</string>
+    <string name="network_error">網路連接錯誤，請稍後重試。</string>
     <string name="package_number_copied">運單號已複製到剪貼板。</string>
     <string name="package_removed_msg">已被移除。</string>
     <string name="undo">撤銷</string>
     <string name="go_to_settings">去設置</string>
     <string name="to_add_packages">點擊添加按鈕添加包裹。</string>
-    <string name="latest_status">最新狀態:&#160;</string>
+    <string name="latest_status">最新狀態: </string>
     <string-array name="package_status">
         <item>運輸中</item>
         <item>其他</item>
@@ -84,10 +84,10 @@
     <string name="tint_package_name">名稱(可選)</string>
     <string name="tint_package_number">運單號</string>
     <string name="wrong_number_and_check">無效的運單號，請檢查後重試。</string>
-    <string name="require_permission">你需要授予相機權限才能使用掃描功能。</string>
+    <string name="require_permission">你需要授予相機許可權才能使用掃描功能。</string>
     <string name="package_name_default_pre">包裹</string>
     <string name="package_exist">運單號已經在你的列表裡了，請不要重複添加。</string>
-    <string name="permission_denied">權限被拒絕</string>
+    <string name="permission_denied">許可權被拒絕</string>
     <string name="error">錯誤</string>
     <string name="something_wrong">發生了一些錯誤…</string>
     <string name="unable_to_open_camera">無法打開相機，請檢查後重試。</string>
@@ -114,7 +114,7 @@
     <string name="custom_tabs_desc">使用Chrome Custom Tabs打開應用內的鏈接。</string>
     <string name="user_interface">用戶界面</string>
     <string name="navigation_bar_tint">導航欄變色</string>
-    <string name="navigation_bar_tint_desc">為導航欄着色</string>
+    <string name="navigation_bar_tint_desc">為導航欄著色</string>
     <string name="navigation_bar_restart_msg">重啟應用後生效。</string>
     <string-array name="notification_interval">
         <item>10 分鐘</item>
@@ -174,11 +174,11 @@
     <string name="onboarding_finish_button_description">完成</string>
     <string name="onboarding_pre_button_description">上一步</string>
     <string name="onboarding_section_1">簡單快速地添加包裹</string>
-    <string name="onboarding_intro_1">支持全球640餘家快遞公司, 但當你添加包裹時, 快遞公司的識別將被自動完成。</string>
-    <string name="onboarding_section_2">保持你的物流信息為最新狀態</string>
-    <string name="onboarding_intro_2">當物流信息更新後, 你將收到通知提醒, 所以你的信息將保持最新。</string>
-    <string name="onboarding_section_3">和你的Android Wear設備保持同步</string>
-    <string name="onboarding_intro_3">你可以在Android Wear設備上完成一切操作。</string>
+    <string name="onboarding_intro_1">支持全球640餘家快遞公司</string>
+    <string name="onboarding_section_2">一次點擊就可以完成輸入單號的操作</string>
+    <string name="onboarding_intro_2">對準單號掃描，然後單號就會被自動識別</string>
+    <string name="onboarding_section_3">保持你的物流信息為最新狀態</string>
+    <string name="onboarding_intro_3">當物流信息更新後, 你將收到通知提醒, 所以你的信息將保持最新</string>
     <string name="onboarding_finish_button_description_wait">準備中, 請稍後…</string>
     <!--onboarding end-->
 
@@ -187,7 +187,7 @@
     <string name="search_hint">包裹或公司…</string>
     <string name="search_label_package">包裹</string>
     <string name="search_label_company">快遞公司</string>
-    <string name="item_loading">加載中…</string>
+    <string name="item_loading">載入中…</string>
     <!--search end-->
 
     <!--custom tabs-->

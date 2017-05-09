@@ -19,7 +19,11 @@ package io.github.marktony.espresso.ui.onboarding;
 import android.animation.ArgbEvaluator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -33,10 +37,14 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.util.Arrays;
+
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.source.CompaniesRepository;
 import io.github.marktony.espresso.data.source.local.CompaniesLocalDataSource;
+import io.github.marktony.espresso.mvp.addpackage.AddPackageActivity;
 import io.github.marktony.espresso.mvp.packages.MainActivity;
+import io.github.marktony.espresso.mvp.search.SearchActivity;
 import io.github.marktony.espresso.util.SettingsUtil;
 
 public class OnboardingActivity extends AppCompatActivity {
@@ -99,6 +107,7 @@ public class OnboardingActivity extends AppCompatActivity {
                     ed.putBoolean(SettingsUtil.KEY_FIRST_LAUNCH, false);
                     ed.apply();
                     navigateToMainActivity();
+                    enableShortcuts();
                 }
             });
 
@@ -186,6 +195,44 @@ public class OnboardingActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
 
         }
+    }
+
+    private void enableShortcuts() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            ShortcutManager manager =  getSystemService(ShortcutManager.class);
+            ShortcutInfo addPkg = new ShortcutInfo.Builder(this, "shortcut_add_package")
+                    .setLongLabel(getString(R.string.shortcut_label_add_package))
+                    .setShortLabel(getString(R.string.shortcut_label_add_package))
+                    .setIcon(Icon.createWithResource(this, R.drawable.ic_shortcut_add))
+                    .setIntent(
+                            new Intent(OnboardingActivity.this, AddPackageActivity.class)
+                                    .setAction(Intent.ACTION_VIEW)
+                                    .addCategory(ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
+                    )
+                    .build();
+            ShortcutInfo scanCode = new ShortcutInfo.Builder(this, "shortcut_scan_code")
+                    .setIcon(Icon.createWithResource(this, R.drawable.ic_shortcut_filter_center_focus))
+                    .setLongLabel(getString(R.string.shortcut_label_scan_code))
+                    .setShortLabel(getString(R.string.shortcut_label_scan_code))
+                    .setIntent(
+                            new Intent(OnboardingActivity.this, AddPackageActivity.class)
+                                    .setAction("io.github.marktony.espresso.mvp.addpackage.AddPackageActivity")
+                                    .addCategory(ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
+                    )
+                    .build();
+            ShortcutInfo search = new ShortcutInfo.Builder(this, "shortcut_search")
+                    .setIcon(Icon.createWithResource(this, R.drawable.ic_shortcut_search))
+                    .setLongLabel(getString(R.string.shortcut_label_search))
+                    .setShortLabel(getString(R.string.shortcut_label_search))
+                    .setIntent(
+                            new Intent(OnboardingActivity.this, SearchActivity.class)
+                                    .setAction(Intent.ACTION_VIEW)
+                                    .addCategory(ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
+                    )
+                    .build();
+            manager.setDynamicShortcuts(Arrays.asList(addPkg, scanCode, search));
+        }
+
     }
 
     private void navigateToMainActivity() {

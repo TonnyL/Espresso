@@ -174,11 +174,11 @@
     <string name="onboarding_finish_button_description">完成</string>
     <string name="onboarding_pre_button_description">上一步</string>
     <string name="onboarding_section_1">简单快速地添加包裹</string>
-    <string name="onboarding_intro_1">支持全球640余家快递公司, 但当你添加包裹时, 快递公司的识别将被自动完成。</string>
-    <string name="onboarding_section_2">保持你的物流信息为最新状态</string>
-    <string name="onboarding_intro_2">当物流信息更新后, 你将收到通知提醒, 所以你的信息将保持最新。</string>
-    <string name="onboarding_section_3">和你的Android Wear设备保持同步</string>
-    <string name="onboarding_intro_3">你可以在Android Wear设备上完成一切操作。</string>
+    <string name="onboarding_intro_1">支持全球640余家快递公司</string>
+    <string name="onboarding_section_2">一次点击就可以完成输入单号的操作</string>
+    <string name="onboarding_intro_2">对准单号扫描，然后单号就会被自动识别</string>
+    <string name="onboarding_section_3">保持你的物流信息为最新状态</string>
+    <string name="onboarding_intro_3">当物流信息更新后, 你将收到通知提醒, 所以你的信息将保持最新</string>
     <string name="onboarding_finish_button_description_wait">准备中, 请稍后…</string>
     <!--onboarding end-->
 
