@@ -39,32 +39,55 @@ ext {
     zxingLibVersion = '3.3.0'
     datetimePickerVersion = '3.1.3'
     circleimageviewVersion = '2.1.0'
+    espressoVersion = '2.2.2'
+    runnerRulesVersion = '0.5'
+    junitVersion = '4.12'
+    mockitoVersion = '2.0.2-beta'
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+
     // Support libraries
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.android.support:support-v4:${supportLibVersion}"
-    compile "com.android.support:design:${supportLibVersion}"
-    compile "com.android.support:cardview-v7:${supportLibVersion}"
-    compile "com.android.support:preference-v14:${supportLibVersion}"
-    compile "com.android.support:customtabs:${supportLibVersion}"
+    compile "com.android.support:appcompat-v7:$supportLibVersion"
+    compile "com.android.support:support-v4:$supportLibVersion"
+    compile "com.android.support:design:$supportLibVersion"
+    compile "com.android.support:cardview-v7:$supportLibVersion"
+    compile "com.android.support:preference-v14:$supportLibVersion"
+    compile "com.android.support:customtabs:$supportLibVersion"
+
     // ReactiveX series
-    compile "io.reactivex.rxjava2:rxjava:${rxjavaVersion}"
-    compile "io.reactivex.rxjava2:rxandroid:${rxjavaVersion}"
+    compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    compile "io.reactivex.rxjava2:rxandroid:$rxjavaVersion"
     // Retrofit series
-    compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
-    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
-    compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     // Zxing
-    compile "com.google.zxing:core:${zxingLibVersion}"
+    compile "com.google.zxing:core:$zxingLibVersion"
     // Material date time picker
-    compile "com.wdullaer:materialdatetimepicker:${datetimePickerVersion}"
+    compile "com.wdullaer:materialdatetimepicker:$datetimePickerVersion"
     // CircleImageView
-    compile "de.hdodenhof:circleimageview:${circleimageviewVersion}"
-    testCompile 'junit:junit:4.12'
+    compile "de.hdodenhof:circleimageview:$circleimageviewVersion"
+
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.mockito:mockito-all:$mockitoVersion"
+
+    // Mockito
+    androidTestCompile "org.mockito:mockito-core:$mockitoVersion"
+
+    // Espresso
+    androidTestCompile "com.android.support:support-annotations:$supportLibVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
+        exclude group: 'com.android.support'
+    }
+    androidTestCompile("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
+        exclude group: 'com.android.support'
+    }
+
+    // Runner and rules
+    androidTestCompile "com.android.support.test:runner:$runnerRulesVersion"
+    androidTestCompile "com.android.support.test:rules:$runnerRulesVersion"
+
 }

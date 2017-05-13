@@ -16,7 +16,8 @@
   -->
 
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/preferences_settings">
 
     <PreferenceCategory
         android:title="@string/notifications">
