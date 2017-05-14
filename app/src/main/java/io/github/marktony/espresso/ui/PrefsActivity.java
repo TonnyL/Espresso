@@ -25,9 +25,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
 import android.view.MenuItem;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
 
@@ -51,11 +49,6 @@ public class PrefsActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
 
-        Explode explode = new Explode();
-        explode.setDuration(500);
-        explode.setInterpolator(new AccelerateDecelerateInterpolator());
-        getWindow().setEnterTransition(explode);
-
         initViews();
 
         Intent intent = getIntent();
@@ -76,7 +69,7 @@ public class PrefsActivity extends AppCompatActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container,fragment)
+                .replace(R.id.view_pager,fragment)
                 .commit();
 
     }

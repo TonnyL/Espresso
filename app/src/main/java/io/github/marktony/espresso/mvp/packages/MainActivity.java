@@ -16,7 +16,6 @@
 
 package io.github.marktony.espresso.mvp.packages;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -32,12 +31,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
-import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.appwidget.AppWidgetProvider;
@@ -82,17 +78,6 @@ public class MainActivity extends AppCompatActivity
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("navigation_bar_tint", true)) {
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
-
-        // Begin the slide animation.
-        Slide slide = new Slide();
-        slide.setDuration(500);
-        slide.setInterpolator(new AccelerateDecelerateInterpolator());
-        getWindow().setExitTransition(slide);
-
-        Explode explode = new Explode();
-        explode.setDuration(500);
-        explode.setInterpolator(new AccelerateDecelerateInterpolator());
-        getWindow().setEnterTransition(explode);
 
         initViews();
 
@@ -233,13 +218,13 @@ public class MainActivity extends AppCompatActivity
 
             Intent intent = new Intent(MainActivity.this, PrefsActivity.class);
             intent.putExtra(PrefsActivity.EXTRA_FLAG, PrefsActivity.FLAG_SETTINGS);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+            startActivity(intent);
 
         } else if (id == R.id.nav_about) {
 
             Intent intent = new Intent(MainActivity.this, PrefsActivity.class);
             intent.putExtra(PrefsActivity.EXTRA_FLAG, PrefsActivity.FLAG_ABOUT);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+            startActivity(intent);
 
         }
 

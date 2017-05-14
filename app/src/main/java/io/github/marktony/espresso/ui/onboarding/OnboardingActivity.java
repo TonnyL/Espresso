@@ -138,7 +138,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private void initViews() {
         OnboardingPagerAdapter pagerAdapter = new OnboardingPagerAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(pagerAdapter);
         buttonFinish = (AppCompatButton) findViewById(R.id.buttonFinish);
         buttonFinish.setText(R.string.onboarding_finish_button_description_wait);

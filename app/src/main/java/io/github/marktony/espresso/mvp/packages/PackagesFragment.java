@@ -16,7 +16,6 @@
 
 package io.github.marktony.espresso.mvp.packages;
 
-import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -96,8 +95,7 @@ public class PackagesFragment extends Fragment
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        startActivity(new Intent(getContext(), AddPackageActivity.class),
-                            ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                        startActivity(new Intent(getContext(), AddPackageActivity.class));
             }
         });
 
@@ -165,8 +163,7 @@ public class PackagesFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            startActivity(new Intent(getContext(), SearchActivity.class),
-                    ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+            startActivity(new Intent(getContext(), SearchActivity.class));
         } else if (id == R.id.action_mark_all_read) {
             presenter.markAllPacksRead();
         }
@@ -332,7 +329,7 @@ public class PackagesFragment extends Fragment
                 public void OnItemClick(View v, int position) {
                     Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
                     intent.putExtra(PackageDetailsActivity.PACKAGE_ID, list.get(position).getNumber());
-                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                    startActivity(intent);
                 }
 
             });

@@ -16,7 +16,6 @@
 
 package io.github.marktony.espresso.mvp.companies;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -71,7 +70,6 @@ public class CompaniesFragment extends Fragment
 
         initViews(view);
 
-
         setHasOptionsMenu(true);
 
         return view;
@@ -98,8 +96,7 @@ public class CompaniesFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
-            startActivity(new Intent(getContext(), SearchActivity.class),
-                    ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+            startActivity(new Intent(getContext(), SearchActivity.class));
         }
         return true;
     }
@@ -118,7 +115,7 @@ public class CompaniesFragment extends Fragment
 
     @Override
     public void showGetCompaniesError() {
-        Snackbar.make(recyclerView, "获取失败", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(recyclerView, R.string.something_wrong, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -130,7 +127,7 @@ public class CompaniesFragment extends Fragment
                 public void OnItemClick(View v, int position) {
                     Intent intent = new Intent(getContext(), CompanyDetailActivity.class);
                     intent.putExtra(CompanyDetailActivity.COMPANY_ID, list.get(position).getId());
-                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                    startActivity(intent);
                 }
             });
             recyclerView.setAdapter(adapter);

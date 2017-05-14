@@ -16,7 +16,6 @@
 
 package io.github.marktony.espresso.mvp.search;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -146,13 +145,13 @@ public class SearchFragment extends Fragment
 
                         Intent intent = new Intent(getContext(), PackageDetailsActivity.class);
                         intent.putExtra(PackageDetailsActivity.PACKAGE_ID, packages.get(adapter.getOriginalIndex(position)).getNumber());
-                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                        startActivity(intent);
 
                     } else if (adapter.getItemViewType(position) == SearchResultsAdapter.ItemWrapper.TYPE_COMPANY) {
 
                         Intent intent = new Intent(getContext(), CompanyDetailActivity.class);
                         intent.putExtra(CompanyDetailActivity.COMPANY_ID, companies.get(adapter.getOriginalIndex(position)).getId());
-                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                        startActivity(intent);
 
                     }
                 }

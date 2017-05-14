@@ -21,8 +21,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Explode;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.source.local.PackagesLocalDataSource;
@@ -49,11 +47,6 @@ public class PackageDetailsActivity extends AppCompatActivity{
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
 
-        Explode explode = new Explode();
-        explode.setDuration(500);
-        explode.setInterpolator(new AccelerateDecelerateInterpolator());
-        getWindow().setEnterTransition(explode);
-
         // Restore the status.
         if (savedInstanceState != null) {
             fragment = (PackageDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "PackageDetailsFragment");
@@ -62,7 +55,7 @@ public class PackageDetailsActivity extends AppCompatActivity{
         }
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.view_pager, fragment)
                 .commit();
 
         // Create the presenter.

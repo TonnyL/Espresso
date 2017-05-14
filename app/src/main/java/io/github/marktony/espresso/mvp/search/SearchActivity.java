@@ -21,8 +21,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Explode;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import io.github.marktony.espresso.R;
 import io.github.marktony.espresso.data.source.CompaniesRepository;
@@ -45,12 +43,6 @@ public class SearchActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
 
-        // Set the animations.
-        Explode explode = new Explode();
-        explode.setDuration(500);
-        explode.setInterpolator(new AccelerateDecelerateInterpolator());
-        getWindow().setEnterTransition(explode);
-
         if (savedInstanceState != null) {
             fragment = (SearchFragment) getSupportFragmentManager().getFragment(savedInstanceState, "SearchFragment");
         } else {
@@ -58,7 +50,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.view_pager, fragment)
                 .commit();
 
         new SearchPresenter(fragment,

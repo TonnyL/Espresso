@@ -48,11 +48,6 @@ public class CompanyDetailActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
 
-        Explode explode = new Explode();
-        explode.setDuration(500);
-        explode.setInterpolator(new AccelerateDecelerateInterpolator());
-        getWindow().setEnterTransition(explode);
-
         if (savedInstanceState != null) {
             fragment = (CompanyDetailFragment) getSupportFragmentManager().getFragment(savedInstanceState, "CompanyDetailFragment");
         } else {
@@ -61,7 +56,7 @@ public class CompanyDetailActivity extends AppCompatActivity {
 
         if (!fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment, "CompanyDetailFragment")
+                    .add(R.id.view_pager, fragment, "CompanyDetailFragment")
                     .commit();
         }
 

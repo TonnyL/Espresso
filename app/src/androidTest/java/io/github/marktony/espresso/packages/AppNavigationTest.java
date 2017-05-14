@@ -114,7 +114,7 @@ public class AppNavigationTest {
                 .perform(navigateTo(R.id.nav_about));
 
         // Check that title is correct.
-        onView(allOf(withParent(withId(R.id.toolbar)),
+       onView(allOf(withParent(withId(R.id.toolbar)),
                 withText(R.string.nav_about)))
                 .check(matches(isDisplayed()));
     }
