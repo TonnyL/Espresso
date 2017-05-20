@@ -24,6 +24,7 @@ import static org.hamcrest.core.AllOf.allOf;
 
 /**
  * Created by lizhaotailang on 2017/5/14.
+ * The tests for {@link io.github.marktony.espresso.ui.SettingsFragment}.
  */
 
 @RunWith(AndroidJUnit4.class)

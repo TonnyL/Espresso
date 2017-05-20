@@ -166,12 +166,12 @@ public class PackageDetailsFragment extends Fragment
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        fab = view.findViewById(R.id.fab);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        toolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
+        toolbarLayout = view.findViewById(R.id.toolbar_layout);
 
     }
 

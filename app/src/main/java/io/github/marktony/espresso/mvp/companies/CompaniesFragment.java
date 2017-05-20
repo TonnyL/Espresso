@@ -103,7 +103,7 @@ public class CompaniesFragment extends Fragment
 
     @Override
     public void initViews(View view) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewCompaniesList);
+        recyclerView = view.findViewById(R.id.recyclerViewCompaniesList);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
     }

@@ -89,9 +89,9 @@ public class OnboardingFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        sectionLabel = (AppCompatTextView) view.findViewById(R.id.section_label);
-        sectionIntro = (AppCompatTextView) view.findViewById(R.id.section_intro);
-        sectionImg = (ImageView) view.findViewById(R.id.section_img);
+        sectionLabel = view.findViewById(R.id.section_label);
+        sectionIntro = view.findViewById(R.id.section_intro);
+        sectionImg = view.findViewById(R.id.section_img);
     }
 
 }

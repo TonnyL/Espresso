@@ -3,13 +3,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 'android-O'
+    buildToolsVersion '26.0.0 rc2'
 
     defaultConfig {
         applicationId "io.github.marktony.espresso"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -31,35 +31,10 @@ android {
         abortOnError false
     }
 
-    productFlavors {
-        mock {
-            applicationIdSuffix = ".mock"
-        }
-        prod {
-
-        }
-    }
-
-    // Remove mockRelease as it's not needed.
-    android.variantFilter { variant ->
-        if (variant.buildType.name == 'release'
-                && variant.getFlavors().get(0).name == 'mock') {
-            variant.setIgnore(true);
-        }
-    }
-
-    // Always show the result of every unit test, even if it passes.
-    testOptions.unitTests.all {
-        testLogging {
-            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
-        }
-    }
-
-    sourceSets { prod { java.srcDirs = ['src/prod/java', 'src/prod/java/'] } }
 }
 
 ext {
-    supportLibVersion = '25.3.1'
+    supportLibVersion = '26.0.0-beta1'
     rxjavaVersion = '2.0.1'
     retrofitVersion = '2.2.0'
     zxingLibVersion = '3.3.0'
@@ -92,15 +67,15 @@ dependencies {
     // Zxing
     compile "com.google.zxing:core:$zxingLibVersion"
     // Material date time picker
-    compile "com.wdullaer:materialdatetimepicker:$datetimePickerVersion"
+    compile("com.wdullaer:materialdatetimepicker:$datetimePickerVersion"){
+        exclude group:'com.android.support'
+    }
     // CircleImageView
-    compile "de.hdodenhof:circleimageview:$circleimageviewVersion"
+    compile("de.hdodenhof:circleimageview:$circleimageviewVersion"){
+        exclude group:'com.android.support'
+    }
 
     testCompile "junit:junit:$junitVersion"
-    testCompile "org.mockito:mockito-all:$mockitoVersion"
-
-    // Mockito
-    androidTestCompile "org.mockito:mockito-core:$mockitoVersion"
 
     // Espresso
     androidTestCompile "com.android.support:support-annotations:$supportLibVersion"

@@ -136,10 +136,10 @@ public class CompanyDetailFragment extends Fragment
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        textViewCompanyName = (AppCompatTextView) view.findViewById(R.id.textViewCompany);
-        textViewTel = (AppCompatTextView) view.findViewById(R.id.textViewCompanyPhoneNumber);
-        textViewWebsite = (AppCompatTextView) view.findViewById(R.id.textViewCompanyWebsite);
+        fab = view.findViewById(R.id.fab);
+        textViewCompanyName = view.findViewById(R.id.textViewCompany);
+        textViewTel = view.findViewById(R.id.textViewCompanyPhoneNumber);
+        textViewWebsite = view.findViewById(R.id.textViewCompanyWebsite);
     }
 
     @Override

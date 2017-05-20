@@ -212,12 +212,12 @@ public class AddPackageFragment extends Fragment
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        editTextName = (TextInputEditText) view.findViewById(R.id.editTextName);
-        editTextNumber = (TextInputEditText) view.findViewById(R.id.editTextNumber);
-        textViewScanCode = (AppCompatTextView) view.findViewById(R.id.textViewScanCode);
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
+        editTextName = view.findViewById(R.id.editTextName);
+        editTextNumber = view.findViewById(R.id.editTextNumber);
+        textViewScanCode = view.findViewById(R.id.textViewScanCode);
+        fab = view.findViewById(R.id.fab);
+        progressBar = view.findViewById(R.id.progressBar);
+        scrollView = view.findViewById(R.id.scrollView);
 
     }
 

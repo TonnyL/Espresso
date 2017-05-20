@@ -43,7 +43,7 @@ public class LicensesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_licenses, container, false);
 
-        WebView webView = (WebView) view.findViewById(R.id.webView);
+        WebView webView = view.findViewById(R.id.webView);
         webView.loadUrl("file:///android_asset/license.html");
 
         return view;

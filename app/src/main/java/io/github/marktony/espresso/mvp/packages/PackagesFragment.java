@@ -201,12 +201,12 @@ public class PackagesFragment extends Fragment
     @Override
     public void initViews(View view) {
 
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        bottomNavigationView = (BottomNavigationView) view.findViewById(R.id.bottomNavigationView);
-        emptyView = (LinearLayout) view.findViewById(R.id.emptyView);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        fab =  view.findViewById(R.id.fab);
+        bottomNavigationView = view.findViewById(R.id.bottomNavigationView);
+        emptyView =  view.findViewById(R.id.emptyView);
+        recyclerView =  view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        refreshLayout =  view.findViewById(R.id.refreshLayout);
         refreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
         // ItemTouchHelper helps to handle the drag or swipe action.

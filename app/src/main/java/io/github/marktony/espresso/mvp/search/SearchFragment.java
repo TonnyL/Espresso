@@ -119,9 +119,9 @@ public class SearchFragment extends Fragment
         activity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        searchView = (SearchView) view.findViewById(R.id.searchView);
+        searchView = view.findViewById(R.id.searchView);
         searchView.setIconified(false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 

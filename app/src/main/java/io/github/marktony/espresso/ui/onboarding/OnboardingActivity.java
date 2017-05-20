@@ -61,6 +61,8 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private static final int MSG_DATA_INSERT_FINISH = 1;
 
+    private Handler handler = new Handler(new HandlerCallback());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,16 +140,17 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private void initViews() {
         OnboardingPagerAdapter pagerAdapter = new OnboardingPagerAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(pagerAdapter);
-        buttonFinish = (AppCompatButton) findViewById(R.id.buttonFinish);
+        buttonFinish = findViewById(R.id.buttonFinish);
         buttonFinish.setText(R.string.onboarding_finish_button_description_wait);
         buttonFinish.setEnabled(false);
-        buttonNext = (ImageButton) findViewById(R.id.imageButtonNext);
-        buttonPre = (ImageButton) findViewById(R.id.imageButtonPre);
-        indicators = new ImageView[] {(ImageView) findViewById(R.id.imageViewIndicator0),
-                (ImageView) findViewById(R.id.imageViewIndicator1),
-                (ImageView) findViewById(R.id.imageViewIndicator2)};
+        buttonNext = findViewById(R.id.imageButtonNext);
+        buttonPre = findViewById(R.id.imageButtonPre);
+        indicators = new ImageView[] {
+                findViewById(R.id.imageViewIndicator0),
+                findViewById(R.id.imageViewIndicator1),
+                findViewById(R.id.imageViewIndicator2) };
     }
 
     private void initData() {
@@ -164,17 +167,20 @@ public class OnboardingActivity extends AppCompatActivity {
         }
     }
 
-    private Handler handler = new Handler() {
+    private class HandlerCallback implements Handler.Callback {
+
         @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
+        public boolean handleMessage(Message message) {
+            switch (message.what) {
                 case MSG_DATA_INSERT_FINISH:
+
                     buttonFinish.setText(R.string.onboarding_finish_button_description);
                     buttonFinish.setEnabled(true);
                     break;
             }
+            return true;
         }
-    };
+    }
 
     private class InitCompaniesDataTask extends AsyncTask<Void, Void, Void> {
 
