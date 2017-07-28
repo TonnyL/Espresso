@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 'android-O'
-    buildToolsVersion '26.0.0 rc2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.0'
 
     defaultConfig {
         applicationId "io.github.marktony.espresso"
@@ -34,7 +34,7 @@ android {
 }
 
 ext {
-    supportLibVersion = '26.0.0-beta1'
+    supportLibVersion = '26.0.0-beta2'
     rxjavaVersion = '2.0.1'
     retrofitVersion = '2.2.0'
     zxingLibVersion = '3.3.0'

@@ -10,6 +10,9 @@ Espresso is an express delivery tracking app designed with Material Design style
 
 The source code in this repository reflects the app which supports mobile devices running Android 5.0+.
 
+### About This Repository And App
+This app is inspired by [PackageTracker](https://github.com/fython/PackageTracker) which is developed by [fython](https://github.com/fython) and has a lot of similar elements in design and function with it. Thanks for the contributions of fython and his team.
+
 ### Features
 
 + Over than 640 express companies all over the world are supported.
@@ -23,9 +26,9 @@ The source code in this repository reflects the app which supports mobile device
 + Support send feedback on using experience from your devices.
 
 ### Screenshots
-![screenshot0](https://github.com/TonnyL/Espresso/blob/master/art/screenshot0.png)
+![screenshot0](./art/screenshot0.png)
 
-![screenshot1](https://github.com/TonnyL/Espresso/blob/master/art/screenshot1.png)
+![screenshot1](./art/screenshot1.png)
 
 ### How to Work with the Source
 I hope the source code for this app is useful for you as a reference or starting point for creating your own app. Here is some instructions to help you better build and run the code in Android Studio.
