@@ -2,6 +2,7 @@ package io.github.marktony.espresso.packages;
 
 import android.graphics.drawable.ColorDrawable;
 import android.support.test.filters.LargeTest;
+import android.support.test.filters.FlakyTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
@@ -119,6 +120,7 @@ public class AppNavigationTest {
                 .check(matches(isDisplayed()));
     }
 
+    @FlakyTest(detail = "After performing changing the theme, the background color might not be changed before the check.")
     @Test
     public void clickOnNavigationDrawerItem_ChangeTheme() {
         // Open drawer to click on navigation.
