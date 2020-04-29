@@ -120,7 +120,7 @@ public class AppNavigationTest {
                 .check(matches(isDisplayed()));
     }
 
-    @FlakyTest
+    @FlakyTest(detail = "After performing changing the theme, the background color might not be changed before the check.")
     @Test
     public void clickOnNavigationDrawerItem_ChangeTheme() {
         // Open drawer to click on navigation.
